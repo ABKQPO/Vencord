@@ -21,7 +21,7 @@ import { BackupRestoreIcon, CloudIcon, MainSettingsIcon, PaintbrushIcon, PatchHe
 import { BackupAndRestoreTab, CloudTab, PatchHelperTab, PluginsTab, ThemesTab, UpdaterTab, VencordTab } from "@components/settings/tabs";
 import { Devs } from "@utils/constants";
 import { isTruthy } from "@utils/guards";
-import { tr, useLocale } from "@utils/localization";
+import { tr } from "@utils/localization";
 import definePlugin, { IconProps, OptionType } from "@utils/types";
 import { waitFor } from "@webpack";
 import { React } from "@webpack/common";
@@ -138,7 +138,7 @@ export default definePlugin({
         const panel: SettingsLayoutNode = {
             key: key + "_panel",
             type: LayoutTypes.PANEL,
-            useTitle: () => { useLocale(); return resolve(panelTitle); },
+            useTitle: () => resolve(panelTitle),
             buildLayout: () => [{
                 type: LayoutTypes.CATEGORY,
                 key: key + "_category",
@@ -146,7 +146,7 @@ export default definePlugin({
                     type: LayoutTypes.CUSTOM,
                     key: key + "_custom",
                     Component: Component,
-                    useSearchTerms: () => { useLocale(); return [resolve(title)]; }
+                    useSearchTerms: () => [resolve(title)]
                 }]
             }]
         };
@@ -154,7 +154,7 @@ export default definePlugin({
         return ({
             key,
             type: LayoutTypes.SIDEBAR_ITEM,
-            useTitle: () => { useLocale(); return resolve(title); },
+            useTitle: () => resolve(title),
             icon: () => <Icon width={20} height={20} />,
             buildLayout: () => [panel]
         });
@@ -233,7 +233,7 @@ export default definePlugin({
         const vencordSection: SettingsLayoutNode = {
             key: "vencord_section",
             type: LayoutTypes.SECTION,
-            useTitle: () => { useLocale(); return tr("loader.sidebar.Vencord_Settings", "Vencord Settings"); },
+            useTitle: () => tr("loader.sidebar.Vencord_Settings", "Vencord Settings"),
             buildLayout: () => vencordEntries
         };
 
