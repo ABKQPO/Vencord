@@ -20,7 +20,7 @@ import { Logger } from "@utils/Logger";
 import { makeCodeblock } from "@utils/text";
 import { CommandArgument, CommandContext, CommandOption } from "@vencord/discord-types";
 
-import { sendBotMessage } from "./commandHelpers";
+import { prepareCommandDescription, sendBotMessage } from "./commandHelpers";
 import { ApplicationCommandInputType, ApplicationCommandOptionType, ApplicationCommandType, VencordCommand } from "./types";
 
 export * from "./commandHelpers";
@@ -91,16 +91,18 @@ export const _handleCommand = function (cmd: VencordCommand, args: CommandArgume
  * Prepare a Command Option for Discord by filling missing fields
  * @param opt
  */
-export function prepareOption<O extends CommandOption | VencordCommand>(opt: O): O {
+export function prepareOption<O extends CommandOption | VencordCommand>(opt: O, plugin = "", path = opt.name): O {
     opt.displayName ||= opt.name;
-    opt.displayDescription ||= opt.description;
-    opt.options?.forEach((opt, i, opts) => {
-        // See comment above Placeholders
-        if (opt === OptPlaceholder) opts[i] = OptionalMessageOption;
-        else if (opt === ReqPlaceholder) opts[i] = RequiredMessageOption;
-        opt.choices?.forEach(x => x.displayName ||= x.name);
-
-        prepareOption(opts[i]);
+    prepareCommandDescription(opt, plugin, path);
+    if ("choices" in opt) opt.choices?.forEach(choice => choice.displayName ||= choice.name);
+    opt.options?.forEach((option, i, options) => {
+        // Discord owns these shared options. Clone them before adding our display getters.
+        if (option === OptPlaceholder || option === OptionalMessageOption) {
+            options[i] = Object.defineProperties({} as CommandOption, Object.getOwnPropertyDescriptors(OptionalMessageOption));
+        } else if (option === ReqPlaceholder || option === RequiredMessageOption) {
+            options[i] = Object.defineProperties({} as CommandOption, Object.getOwnPropertyDescriptors(RequiredMessageOption));
+        }
+        prepareOption(options[i], plugin, path + "." + options[i].name);
     });
     return opt;
 }
@@ -129,6 +131,11 @@ function registerSubCommands(cmd: VencordCommand, plugin: string) {
             }],
             rootCommand: cmd
         };
+        // Spreading would snapshot lazy localized descriptions. Preserve the source descriptors.
+        for (const key of ["description", "displayDescription"] as const) {
+            const descriptor = Object.getOwnPropertyDescriptor(o, key);
+            if (descriptor) Object.defineProperty(subCmd, key, descriptor);
+        }
         registerCommand(subCmd, plugin);
     });
 }
@@ -163,7 +170,7 @@ export function registerCommand<C extends VencordCommand>(command: C, plugin: st
     command.inputType ??= ApplicationCommandInputType.BUILT_IN_TEXT;
     command.plugin ||= plugin;
 
-    prepareOption(command);
+    prepareOption(command, plugin);
     commands[command.name] = command;
 
     if (isSubCommandParent(command)) {

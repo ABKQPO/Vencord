@@ -28,6 +28,7 @@ import { Span } from "@components/Span";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { React, TextInput, useState } from "@webpack/common";
@@ -68,19 +69,20 @@ const settings = definePluginSettings({
     replace: {
         type: OptionType.COMPONENT,
         component: () => {
+    useLocale();
             const { stringRules, regexRules } = settings.use(["stringRules", "regexRules"]);
 
             return (
                 <>
                     <TextReplaceTesting />
                     <TextReplace
-                        title="Simple Replacements"
-                        description="Simple find and replace rules. For example, find 'brb' and replace it with 'be right back'"
+                        title={tr("plugins.TextReplace.simpleReplacements", "Simple Replacements")}
+                        description={tr("plugins.TextReplace.simpleReplacementsHelp", "Simple find and replace rules. For example, find 'brb' and replace it with 'be right back'")}
                         rulesArray={stringRules}
                     />
                     <TextReplace
-                        title="Regex Replacements"
-                        description="More powerful replacements using Regular Expressions. This section is for advanced users. If you don't understand it, just ignore it"
+                        title={tr("plugins.TextReplace.regexReplacements", "Regex Replacements")}
+                        description={tr("plugins.TextReplace.regexReplacementsHelp", "More powerful replacements using Regular Expressions. This section is for advanced users. If you don't understand it, just ignore it")}
                         rulesArray={regexRules}
                         isRegex
                     />
@@ -132,6 +134,7 @@ function Input({ initialValue, onChange, placeholder }: {
     initialValue: string;
     onChange(value: string): void;
 }) {
+    useLocale();
     const [value, setValue] = useState(initialValue);
     return (
         <TextInput
@@ -145,6 +148,7 @@ function Input({ initialValue, onChange, placeholder }: {
 }
 
 function TextRow({ label, description, value, onChange }: { label: string; description: string; value: string; onChange(value: string): void; }) {
+    useLocale();
     return (
         <>
             <TooltipContainer text={description}>
@@ -177,6 +181,7 @@ function normalizeRule(rule: Rule) {
 type DropIndicator = { index: number; position: "before" | "after"; };
 
 function TextReplace({ title, description, rulesArray, isRegex = false }: TextReplaceProps) {
+    useLocale();
     const [searchQuery, setSearchQuery] = useState("");
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
     const [dropIndicator, setDropIndicator] = useState<DropIndicator | null>(null);
@@ -240,7 +245,7 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                 <Paragraph>{description}</Paragraph>
                 <div className={cl("search-input")}>
                     <TextInput
-                        placeholder="Search for a rule..."
+                        placeholder={tr("plugins.TextReplace.searchForARule", "Search for a rule...")}
                         value={searchQuery}
                         onChange={setSearchQuery}
                     />
@@ -248,7 +253,7 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
             </div>
             <Flex flexDirection="column" style={{ gap: "0.5em", paddingBottom: "1.25em" }}>
                 {!filteredRules.length && searchQuery && (
-                    <Paragraph>No rules match your search criteria.</Paragraph>
+                    <Paragraph>{tr("plugins.TextReplace.noRulesMatchYourSearchCriteria", "No rules match your search criteria.")}</Paragraph>
                 )}
                 {filteredRules.map(({ rule, index }) =>
                     <div
@@ -268,26 +273,26 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                                 <>
                                     <div className={cl("input-grid")}>
                                         <TextRow
-                                            label="Name"
-                                            description="An optional name to help you identify this rule."
+                                            label={tr("plugins.TextReplace.name", "Name")}
+                                            description={tr("plugins.TextReplace.ruleNameHelp", "An optional name to help you identify this rule.")}
                                             value={rule.name ?? ""}
                                             onChange={e => onChange(e, index, "name")}
                                         />
                                         <TextRow
-                                            label="Find"
-                                            description={isRegex ? "The regex pattern" : "The text to replace"}
+                                            label={tr("plugins.TextReplace.find", "Find")}
+                                            description={isRegex ? tr("plugins.TextReplace.theRegexPattern", "The regex pattern") : tr("plugins.TextReplace.theTextToReplace", "The text to replace")}
                                             value={rule.find}
                                             onChange={e => onChange(e, index, "find")}
                                         />
                                         <TextRow
-                                            label="Replace"
-                                            description="The text to replace the found text with"
+                                            label={tr("plugins.TextReplace.replace", "Replace")}
+                                            description={tr("plugins.TextReplace.replacementHelp", "The text to replace the found text with")}
                                             value={rule.replace}
                                             onChange={e => onChange(e, index, "replace")}
                                         />
                                         <TextRow
-                                            label="Only if includes"
-                                            description="Optionally, only apply this rule if the message includes this text."
+                                            label={tr("plugins.TextReplace.onlyIfIncludes", "Only if includes")}
+                                            description={tr("plugins.TextReplace.onlyIfHelp", "Optionally, only apply this rule if the message includes this text.")}
                                             value={rule.onlyIfIncludes}
                                             onChange={e => onChange(e, index, "onlyIfIncludes")}
                                         />
@@ -298,7 +303,8 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                                         variant="dangerPrimary"
                                         onClick={() => onClickRemove(index)}
                                     >
-                                        Delete Rule
+
+                                        {tr("plugins.TextReplace.deleteRule", "Delete Rule")}
                                     </Button>
                                 </>
                             )}
@@ -319,8 +325,8 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                                     {rule.name
                                         ? rule.name
                                         : isEmptyRule(rule)
-                                            ? `Empty Rule ${index + 1}`
-                                            : `Rule ${index + 1} - ${rule.find}`
+                                            ? tr("plugins.TextReplace.emptyRule", "Empty Rule {count}", { count: index + 1 })
+                                            : tr("plugins.TextReplace.ruleSummary", "Rule {count} - {text}", { count: index + 1, text: rule.find })
                                     }
                                 </Paragraph>
                             </div>
@@ -334,7 +340,8 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                     }}
                     disabled={rulesArray.length > 0 && isEmptyRule(rulesArray[rulesArray.length - 1])}
                 >
-                    Add Rule
+
+                    {tr("plugins.TextReplace.addRule", "Add Rule")}
                 </Button>
             </Flex>
         </>
@@ -342,14 +349,15 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
 }
 
 function TextReplaceTesting() {
+    useLocale();
     const [value, setValue] = useState("");
 
     return (
         <div>
-            <HeadingSecondary>Rule Tester</HeadingSecondary>
+            <HeadingSecondary>{tr("plugins.TextReplace.ruleTester", "Rule Tester")}</HeadingSecondary>
             <Flex flexDirection="column" gap={6}>
-                <TextInput placeholder="Type a message to test rules on" onChange={setValue} />
-                <TextInput placeholder="Message with rules applied" editable={false} value={applyRules(value)} style={{ opacity: 0.7 }} />
+                <TextInput placeholder={tr("plugins.TextReplace.typeAMessageToTestRulesOn", "Type a message to test rules on")} onChange={setValue} />
+                <TextInput placeholder={tr("plugins.TextReplace.messageWithRulesApplied", "Message with rules applied")} editable={false} value={applyRules(value)} style={{ opacity: 0.7 }} />
             </Flex>
         </div>
     );

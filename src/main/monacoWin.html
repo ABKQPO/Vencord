@@ -36,22 +36,48 @@
         ></script>
 
         <script>
+            const editorParams = new URLSearchParams(location.hash.slice(1));
+            const editorLocale = editorParams.get("locale") === "zh-CN" ? "zh-CN" : "en-US";
+            document.documentElement.lang = editorLocale;
+            document.title = editorParams.get("title") || document.title;
+            let editor;
+
+            window.setEditorLocale = async (fragment) => {
+                const nextParams = new URLSearchParams(fragment);
+                if (nextParams.get("locale") === editorLocale) return;
+                // Save directly before reloading the NLS bundle, including pending edits.
+                if (editor) {
+                    await VencordNative.quickCss.set(editor.getValue());
+                    nextParams.set("viewState", JSON.stringify(editor.saveViewState()));
+                }
+                location.hash = nextParams.toString();
+                location.reload();
+            };
+
             require.config({
                 paths: {
                     vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs",
+                },
+                "vs/nls": {
+                    availableLanguages: editorLocale === "zh-CN" ? { "*": "zh-cn" } : {},
                 },
             });
 
             require(["vs/editor/editor.main"], () => {
                 getCurrentCss().then((css) => {
-                    var editor = monaco.editor.create(
+                    editor = monaco.editor.create(
                         document.getElementById("container"),
                         {
                             value: css,
                             language: "css",
                             theme: getTheme(),
+                            ariaLabel: editorParams.get("editorLabel") || document.title,
                         }
                     );
+                    const previousView = editorParams.get("viewState");
+                    if (previousView) {
+                        try { editor.restoreViewState(JSON.parse(previousView)); } catch {}
+                    }
                     editor.onDidChangeModelContent(() =>
                         setCss(editor.getValue())
                     );

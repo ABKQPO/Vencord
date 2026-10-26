@@ -17,12 +17,14 @@
 */
 
 import { useCopyCooldown } from "@plugins/shikiCodeblocks.desktop/hooks/useCopyCooldown";
+import { tr, useLocale } from "@utils/localization";
 
 export interface CopyButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
     content: string;
 }
 
 export function CopyButton({ content, ...props }: CopyButtonProps) {
+    useLocale();
     const [copyCooldown, copy] = useCopyCooldown(1000);
 
     return (
@@ -34,7 +36,7 @@ export function CopyButton({ content, ...props }: CopyButtonProps) {
             }}
             onClick={() => copy(content)}
         >
-            {copyCooldown ? "Copied!" : "Copy"}
+            {copyCooldown ? tr("plugins.ShikiCodeblocks.copied", "Copied!") : tr("plugins.ShikiCodeblocks.copy", "Copy")}
         </button>
 
     );

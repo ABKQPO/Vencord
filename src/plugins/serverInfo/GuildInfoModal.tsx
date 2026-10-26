@@ -8,6 +8,7 @@ import "./styles.css";
 
 import { classNameFactory } from "@utils/css";
 import { getGuildAcronym, openImageModal, openUserProfile } from "@utils/discord";
+import { getLocale,tr, useLocale } from "@utils/localization";
 import { classes } from "@utils/misc";
 import { useAwaiter } from "@utils/react";
 import { Guild, RenderModalProps, User } from "@vencord/discord-types";
@@ -51,6 +52,7 @@ function renderTimestamp(timestamp: number) {
 }
 
 function GuildInfoModal({ guild, modalProps }: GuildProps & { modalProps: RenderModalProps; }) {
+    useLocale();
     const [friendCount, setFriendCount] = useState<number>();
     const [blockedCount, setBlockedCount] = useState<number>();
     const [ignoredCount, setIgnoredCount] = useState<number>();
@@ -122,25 +124,29 @@ function GuildInfoModal({ guild, modalProps }: GuildProps & { modalProps: Render
                     className={cl("tab", { selected: currentTab === Tabs.ServerInfo })}
                     id={Tabs.ServerInfo}
                 >
-                    Server Info
+
+                    {tr("plugins.ServerInfo.serverInfo", "Server Info")}
                 </TabBar.Item>
                 <TabBar.Item
                     className={cl("tab", { selected: currentTab === Tabs.Friends })}
                     id={Tabs.Friends}
                 >
-                    Friends{friendCount !== undefined ? ` (${friendCount})` : ""}
+
+                    {tr("plugins.ServerInfo.friends", "Friends")}{friendCount !== undefined ? ` (${friendCount})` : ""}
                 </TabBar.Item>
                 <TabBar.Item
                     className={cl("tab", { selected: currentTab === Tabs.BlockedUsers })}
                     id={Tabs.BlockedUsers}
                 >
-                    Blocked Users{blockedCount !== undefined ? ` (${blockedCount})` : ""}
+
+                    {tr("plugins.ServerInfo.blockedUsers", "Blocked Users")}{blockedCount !== undefined ? ` (${blockedCount})` : ""}
                 </TabBar.Item>
                 <TabBar.Item
                     className={cl("tab", { selected: currentTab === Tabs.IgnoredUsers })}
                     id={Tabs.IgnoredUsers}
                 >
-                    Ignored Users{ignoredCount !== undefined ? ` (${ignoredCount})` : ""}
+
+                    {tr("plugins.ServerInfo.ignoredUsers", "Ignored Users")}{ignoredCount !== undefined ? ` (${ignoredCount})` : ""}
                 </TabBar.Item>
             </TabBar>
 
@@ -185,21 +191,22 @@ function Owner(guildId: string, owner: User) {
 }
 
 function ServerInfoTab({ guild }: GuildProps) {
+    useLocale();
     const [owner] = useAwaiter(() => UserUtils.getUser(guild.ownerId), {
         deps: [guild.ownerId],
         fallbackValue: null
     });
 
     const Fields = {
-        "Server Owner": owner ? Owner(guild.id, owner) : "Loading...",
-        "Created At": renderTimestamp(SnowflakeUtils.extractTimestamp(guild.id)),
-        "Joined At": guild.joinedAt ? renderTimestamp(guild.joinedAt.getTime()) : "-", // Not available in lurked guild
-        "Vanity Link": guild.vanityURLCode ? (<a>{`discord.gg/${guild.vanityURLCode}`}</a>) : "-", // Making the anchor href valid would cause Discord to reload
-        "Preferred Locale": guild.preferredLocale || "-",
-        "Verification Level": ["None", "Low", "Medium", "High", "Highest"][guild.verificationLevel] || "?",
-        "Server Boosts": `${guild.premiumSubscriberCount ?? 0} (Level ${guild.premiumTier ?? 0})`,
-        "Channels": GuildChannelStore.getChannels(guild.id)?.count - 1 || "?", // - null category
-        "Roles": GuildRoleStore.getSortedRoles(guild.id).length - 1, // - @everyone
+        [tr("plugins.ServerInfo.serverOwner", "Server Owner")]: owner ? Owner(guild.id, owner) : tr("plugins.ServerInfo.loading", "Loading..."),
+        [tr("plugins.ServerInfo.createdAt", "Created At")]: renderTimestamp(SnowflakeUtils.extractTimestamp(guild.id)),
+        [tr("plugins.ServerInfo.joinedAt", "Joined At")]: guild.joinedAt ? renderTimestamp(guild.joinedAt.getTime()) : "-", // Not available in lurked guild
+        [tr("plugins.ServerInfo.vanityLink", "Vanity Link")]: guild.vanityURLCode ? (<a>{`discord.gg/${guild.vanityURLCode}`}</a>) : "-", // Making the anchor href valid would cause Discord to reload
+        [tr("plugins.ServerInfo.preferredLocale", "Preferred Locale")]: guild.preferredLocale ? new Intl.DisplayNames([getLocale()], { type: "language" }).of(guild.preferredLocale) : "-",
+        [tr("plugins.ServerInfo.verificationLevel", "Verification Level")]: [tr("plugins.ServerInfo.none", "None"), tr("plugins.ServerInfo.low", "Low"), tr("plugins.ServerInfo.medium", "Medium"), tr("plugins.ServerInfo.high", "High"), tr("plugins.ServerInfo.highest", "Highest")][guild.verificationLevel] || "?",
+        [tr("plugins.ServerInfo.serverBoosts", "Server Boosts")]: tr("plugins.ServerInfo.boostCount", "{count} (Level {level})", { count: new Intl.NumberFormat(getLocale()).format(guild.premiumSubscriberCount ?? 0), level: guild.premiumTier ?? 0 }),
+        [tr("plugins.ServerInfo.channels", "Channels")]: GuildChannelStore.getChannels(guild.id)?.count - 1 || "?", // - null category
+        [tr("plugins.ServerInfo.roles", "Roles")]: GuildRoleStore.getSortedRoles(guild.id).length - 1, // - @everyone
     };
 
     return (
@@ -230,6 +237,7 @@ function IgnoredUserTab({ guild, setCount }: RelationshipProps) {
 
 
 function UserList(type: "friends" | "blocked" | "ignored", guild: Guild, ids: string[], setCount: (count: number) => void) {
+    useLocale();
     const missing = [] as string[];
     const members = [] as string[];
 

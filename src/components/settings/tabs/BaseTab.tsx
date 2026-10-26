@@ -18,8 +18,9 @@
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { handleComponentFailed } from "@components/handleComponentFailed";
+import { tr, useLocale } from "@utils/localization";
 import { onlyOnce } from "@utils/onlyOnce";
-import { Modal,openModal } from "@webpack/common";
+import { Modal, openModal } from "@webpack/common";
 import type { ComponentType, PropsWithChildren } from "react";
 
 export function SettingsTab({ children }: PropsWithChildren) {
@@ -33,7 +34,9 @@ export const handleSettingsTabError = onlyOnce(handleComponentFailed);
 export function wrapTab(component: ComponentType<any>, tab: string) {
     const wrapped = ErrorBoundary.wrap(component, {
         displayName: `${tab}SettingsTab`,
-        message: `Failed to render the ${tab} tab. If this issue persists, try using the installer to reinstall!`,
+        message: () => {
+            return tr("loader.tab.failed", "Failed to render the {tab} tab. If this issue persists, try using the installer to reinstall!", { tab: getTabTitle(tab) });
+        },
         onError: handleSettingsTabError,
     });
 
@@ -41,19 +44,32 @@ export function wrapTab(component: ComponentType<any>, tab: string) {
 }
 
 export function openSettingsTabModal(Tab: ComponentType<any>) {
-    Tab = wrapTab(Tab, Tab.displayName || "SettingsTab");
-
     try {
-        openModal(props => (
-            <Modal
-                {...props}
-                size="lg"
-                title={Tab.displayName?.replace("SettingsTab", "") || "Settings"}
-            >
-                <Tab />
-            </Modal>
-        ));
+        openModal(props => <SettingsTabModal {...props} Tab={Tab} />);
     } catch {
         handleSettingsTabError();
     }
+}
+
+function getTabTitle(tab: string) {
+    const name = tab.replace(/SettingsTab$/, "");
+    switch (name) {
+        case "Vencord": case "Vencord Settings": return tr("loader.tab.vencord", "Vencord Settings");
+        case "Plugins": return tr("loader.tab.plugins", "Plugins");
+        case "Themes": return tr("loader.tab.themes", "Themes");
+        case "Updater": return tr("loader.tab.updater", "Updater");
+        case "Cloud": return tr("loader.tab.cloud", "Cloud");
+        case "Backup & Restore": case "BackupAndRestore": return tr("loader.tab.backup", "Backup & Restore");
+        case "Patch Helper": case "PatchHelper": return tr("loader.tab.patch", "Patch Helper");
+        default: return name || tr("loader.tab.settings", "Settings");
+    }
+}
+
+function SettingsTabModal({ Tab, ...props }: import("@vencord/discord-types").RenderModalProps & { Tab: ComponentType<any>; }) {
+    useLocale();
+    return (
+        <Modal {...props} size="lg" title={getTabTitle(Tab.displayName ?? "")}>
+            <Tab />
+        </Modal>
+    );
 }

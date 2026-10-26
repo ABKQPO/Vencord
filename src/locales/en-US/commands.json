@@ -1,0 +1,16 @@
+{
+    "commands.petpet.petpet.description": "Create a petpet gif. You can only specify one of the image options",
+    "commands.petpet.petpet.delay.description": "The delay between each frame in ms. Rounded to nearest 10ms. Defaults to the minimum value of 20.",
+    "commands.petpet.petpet.resolution.description": "Resolution for the gif. Defaults to 120. If you enter an insane number and it freezes Discord that's your fault.",
+    "commands.petpet.petpet.image.description": "Image attachment to use",
+    "commands.petpet.petpet.url.description": "URL to fetch image from",
+    "commands.petpet.petpet.user.description": "User whose avatar to use as image",
+    "commands.petpet.petpet.no-server-pfp.description": "Use the normal avatar instead of the server specific one when using the 'user' option",
+    "commands.SilentTyping.silenttype.description": "Toggle whether you're hiding that you're typing or not.",
+    "commands.SilentTyping.silenttype.value.description": "Whether to hide or not that you're typing (default is toggle)",
+    "commands.SupportHelper.vencord-debug.description": "Send Vencord debug info",
+    "commands.SupportHelper.vencord-plugins.description": "Send Vencord plugin list",
+    "commands.SpotifyShareCommands.track.description": "Share your current Spotify track in chat",
+    "commands.SpotifyShareCommands.album.description": "Share your current Spotify album in chat",
+    "commands.SpotifyShareCommands.artist.description": "Share your current Spotify artist in chat"
+}

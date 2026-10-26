@@ -30,6 +30,8 @@ import { SettingsTab, wrapTab } from "@components/settings/tabs/BaseTab";
 import { ChangeList } from "@utils/ChangeList";
 import { classNameFactory } from "@utils/css";
 import { isTruthy } from "@utils/guards";
+import { tr, useLocale } from "@utils/localization";
+import { getPluginDisplayName, getPluginSearchText, getPluginTagLabel } from "@utils/localization/plugins";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
@@ -49,25 +51,26 @@ export const cl = classNameFactory("vc-plugins-");
 export const logger = new Logger("PluginSettings", "#a6d189");
 
 function ReloadRequiredCard({ required }: { required: boolean; }) {
+    useLocale();
     return (
         <Card variant={required ? "warning" : "normal"} className={cl("info-card")}>
             {required
                 ? (
                     <>
-                        <HeadingTertiary>Restart required!</HeadingTertiary>
+                        <HeadingTertiary>{tr("loader.a7c9ad49f1c3", "Restart required!")}</HeadingTertiary>
                         <Paragraph className={cl("dep-text")}>
-                            Restart now to apply new plugins and their settings
+                            {tr("loader.0a757ae296ad", "Restart now to apply new plugins and their settings")}
                         </Paragraph>
                         <Button onClick={() => location.reload()} className={cl("restart-button")}>
-                            Restart
+                            {tr("loader.6b983a81e5e8", "Restart")}
                         </Button>
                     </>
                 )
                 : (
                     <>
-                        <HeadingTertiary>Plugin Management</HeadingTertiary>
-                        <Paragraph>Press the cog wheel or info icon to get more info on a plugin</Paragraph>
-                        <Paragraph>Plugins with a cog wheel have settings you can modify!</Paragraph>
+                        <HeadingTertiary>{tr("loader.62aac05523dc", "Plugin Management")}</HeadingTertiary>
+                        <Paragraph>{tr("loader.1bc93b1fe08a", "Press the cog wheel or info icon to get more info on a plugin")}</Paragraph>
+                        <Paragraph>{tr("loader.5ff8371c6d27", "Plugins with a cog wheel have settings you can modify!")}</Paragraph>
                     </>
                 )}
         </Card>
@@ -85,40 +88,42 @@ const enum SearchStatus {
 }
 
 function ExcludedPluginsList({ search }: { search: string; }) {
+    useLocale();
     const matchingExcludedPlugins = search
         ? Object.entries(ExcludedPlugins)
-            .filter(([name]) => name.toLowerCase().includes(search))
+            .filter(([name]) => getPluginSearchText({ name, description: "" }).some(text => text.toLowerCase().includes(search)))
         : [];
 
     const ExcludedReasons: Record<PluginTarget, string> = {
-        desktop: "Discord Desktop app or Vesktop",
-        discordDesktop: "Discord Desktop app",
-        vesktop: "Vesktop app",
-        web: "Vesktop app and the Web version of Discord",
-        dev: "Developer version of Vencord",
-        browser: "Web Browser version of Vencord"
+        desktop: tr("loader.b2fd7858f127", "Discord Desktop app or Vesktop"),
+        discordDesktop: tr("loader.a759b08e8548", "Discord Desktop app"),
+        vesktop: tr("loader.c3f3baa9b9fa", "Vesktop app"),
+        web: tr("loader.c2058d2b15e4", "Vesktop app and the Web version of Discord"),
+        dev: tr("loader.bd0223607a68", "Developer version of Vencord"),
+        browser: tr("loader.5ed20818a42c", "Web Browser version of Vencord")
     };
 
     return (
         <Paragraph className={Margins.top16}>
             {matchingExcludedPlugins.length
                 ? <>
-                    <Paragraph>Are you looking for:</Paragraph>
+                    <Paragraph>{tr("loader.79ce26417e9b", "Are you looking for:")}</Paragraph>
                     <ul>
                         {matchingExcludedPlugins.map(([name, reason]) => (
                             <li key={name}>
-                                <b>{name}</b>: Only available on the {ExcludedReasons[reason]}
+                                <b>{getPluginDisplayName({ name })}</b>{tr("plugins.platformOnly", ": Only available on {platform}", { platform: ExcludedReasons[reason] })}
                             </li>
                         ))}
                     </ul>
                 </>
-                : "No plugins meet the search criteria."
+                : tr("loader.976ce5b526a5", "No plugins meet the search criteria.")
             }
         </Paragraph>
     );
 }
 
 function PluginSettings() {
+    const locale = useLocale();
     const settings = useSettings();
     const changeRef = useRef<ChangeList<string>>(null);
     const changes = changeRef.current ??= new ChangeList<string>();
@@ -127,8 +132,8 @@ function PluginSettings() {
         if (changes.hasChanges)
             promptToRestart("reload", {
                 children: <>
-                    <Heading tag="h5">The following plugins require a restart:</Heading>
-                    <Paragraph>{Array.from(changes, k => k.split(".")[0]).join(", ")}</Paragraph>
+                    <Heading tag="h5">{tr("loader.8a843bbad8e3", "The following plugins require a restart:")}</Heading>
+                    <Paragraph>{Array.from(changes, k => getPluginDisplayName({ name: k.split(".")[0] })).join(", ")}</Paragraph>
                 </>
             });
     }, []);
@@ -148,8 +153,8 @@ function PluginSettings() {
     }, []);
 
     const sortedPlugins = useMemo(() =>
-        Object.values(Plugins).sort((a, b) => a.name.localeCompare(b.name)),
-        []
+        Object.values(Plugins).sort((a, b) => getPluginDisplayName(a).localeCompare(getPluginDisplayName(b), locale)),
+        [locale]
     )
         .toSorted((a, b) => Number(settings.plugins[b.name]?.isFavorite ?? false) - Number(settings.plugins[a.name]?.isFavorite ?? false));
 
@@ -188,12 +193,7 @@ function PluginSettings() {
 
         if (!search.length) return true;
 
-        return (
-            plugin.name.toLowerCase().includes(search) ||
-            plugin.name.match(/[A-Z]/g)?.join("").toLowerCase().includes(search) || // acronyms like BF for BetterFolders
-            plugin.description.toLowerCase().includes(search) ||
-            plugin.searchTerms?.some(t => t.toLowerCase().includes(search))
-        );
+        return getPluginSearchText(plugin).some(text => text.toLowerCase().includes(search));
     };
 
     const [newPlugins] = useAwaiter(() => DataStore.get("Vencord_existingPlugins").then((cachedPlugins: Record<string, number> | undefined) => {
@@ -227,7 +227,7 @@ function PluginSettings() {
 
         if (isRequired) {
             const tooltipText = p.required || !depMap[p.name]
-                ? "This plugin is required for Vencord to function."
+                ? tr("loader.d3ebab0dcfac", "This plugin is required for Vencord to function.")
                 : makeDependencyList(depMap[p.name]?.filter(d => settings.plugins[d].enabled));
 
             requiredPlugins.push(
@@ -264,13 +264,13 @@ function PluginSettings() {
             <UIElementsButton />
 
             <HeadingTertiary className={classes(Margins.top20, Margins.bottom8)}>
-                Filters
+                {tr("loader.546ebb8eb993", "Filters")}
             </HeadingTertiary>
 
             <ErrorBoundary noop>
                 <TextInput
                     inputClassName={cl("filter-control")}
-                    placeholder="Search for a plugin..."
+                    placeholder={tr("loader.b80cd355dbb9", "Search for a plugin...")}
                     value={searchValue.value}
                     onChange={onSearch}
                     autoFocus
@@ -281,39 +281,39 @@ function PluginSettings() {
                 <div className={classes(Margins.bottom20, Margins.top8, cl("filter-controls"))}>
                     <Select
                         options={[
-                            { label: "Show All", value: SearchStatus.ALL, default: true },
-                            { label: "Show Favorites", value: SearchStatus.FAVORITES },
-                            { label: "Show Enabled", value: SearchStatus.ENABLED },
-                            { label: "Show Disabled", value: SearchStatus.DISABLED },
-                            { label: "Show New", value: SearchStatus.NEW },
-                            hasUserPlugins && { label: "Show UserPlugins", value: SearchStatus.USER_PLUGINS },
-                            { label: "Show API Plugins", value: SearchStatus.API_PLUGINS },
+                            { label: tr("loader.e1c32645f2f8", "Show All"), value: SearchStatus.ALL, default: true },
+                            { label: tr("loader.7bf9dbcb545b", "Show Favorites"), value: SearchStatus.FAVORITES },
+                            { label: tr("loader.9f5578f60725", "Show Enabled"), value: SearchStatus.ENABLED },
+                            { label: tr("loader.52cee9f0fa71", "Show Disabled"), value: SearchStatus.DISABLED },
+                            { label: tr("loader.1d8393d1859c", "Show New"), value: SearchStatus.NEW },
+                            hasUserPlugins && { label: tr("loader.b7899af4e4f9", "Show UserPlugins"), value: SearchStatus.USER_PLUGINS },
+                            { label: tr("loader.ec3b0b08c60d", "Show API Plugins"), value: SearchStatus.API_PLUGINS },
                         ].filter(isTruthy)}
                         serialize={String}
                         select={status => setSearchValue(prev => ({ ...prev, status }))}
                         isSelected={v => v === searchValue.status}
                         closeOnSelect={true}
-                        placeholder="Filter by Type"
+                        placeholder={tr("loader.52cc2c673991", "Filter by Type")}
                     />
                     <SearchableSelect
-                        options={PluginTags.map(tag => ({ label: tag, value: tag }))}
+                        options={PluginTags.map(tag => ({ label: getPluginTagLabel(tag), value: tag }))}
                         value={searchValue.tags}
                         onChange={tags => setSearchValue(prev => ({ ...prev, tags }))}
                         closeOnSelect={false}
-                        placeholder="Filter by Tags"
+                        placeholder={tr("loader.8afe884afd8f", "Filter by Tags")}
                         multi
                     />
                 </div>
             </ErrorBoundary>
 
-            <HeadingTertiary className={Margins.top20}>Plugins</HeadingTertiary>
+            <HeadingTertiary className={Margins.top20}>{tr("loader.9514b7ff4860", "Plugins")}</HeadingTertiary>
 
             {plugins.length || requiredPlugins.length
                 ? (
                     <div className={cl("grid")}>
                         {plugins.length
                             ? plugins
-                            : <Paragraph>No plugins meet the search criteria.</Paragraph>
+                            : <Paragraph>{tr("loader.976ce5b526a5", "No plugins meet the search criteria.")}</Paragraph>
                         }
                     </div>
                 )
@@ -324,13 +324,13 @@ function PluginSettings() {
             <Divider className={Margins.top20} />
 
             <HeadingTertiary className={classes(Margins.top20, Margins.bottom8)}>
-                Required Plugins
+                {tr("loader.5ec0cf0bdcf2", "Required Plugins")}
             </HeadingTertiary>
 
             <div className={cl("grid")}>
                 {requiredPlugins.length
                     ? requiredPlugins
-                    : <Paragraph>No plugins meet the search criteria.</Paragraph>
+                    : <Paragraph>{tr("loader.976ce5b526a5", "No plugins meet the search criteria.")}</Paragraph>
                 }
             </div>
         </SettingsTab >
@@ -340,8 +340,8 @@ function PluginSettings() {
 function makeDependencyList(deps: string[]) {
     return (
         <>
-            <Paragraph>This plugin is required by:</Paragraph>
-            {deps.map((dep: string) => <Paragraph key={dep} className={cl("dep-text")}>{dep}</Paragraph>)}
+            <Paragraph>{tr("loader.23be8966cfbb", "This plugin is required by:")}</Paragraph>
+            {deps.map((dep: string) => <Paragraph key={dep} className={cl("dep-text")}>{getPluginDisplayName({ name: dep })}</Paragraph>)}
         </>
     );
 }

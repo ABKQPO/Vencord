@@ -17,20 +17,22 @@
 */
 
 import { isSettingDisabled } from "@api/PluginManager";
+import { tr, useLocale } from "@utils/localization";
 import { PluginSettingStringDef } from "@utils/types";
 import { React, TextArea, TextInput, useState } from "@webpack/common";
 
 import { resolveError, SettingProps, SettingsSection } from "./Common";
 
 export function TextSetting({ setting, pluginSettings, definedSettings, id, onChange }: SettingProps<PluginSettingStringDef>) {
+    useLocale();
     const [state, setState] = useState(pluginSettings[id] ?? setting.default ?? null);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<boolean | string>(true);
 
     function handleChange(newValue: string) {
         const isValid = setting.isValid?.call(definedSettings, newValue) ?? true;
 
         setState(newValue);
-        setError(resolveError(isValid));
+        setError(isValid);
 
         if (isValid === true) {
             onChange(newValue);
@@ -38,17 +40,17 @@ export function TextSetting({ setting, pluginSettings, definedSettings, id, onCh
     }
 
     return (
-        <SettingsSection name={setting.displayName} id={id} description={setting.description} error={error}>
+        <SettingsSection name={setting.displayName} id={id} description={setting.description} error={resolveError(error)}>
             {setting.multiline
                 ? <TextArea
-                    placeholder={setting.placeholder ?? "Enter a value"}
+                    placeholder={setting.placeholder ?? tr("loader.686ac0ba5487", "Enter a value")}
                     value={state}
                     onChange={handleChange}
                     disabled={isSettingDisabled(definedSettings, setting)}
                     {...setting.componentProps} />
                 : <TextInput
                     type="text"
-                    placeholder={setting.placeholder ?? "Enter a value"}
+                    placeholder={setting.placeholder ?? tr("loader.686ac0ba5487", "Enter a value")}
                     value={state}
                     onChange={handleChange}
                     maxLength={null}

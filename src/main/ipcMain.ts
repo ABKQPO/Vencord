@@ -22,6 +22,8 @@ import "./settings";
 
 import { debounce } from "@shared/debounce";
 import { IpcEvents } from "@shared/IpcEvents";
+import { nativeMessage } from "@shared/nativeLocalization";
+import { normalizeLocale } from "@utils/localization/core";
 import { BrowserWindow, ipcMain, nativeTheme, shell, systemPreferences } from "electron";
 import monacoHtml from "file://monacoWin.html?minify&base64";
 import { FSWatcher, mkdirSync, readFileSync, watch, writeFileSync } from "fs";
@@ -146,10 +148,35 @@ ipcMain.on(IpcEvents.GET_MONACO_THEME, e => {
     e.returnValue = nativeTheme.shouldUseDarkColors ? "vs-dark" : "vs-light";
 });
 
-ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
-    const title = "Vencord QuickCSS Editor";
-    const existingWindow = BrowserWindow.getAllWindows().find(w => w.title === title);
+let quickCssWindow: BrowserWindow | undefined;
+
+function quickCssLocaleParams(requestedLocale?: string) {
+    const locale = normalizeLocale(requestedLocale);
+    const title = nativeMessage(locale, "native.quickCss.title");
+    const editorLabel = nativeMessage(locale, "native.quickCss.editorLabel");
+    return { title, fragment: new URLSearchParams({ locale, title, editorLabel }).toString() };
+}
+
+async function setQuickCssLocale(requestedLocale?: string) {
+    const win = quickCssWindow;
+    if (!win || win.isDestroyed()) return;
+
+    if (win.webContents.isLoadingMainFrame()) {
+        win.webContents.once("did-finish-load", () => { void setQuickCssLocale(requestedLocale); });
+        return;
+    }
+
+    const { fragment } = quickCssLocaleParams(requestedLocale);
+    await win.webContents.executeJavaScript(`window.setEditorLocale(${JSON.stringify(fragment)})`);
+}
+
+ipcMain.handle(IpcEvents.SET_MONACO_LOCALE, (_, locale: string) => setQuickCssLocale(locale));
+
+ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async (_, requestedLocale?: string) => {
+    const { title, fragment } = quickCssLocaleParams(requestedLocale);
+    const existingWindow = quickCssWindow;
     if (existingWindow && !existingWindow.isDestroyed()) {
+        await setQuickCssLocale(requestedLocale);
         existingWindow.focus();
         return;
     }
@@ -166,10 +193,14 @@ ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
             sandbox: false
         }
     });
+    quickCssWindow = win;
+    win.on("closed", () => {
+        if (quickCssWindow === win) quickCssWindow = undefined;
+    });
 
     makeLinksOpenExternally(win);
 
-    await win.loadURL(`data:text/html;base64,${monacoHtml}`);
+    await win.loadURL(`data:text/html;base64,${monacoHtml}#${fragment}`);
 });
 
 ipcMain.handle(IpcEvents.GET_RENDERER_CSS, () => readFile(RENDERER_CSS_PATH, "utf-8"));

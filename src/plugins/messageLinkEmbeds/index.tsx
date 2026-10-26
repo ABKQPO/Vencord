@@ -21,6 +21,7 @@ import { updateMessage } from "@api/MessageUpdater";
 import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import { Devs } from "@utils/constants.js";
+import { tr, useLocale } from "@utils/localization";
 import { Queue } from "@utils/Queue";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
@@ -121,11 +122,14 @@ const settings = definePluginSettings({
     },
     clearMessageCache: {
         type: OptionType.COMPONENT,
-        component: () => (
+        component: () => {
+            useLocale();
+            return (
             <Button onClick={() => messageCache.clear()}>
-                Clear the linked message cache
+                {tr("plugins.MessageLinkEmbeds.clearCache", "Clear the linked message cache")}
             </Button>
-        )
+        );
+        }
     }
 });
 
@@ -193,9 +197,9 @@ function getImages(message: Message): Attachment[] {
 
 function noContent(attachments: number, embeds: number) {
     if (!attachments && !embeds) return "";
-    if (!attachments) return `[no content, ${embeds} embed${embeds !== 1 ? "s" : ""}]`;
-    if (!embeds) return `[no content, ${attachments} attachment${attachments !== 1 ? "s" : ""}]`;
-    return `[no content, ${attachments} attachment${attachments !== 1 ? "s" : ""} and ${embeds} embed${embeds !== 1 ? "s" : ""}]`;
+    if (!attachments) return tr("plugins.MessageLinkEmbeds.noContentCountEmbeds", "[no content, {count} embeds]", { count: embeds });
+    if (!embeds) return tr("plugins.MessageLinkEmbeds.noContentCountAttachments", "[no content, {count} attachments]", { count: attachments });
+    return tr("plugins.MessageLinkEmbeds.noContentAttachmentsAttachmentsAndEmbedsEmbeds", "[no content, {attachments} attachments and {embeds} embeds]", { attachments, embeds });
 }
 
 function requiresRichEmbed(message: Message) {
@@ -290,12 +294,13 @@ function MessageEmbedAccessory({ message }: { message: Message; }) {
 }
 
 function getChannelLabelAndIconUrl(channel: Channel) {
-    if (channel.isDM()) return ["Direct Message", IconUtils.getUserAvatarURL(UserStore.getUser(channel.recipients[0]))];
-    if (channel.isGroupDM()) return ["Group DM", IconUtils.getChannelIconURL(channel)];
-    return ["Server", IconUtils.getGuildIconURL(GuildStore.getGuild(channel.guild_id))];
+    if (channel.isDM()) return [tr("plugins.MessageLinkEmbeds.directMessage", "Direct Message"), IconUtils.getUserAvatarURL(UserStore.getUser(channel.recipients[0]))];
+    if (channel.isGroupDM()) return [tr("plugins.MessageLinkEmbeds.groupDM", "Group DM"), IconUtils.getChannelIconURL(channel)];
+    return [tr("plugins.MessageLinkEmbeds.server", "Server"), IconUtils.getGuildIconURL(GuildStore.getGuild(channel.guild_id))];
 }
 
 function ChannelMessageEmbedAccessory({ message, channel }: MessageEmbedProps): JSX.Element | null {
+    useLocale();
     const compact = MessageDisplayCompact.useSetting();
 
     const dmReceiver = UserStore.getUser(ChannelStore.getChannel(channel.id).recipients?.[0]);
@@ -336,6 +341,7 @@ function ChannelMessageEmbedAccessory({ message, channel }: MessageEmbedProps): 
 }
 
 function AutomodEmbedAccessory(props: MessageEmbedProps): JSX.Element | null {
+    useLocale();
     const { message, channel } = props;
     const compact = MessageDisplayCompact.useSetting();
     const images = getImages(message);

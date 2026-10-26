@@ -7,7 +7,7 @@
 import { ChatBarButton } from "@api/ChatButtons";
 import { ClockIcon, UploadIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
-import { pluralise } from "@utils/misc";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { MessageFlags, MessageType } from "@vencord/discord-types/enums";
@@ -39,15 +39,15 @@ async function addAttachments(channelId: string, messageId: string, existingAtta
     if (files.length + existingAttachmentCount > 10) {
         const remaining = 10 - existingAttachmentCount;
         if (remaining <= 0) {
-            showToast({ text: "You cannot add more attachments to this message.", variant: "critical" });
+            showToast({ text: tr("plugins.AddAttachments.youCannotAddMoreAttachmentsToThisMessage", "You cannot add more attachments to this message."), variant: "critical" });
             return;
         }
 
-        showToast({ text: `You can only add ${pluralise(remaining, "more attachment")} to this message.`, variant: "critical" });
+        showToast({ text: tr("plugins.AddAttachments.youCanOnlyAddCountMoreAttachmentsToThisMessage", "You can only add {count} more attachments to this message.", { count: remaining }), variant: "critical" });
         return;
     }
 
-    showToast({ text: "Uploading, this can take a while...", icon: ClockIcon, iconColor: "var(--text-default)" });
+    showToast({ text: tr("plugins.AddAttachments.uploadingThisCanTakeAWhile", "Uploading, this can take a while..."), icon: ClockIcon, iconColor: "var(--text-default)" });
 
     const { body: { attachments } } = await RestAPI.post({
         url: `/channels/${channelId}/attachments`,
@@ -87,7 +87,7 @@ async function addAttachments(channelId: string, messageId: string, existingAtta
         }
     });
 
-    showToast({ text: `${files.length === 1 ? "Attachment" : "Attachments"} added successfully!`, variant: "success" });
+    showToast({ text: tr("plugins.AddAttachments.attachmentsAddedSuccessfully", "Attachments added successfully!"), variant: "success" });
 }
 
 function canAddAttachments(msg: Message) {
@@ -132,7 +132,7 @@ export default definePlugin({
             if (!channel.isPrivate() && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return null;
 
             return {
-                label: "Add Attachments",
+                label: tr("plugins.AddAttachments.addAttachments", "Add Attachments"),
                 icon: UploadIcon,
                 onClick: () => chooseAttachments(msg.channel_id, msg.id, msg.attachments.length)
             };
@@ -142,6 +142,7 @@ export default definePlugin({
     chatBarButton: {
         icon: UploadIcon,
         render({ channel, type }) {
+            useLocale();
             if (type.analyticsName !== "edit") return null;
 
             const msg = EditMessageStore.getEditingMessage(channel.id);
@@ -149,7 +150,7 @@ export default definePlugin({
 
             return (
                 <ChatBarButton
-                    tooltip="Add Attachments"
+                    tooltip={tr("plugins.AddAttachments.addAttachments", "Add Attachments")}
                     onClick={() => chooseAttachments(msg.channel_id, msg.id, msg.attachments.length)}
                 >
                     <UploadIcon height={18} width={18} />

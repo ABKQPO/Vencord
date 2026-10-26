@@ -26,6 +26,8 @@ import { HeadingSecondary } from "@components/Heading";
 import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsTab, wrapTab } from "@components/settings/tabs/BaseTab";
+import { LocalizedText } from "@components/settings/tabs/LocalizedText";
+import { tr, useLocale } from "@utils/localization";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useAwaiter } from "@utils/react";
@@ -37,6 +39,7 @@ import gitHash from "~git-hash";
 import { CommonProps, HashLink, Newer, Updatable } from "./Components";
 
 function VesktopSection() {
+    useLocale();
     if (!IS_VESKTOP) return null;
 
     const [isVesktopOutdated] = useAwaiter<boolean>(VesktopNative.app.isOutdated, { fallbackValue: false });
@@ -44,19 +47,19 @@ function VesktopSection() {
     return (
         <Flex className={Margins.bottom20} flexDirection="column" gap="1em">
             <Card variant="info">
-                <HeadingSecondary>Vesktop & Vencord</HeadingSecondary>
-                <Paragraph>Vesktop and Vencord are two separate things. This updater is for Vencord.</Paragraph>
+                <HeadingSecondary>{tr("loader.settings.vesktop.vencord", "Vesktop & Vencord")}</HeadingSecondary>
+                <Paragraph>{tr("loader.settings.vesktop.and.vencord.are.two.separate.things.this.updater.is.for.vencord", "Vesktop and Vencord are two separate things. This updater is for Vencord.")}</Paragraph>
                 <Paragraph className={Margins.top8}>
-                    You receive separate popups for Vesktop updates. You can also manually update by installing the <Link href="https://vesktop.dev/install">latest version</Link>.
+                    <LocalizedText id="loader.settings.you.receive.separate.popups.for.vesktop.updates.you.can.also.manually.update.by.installing.the." fallback="You receive separate popups for Vesktop updates. You can also manually update by installing the {version}." slots={{ version: <Link href="https://vesktop.dev/install">{tr("loader.settings.latest.version", "latest version")}</Link> }} />
                 </Paragraph>
             </Card>
 
             {isVesktopOutdated && (
                 <Card variant="warning">
-                    <HeadingSecondary>Vesktop Outdated</HeadingSecondary>
+                    <HeadingSecondary>{tr("loader.settings.vesktop.outdated", "Vesktop Outdated")}</HeadingSecondary>
                     <Flex flexDirection="column" gap="0.5em">
-                        <Paragraph>Your version of Vesktop is outdated!</Paragraph>
-                        <Button variant="link" onClick={() => VesktopNative.app.openUpdater()}>Open Vesktop Updater</Button>
+                        <Paragraph>{tr("loader.settings.your.version.of.vesktop.is.outdated", "Your version of Vesktop is outdated!")}</Paragraph>
+                        <Button variant="link" onClick={() => VesktopNative.app.openUpdater()}>{tr("loader.settings.open.vesktop.updater", "Open Vesktop Updater")}</Button>
                     </Flex>
                 </Card>
             )}
@@ -65,10 +68,11 @@ function VesktopSection() {
 }
 
 function Updater() {
+    useLocale();
     const settings = useSettings(["autoUpdate", "autoUpdateNotification"]);
 
     const [repo, err, repoPending] = useAwaiter(getRepo, {
-        fallbackValue: "Loading...",
+        fallbackValue: tr("loader.settings.loading", "Loading..."),
         onError: e => UpdateLogger.error("Failed to retrieve repo", err)
     });
 
@@ -83,15 +87,15 @@ function Updater() {
 
             <div className="vc-settings-switches">
                 <FormSwitch
-                    title="Automatically update"
-                    description="Automatically update Vencord without confirmation prompt"
+                    title={tr("loader.settings.automatically.update", "Automatically update")}
+                    description={tr("loader.settings.automatically.update.vencord.without.confirmation.prompt", "Automatically update Vencord without confirmation prompt")}
                     value={settings.autoUpdate}
                     onChange={(v: boolean) => settings.autoUpdate = v}
                     hideBorder
                 />
                 <FormSwitch
-                    title="Get notified when an automatic update completes"
-                    description="Show a notification when Vencord automatically updates"
+                    title={tr("loader.settings.get.notified.when.an.automatic.update.completes", "Get notified when an automatic update completes")}
+                    description={tr("loader.settings.show.a.notification.when.vencord.automatically.updates", "Show a notification when Vencord automatically updates")}
                     value={settings.autoUpdateNotification}
                     onChange={(v: boolean) => settings.autoUpdateNotification = v}
                     disabled={!settings.autoUpdate}
@@ -99,13 +103,13 @@ function Updater() {
                 />
             </div>
 
-            <Forms.FormTitle tag="h5" className={Margins.top20}>Repo</Forms.FormTitle>
+            <Forms.FormTitle tag="h5" className={Margins.top20}>{tr("loader.settings.repo", "Repo")}</Forms.FormTitle>
 
             <Forms.FormText>
                 {repoPending
-                    ? repo
+                    ? tr("loader.settings.loading", "Loading...")
                     : err
-                        ? "Failed to retrieve - check console"
+                        ? tr("loader.settings.failed.to.retrieve.check.console", "Failed to retrieve - check console")
                         : (
                             <Link href={repo}>
                                 {repo.split("/").slice(-2).join("/")}
@@ -118,7 +122,7 @@ function Updater() {
 
             <Divider className={classes(Margins.top16, Margins.bottom16)} />
 
-            <Forms.FormTitle tag="h5">Updates</Forms.FormTitle>
+            <Forms.FormTitle tag="h5">{tr("loader.settings.updates", "Updates")}</Forms.FormTitle>
 
             {isNewer
                 ? <Newer {...commonProps} />

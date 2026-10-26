@@ -27,6 +27,7 @@ import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { isTruthy } from "@utils/guards";
+import { tr, useLocale } from "@utils/localization";
 import { useAwaiter } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { Activity } from "@vencord/discord-types";
@@ -234,7 +235,7 @@ export default definePlugin({
         return (
             <Menu.MenuCheckboxItem
                 id="custom-rpc-toggle-toolbox"
-                label="Show Custom RPC"
+                label={tr("plugins.CustomRPC.showCustomRPC", "Show Custom RPC")}
                 checked={enablePresence}
                 action={() => {
                     settings.store.enablePresence = !enablePresence;
@@ -259,6 +260,7 @@ export default definePlugin({
     ],
 
     settingsAboutComponent: () => {
+    useLocale();
         const { enablePresence } = settings.use(["enablePresence"]);
         const [activity] = useAwaiter(createActivity, { fallbackValue: undefined, deps: Object.values(settings.store) });
         const gameActivityEnabled = ShowCurrentGame.useSetting();
@@ -269,22 +271,22 @@ export default definePlugin({
                 {!enablePresence && (
                     <Card variant="warning">
                         <Flex flexDirection="column" gap=".5em" alignItems="flex-start">
-                            <BaseText size="md" weight="bold">Custom RPC disabled</BaseText>
-                            <Paragraph>The "Enable Presence" setting is disabled, so your presence won't show. If this was unintentional, enable it below.</Paragraph>
+                            <BaseText size="md" weight="bold">{tr("plugins.CustomRPC.customRPCDisabled", "Custom RPC disabled")}</BaseText>
+                            <Paragraph>{tr("plugins.CustomRPC.theEnablePresenceSettingIsDisabledSoYourPresenceWonTShowIfThisWasUnintentionalEnableItBelow", "The \"Enable Presence\" setting is disabled, so your presence won't show. If this was unintentional, enable it below.")}</Paragraph>
                         </Flex>
                     </Card>
                 )}
                 {!gameActivityEnabled && (
                     <Card variant="danger">
                         <Flex flexDirection="column" gap=".5em" alignItems="flex-start">
-                            <BaseText size="md" weight="bold">Activity Sharing disabled</BaseText>
-                            <Paragraph>Activity Sharing isn't enabled, so people won't be able to see your custom rich presence!</Paragraph>
+                            <BaseText size="md" weight="bold">{tr("plugins.CustomRPC.activitySharingDisabled", "Activity Sharing disabled")}</BaseText>
+                            <Paragraph>{tr("plugins.CustomRPC.activitySharingIsnTEnabledSoPeopleWonTBeAbleToSeeYourCustomRichPresence", "Activity Sharing isn't enabled, so people won't be able to see your custom rich presence!")}</Paragraph>
 
                             <Button
                                 variant="overlayPrimary"
                                 onClick={() => ShowCurrentGame.updateSetting(true)}
                             >
-                                Enable Activity Sharing
+                                {tr("plugins.CustomRPC.enableActivitySharing", "Enable Activity Sharing")}
                             </Button>
                         </Flex>
                     </Card>
@@ -292,20 +294,19 @@ export default definePlugin({
 
                 <Flex flexDirection="column" gap=".5em">
                     <Paragraph>
-                        Go to the <Link href="https://discord.com/developers/applications">Discord Developer Portal</Link> to create an application and
-                        get the application ID.
+                        {tr("plugins.CustomRPC.goToThe", "Go to the")} <Link href="https://discord.com/developers/applications">Discord Developer Portal</Link> {tr("plugins.CustomRPC.toCreateAnApplicationAndGetTheApplicationID", "to create an application and get the application ID.")}
                     </Paragraph>
                     <Paragraph>
-                        Upload images in the Rich Presence tab to get the image keys.
+                        {tr("plugins.CustomRPC.uploadImagesInTheRichPresenceTabToGetTheImageKeys", "Upload images in the Rich Presence tab to get the image keys.")}
                     </Paragraph>
                     <Paragraph>
-                        If you want to use an image link, download your image and reupload the image to <Link href="https://imgur.com">Imgur</Link> and get the image link by right-clicking the image and selecting "Copy image address".
+                        {tr("plugins.CustomRPC.ifYouWantToUseAnImageLinkDownloadYourImageAndReuploadTheImageTo", "If you want to use an image link, download your image and reupload the image to")} <Link href="https://imgur.com">Imgur</Link> {tr("plugins.CustomRPC.andGetTheImageLinkByRightClickingTheImageAndSelectingCopyImageAddress", "and get the image link by right-clicking the image and selecting \"Copy image address\".")}
                     </Paragraph>
                     <Paragraph>
-                        You can't see your own buttons on your profile, but everyone else can see it fine.
+                        {tr("plugins.CustomRPC.youCanTSeeYourOwnButtonsOnYourProfileButEveryoneElseCanSeeItFine", "You can't see your own buttons on your profile, but everyone else can see it fine.")}
                     </Paragraph>
                     <Paragraph>
-                        Some weird unicode text ("fonts" 𝖑𝖎𝖐𝖊 𝖙𝖍𝖎𝖘) may cause the rich presence to not show up, try using normal letters instead.
+                        {tr("plugins.CustomRPC.someWeirdUnicodeTextFontsMayCauseTheRichPresenceToNotShowUpTryUsingNormalLettersInstead", "Some weird unicode text (\"fonts\" 𝖑𝖎𝖐𝖊 𝖙𝖍𝖎𝖘) may cause the rich presence to not show up, try using normal letters instead.")}
                     </Paragraph>
                 </Flex>
 

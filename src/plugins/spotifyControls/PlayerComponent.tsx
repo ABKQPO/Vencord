@@ -25,6 +25,7 @@ import { Span } from "@components/Span";
 import { debounce } from "@shared/debounce";
 import { classNameFactory } from "@utils/css";
 import { copyWithToast, openImageModal } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { classes } from "@utils/misc";
 import { formatDuration } from "@utils/text";
 import { ContextMenuApi, FluxDispatcher, Menu, React, useEffect, useState, useStateFromStores } from "@webpack/common";
@@ -34,6 +35,15 @@ import { SeekBar } from "./SeekBar";
 import { SpotifyStore, Track } from "./SpotifyStore";
 
 const cl = classNameFactory("vc-spotify-");
+
+function getItemTypeLabel(type: string) {
+    switch (type) {
+        case "Song": return tr("plugins.SpotifyControls.itemTypeSong", "Song");
+        case "Artist": return tr("plugins.SpotifyControls.itemTypeArtist", "Artist");
+        case "Album": return tr("plugins.SpotifyControls.itemTypeAlbum", "Album");
+        default: return type;
+    }
+}
 
 function Svg(path: string, label: string) {
     return () => (
@@ -62,6 +72,7 @@ const Repeat = Svg("M7 7h10v1.79c0 .45.54.67.85.35l2.79-2.79c.2-.2.2-.51 0-.71l-
 const Shuffle = Svg("M10.59 9.17L6.12 4.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41l4.46 4.46 1.42-1.4zm4.76-4.32l1.19 1.19L4.7 17.88c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L17.96 7.46l1.19 1.19c.31.31.85.09.85-.36V4.5c0-.28-.22-.5-.5-.5h-3.79c-.45 0-.67.54-.36.85zm-.52 8.56l-1.41 1.41 3.13 3.13-1.2 1.2c-.31.31-.09.85.36.85h3.79c.28 0 .5-.22.5-.5v-3.79c0-.45-.54-.67-.85-.35l-1.19 1.19-3.13-3.14z", "shuffle");
 
 function Button(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+    useLocale();
     return (
         <button
             className={cl("button")}
@@ -73,29 +84,30 @@ function Button(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
 }
 
 function CopyContextMenu({ name, type, path }: { type: string; name: string; path: string; }) {
+    useLocale();
     return (
         <Menu.Menu
             navId="vc-spotify-menu"
             onClose={ContextMenuApi.closeContextMenu}
-            aria-label={`Spotify ${type} Menu`}
+            aria-label={tr("plugins.SpotifyControls.itemMenu", "Spotify {type} Menu", { type: getItemTypeLabel(type) })}
         >
             <Menu.MenuItem
                 id="vc-spotify-copy-name"
-                label={`Copy ${type} Name`}
+                label={tr("plugins.SpotifyControls.copyName", "Copy {type} Name", { type: getItemTypeLabel(type) })}
                 action={() => copyWithToast(name)}
                 icon={CopyIcon}
                 leadingAccessory={{ type: "icon", icon: CopyIcon }}
             />
             <Menu.MenuItem
                 id="vc-spotify-copy-link"
-                label={`Copy ${type} Link`}
+                label={tr("plugins.SpotifyControls.copyLink", "Copy {type} Link", { type: getItemTypeLabel(type) })}
                 action={() => copyWithToast("https://open.spotify.com" + path)}
                 icon={LinkIcon}
                 leadingAccessory={{ type: "icon", icon: LinkIcon }}
             />
             <Menu.MenuItem
                 id="vc-spotify-open"
-                label={`Open ${type} in Spotify`}
+                label={tr("plugins.SpotifyControls.openItem", "Open {type} in Spotify", { type: getItemTypeLabel(type) })}
                 action={() => SpotifyStore.openExternal(path)}
                 icon={OpenExternalIcon}
                 leadingAccessory={{ type: "icon", icon: OpenExternalIcon }}
@@ -105,6 +117,7 @@ function CopyContextMenu({ name, type, path }: { type: string; name: string; pat
 }
 
 function Controls() {
+    useLocale();
     const [isPlaying, shuffle, repeat] = useStateFromStores(
         [SpotifyStore],
         () => [SpotifyStore.isPlaying, SpotifyStore.shuffle, SpotifyStore.repeat]
@@ -156,6 +169,7 @@ const seek = debounce((v: number) => {
 });
 
 function SpotifySeekBar() {
+    useLocale();
     const { duration } = SpotifyStore.track!;
 
     const [storePosition, isSettingPosition, isPlaying] = useStateFromStores(
@@ -188,7 +202,7 @@ function SpotifySeekBar() {
                 size="xs"
                 weight="medium"
                 className={cl("progress-time") + " " + cl("time-left")}
-                aria-label="Progress"
+                aria-label={tr("plugins.SpotifyControls.progress", "Progress")}
             >
                 {formatDuration(position)}
             </Span>
@@ -204,7 +218,7 @@ function SpotifySeekBar() {
                 size="xs"
                 weight="medium"
                 className={cl("progress-time") + " " + cl("time-right")}
-                aria-label="Total Duration"
+                aria-label={tr("plugins.SpotifyControls.totalDuration", "Total Duration")}
             >
                 {formatDuration(duration)}
             </Span>
@@ -214,18 +228,19 @@ function SpotifySeekBar() {
 
 
 function AlbumContextMenu({ track }: { track: Track; }) {
+    useLocale();
     const volume = useStateFromStores([SpotifyStore], () => SpotifyStore.volume);
 
     return (
         <Menu.Menu
             navId="spotify-album-menu"
             onClose={() => FluxDispatcher.dispatch({ type: "CONTEXT_MENU_CLOSE" })}
-            aria-label="Spotify Album Menu"
+            aria-label={tr("plugins.SpotifyControls.spotifyAlbumMenu", "Spotify Album Menu")}
         >
             <Menu.MenuItem
                 key="open-album"
                 id="open-album"
-                label="Open Album"
+                label={tr("plugins.SpotifyControls.openAlbum", "Open Album")}
                 action={() => SpotifyStore.openExternal(`/album/${track.album.id}`)}
                 icon={OpenExternalIcon}
                 leadingAccessory={{ type: "icon", icon: OpenExternalIcon }}
@@ -233,7 +248,7 @@ function AlbumContextMenu({ track }: { track: Track; }) {
             <Menu.MenuItem
                 key="view-cover"
                 id="view-cover"
-                label="View Album Cover"
+                label={tr("plugins.SpotifyControls.viewAlbumCover", "View Album Cover")}
                 // trolley
                 action={() => openImageModal(track.album.image)}
                 icon={ImageIcon}
@@ -242,7 +257,7 @@ function AlbumContextMenu({ track }: { track: Track; }) {
             <Menu.MenuControlItem
                 id="spotify-volume"
                 key="spotify-volume"
-                label="Volume"
+                label={tr("plugins.SpotifyControls.volume", "Volume")}
                 control={(props, ref) => (
                     <Menu.MenuSliderControl
                         {...props}
@@ -270,6 +285,7 @@ function makeLinkProps(type: "Song" | "Artist" | "Album", condition: unknown, na
 }
 
 function Info({ track }: { track: Track; }) {
+    useLocale();
     const img = track?.album?.image;
 
     const [coverExpanded, setCoverExpanded] = useState(false);
@@ -280,7 +296,7 @@ function Info({ track }: { track: Track; }) {
                 <img
                     id={cl("album-image")}
                     src={img.url}
-                    alt="Album Image"
+                    alt={tr("plugins.SpotifyControls.albumImage", "Album Image")}
                     onClick={() => setCoverExpanded(!coverExpanded)}
                     onContextMenu={e => {
                         ContextMenuApi.openContextMenu(e, () => <AlbumContextMenu track={track} />);
@@ -312,7 +328,7 @@ function Info({ track }: { track: Track; }) {
                 </Paragraph>
                 {track.artists.some(a => a.name) && (
                     <Paragraph className={cl(["ellipoverflow", "secondary-song-info"])}>
-                        <span className={cl("song-info-prefix")}>by&nbsp;</span>
+                        <span className={cl("song-info-prefix")}>{tr("plugins.SpotifyControls.by", "by ")}</span>
                         {track.artists.map((a, i) => (
                             <React.Fragment key={a.name}>
                                 <span
@@ -330,7 +346,7 @@ function Info({ track }: { track: Track; }) {
                 )}
                 {track.album.name && (
                     <Paragraph className={cl(["ellipoverflow", "secondary-song-info"])}>
-                        <span className={cl("song-info-prefix")}>on&nbsp;</span>
+                        <span className={cl("song-info-prefix")}>{tr("plugins.SpotifyControls.on", "on ")}</span>
                         <span
                             id={cl("album-title")}
                             className={cl("album")}
@@ -348,6 +364,7 @@ function Info({ track }: { track: Track; }) {
 }
 
 export function Player() {
+    useLocale();
     const track = useStateFromStores(
         [SpotifyStore],
         () => SpotifyStore.track,

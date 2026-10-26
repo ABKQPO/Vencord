@@ -21,6 +21,7 @@ import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { IconComponent, OptionType } from "@utils/types";
 import { FluxDispatcher, Menu, React } from "@webpack/common";
 
@@ -44,6 +45,7 @@ const settings = definePluginSettings({
 });
 
 function SilentTypingEnabledIcon() {
+    useLocale();
     return (
         <SilentTypingIcon>
             <mask id="silent-typing-msg-mask">
@@ -56,6 +58,7 @@ function SilentTypingEnabledIcon() {
 }
 
 const SilentTypingIcon: IconComponent = ({ height = 20, width = 20, className, children }) => {
+    useLocale();
     return (
         <svg
             width={width}
@@ -71,6 +74,7 @@ const SilentTypingIcon: IconComponent = ({ height = 20, width = 20, className, c
 };
 
 const SilentTypingToggle: ChatBarButtonFactory = ({ isMainChat }) => {
+    useLocale();
     const { isEnabled, showIcon } = settings.use(["isEnabled", "showIcon"]);
     const toggle = () => settings.store.isEnabled = !settings.store.isEnabled;
 
@@ -78,7 +82,7 @@ const SilentTypingToggle: ChatBarButtonFactory = ({ isMainChat }) => {
 
     return (
         <ChatBarButton
-            tooltip={isEnabled ? "Disable Silent Typing" : "Enable Silent Typing"}
+            tooltip={isEnabled ? tr("plugins.SilentTyping.disableSilentTyping", "Disable Silent Typing") : tr("plugins.SilentTyping.enableSilentTyping", "Enable Silent Typing")}
             onClick={toggle}
         >
             {isEnabled ? <SilentTypingEnabledIcon /> : <SilentTypingIcon />}
@@ -88,6 +92,7 @@ const SilentTypingToggle: ChatBarButtonFactory = ({ isMainChat }) => {
 
 
 const ChatBarContextCheckbox: NavContextMenuPatchCallback = children => {
+    useLocale();
     const { isEnabled, contextMenu } = settings.use(["isEnabled", "contextMenu"]);
     if (!contextMenu) return;
 
@@ -100,7 +105,7 @@ const ChatBarContextCheckbox: NavContextMenuPatchCallback = children => {
     group.splice(idx + 1, 0,
         <Menu.MenuCheckboxItem
             id="vc-silent-typing"
-            label="Enable Silent Typing"
+            label={tr("plugins.SilentTyping.enableSilentTyping", "Enable Silent Typing")}
             checked={isEnabled}
             action={() => settings.store.isEnabled = !settings.store.isEnabled}
         />
@@ -144,7 +149,7 @@ export default definePlugin({
         execute: async (args, ctx) => {
             settings.store.isEnabled = !!findOption(args, "value", !settings.store.isEnabled);
             sendBotMessage(ctx.channel.id, {
-                content: settings.store.isEnabled ? "Silent typing enabled!" : "Silent typing disabled!",
+                content: settings.store.isEnabled ? tr("plugins.SilentTyping.silentTypingEnabled", "Silent typing enabled!") : tr("plugins.SilentTyping.silentTypingDisabled", "Silent typing disabled!"),
             });
         },
     }],

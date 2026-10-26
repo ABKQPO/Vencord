@@ -6,6 +6,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import definePlugin, { makeRange, OptionType, PluginNative, ReporterTestable } from "@utils/types";
 import type { Channel, Embed, GuildMember, MessageAttachment, User } from "@vencord/discord-types";
@@ -201,7 +202,7 @@ export default definePlugin({
         CALL_UPDATE({ call }: { call: Call; }) {
             if (call?.ringing?.includes(UserStore.getCurrentUser().id) && settings.store.callNotifications) {
                 const channel = ChannelStore.getChannel(call.channel_id);
-                sendOtherNotif("Incoming call", `${channel.name} is calling you...`);
+                sendOtherNotif(tr("plugins.XSOverlay.incomingCall", "Incoming call"), tr("plugins.XSOverlay.calling", "{name} is calling you...", { name: channel.name }));
             }
         },
         MESSAGE_CREATE({ message, optimistic }: { message: Message; optimistic: boolean; }) {
@@ -231,20 +232,20 @@ export default definePlugin({
             }
 
             if (message.referenced_message) {
-                titleString += " (reply)";
+                titleString += tr("plugins.XSOverlay.reply", " (reply)");
             }
 
             if (message.embeds.length > 0) {
-                finalMsg += " [embed] ";
+                finalMsg += tr("plugins.XSOverlay.embed", " [embed] ");
                 if (message.content === "") {
-                    finalMsg = "sent message embed(s)";
+                    finalMsg = tr("plugins.XSOverlay.sentMessageEmbedS", "sent message embed(s)");
                 }
             }
 
             if (message.sticker_items) {
-                finalMsg += " [sticker] ";
+                finalMsg += tr("plugins.XSOverlay.sticker", " [sticker] ");
                 if (message.content === "") {
-                    finalMsg = "sent a sticker";
+                    finalMsg = tr("plugins.XSOverlay.sentASticker", "sent a sticker");
                 }
             }
 
@@ -308,13 +309,17 @@ export default definePlugin({
         Native.closeSocket();
     },
 
-    settingsAboutComponent: () => (
+    settingsAboutComponent: () => {
+        useLocale();
+        return (
         <>
-            <Button onClick={() => sendOtherNotif("This is a test notification! explode", "Hello from Vendor!")}>
-                Send test notification
+            <Button onClick={() => sendOtherNotif(tr("plugins.XSOverlay.thisIsATestNotificationExplode", "This is a test notification! explode"), tr("plugins.XSOverlay.helloFromVendor", "Hello from Vendor!"))}>
+
+                {tr("plugins.XSOverlay.sendTestNotification", "Send test notification")}
             </Button>
         </>
-    )
+    );
+    }
 });
 
 function shouldIgnoreForChannelType(channel: Channel) {

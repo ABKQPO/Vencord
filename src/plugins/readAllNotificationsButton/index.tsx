@@ -22,6 +22,7 @@ import { addServerListElement, removeServerListElement, ServerListRenderPosition
 import { TextButton } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin from "@utils/types";
 import { ActiveJoinedThreadsStore, FluxDispatcher, GuildChannelStore, GuildStore, React, ReadStateStore } from "@webpack/common";
 
@@ -53,15 +54,19 @@ function onClick() {
     });
 }
 
-const ReadAllButton = () => (
+const ReadAllButton = () => {
+        useLocale();
+        return (
     <TextButton
         variant="secondary"
         onClick={onClick}
         className="vc-ranb-button"
     >
-        Read All
+
+        {tr("plugins.ReadAllNotificationsButton.readAll", "Read All")}
     </TextButton>
 );
+    };
 
 export default definePlugin({
     name: "ReadAllNotificationsButton",

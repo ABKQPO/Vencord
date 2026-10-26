@@ -9,6 +9,7 @@ import "./styles.css";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { Tooltip } from "@webpack/common";
@@ -88,11 +89,12 @@ async function embedDidMount(this: Component<Props>) {
 }
 
 function DearrowButton({ component }: { component: Component<Props>; }) {
+    useLocale();
     const { embed } = component.props;
     if (!embed?.dearrow) return null;
 
     return (
-        <Tooltip text={embed.dearrow.enabled ? "This embed has been dearrowed, click to restore" : "Click to dearrow"}>
+        <Tooltip text={embed.dearrow.enabled ? tr("plugins.Dearrow.thisEmbedHasBeenDearrowedClickToRestore", "This embed has been dearrowed, click to restore") : tr("plugins.Dearrow.clickToDearrow", "Click to dearrow")}>
             {({ onMouseEnter, onMouseLeave }) => (
                 <button
                     onMouseEnter={onMouseEnter}
@@ -119,7 +121,7 @@ function DearrowButton({ component }: { component: Component<Props>; }) {
                         width="24px"
                         height="24px"
                         viewBox="0 0 36 36"
-                        aria-label="Toggle Dearrow"
+                        aria-label={tr("plugins.Dearrow.toggleDearrow", "Toggle Dearrow")}
                         className="vc-dearrow-icon"
                     >
                         <path

@@ -19,6 +19,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { LinkButton } from "@components/Button";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 
 const API_URL = "https://usrbg.is-hardly.online/users";
@@ -85,9 +86,11 @@ export default definePlugin({
     data: null as UsrbgApiReturn | null,
 
     settingsAboutComponent: () => {
+    useLocale();
         return (
             <LinkButton href="https://github.com/AutumnVN/usrbg#how-to-request-your-own-usrbg-banner" variant="primary">
-                Get your own USRBG banner
+
+                {tr("plugins.USRBG.getYourOwnUSRBGBanner", "Get your own USRBG banner")}
             </LinkButton>
         );
     },

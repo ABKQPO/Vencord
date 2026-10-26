@@ -12,6 +12,7 @@ import {
 } from "@components/index";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { Checkbox, closeModal, Modal, openModal, Text, } from "@webpack/common";
@@ -38,17 +39,17 @@ function openScreenSharePicker(options: DisplayMediaStreamOptions) {
                     options={options}
                     close={() => {
                         props.onClose();
-                        reject(new NotAllowedError("Permission denied by user"));
+                        reject(new NotAllowedError(tr("plugins.WebScreenShare.permissionDeniedByUser", "Permission denied by user")));
                     }}
                 />
             ),
             {
                 onCloseRequest() {
                     closeModal(key);
-                    reject(new NotAllowedError("Permission denied by user"));
+                    reject(new NotAllowedError(tr("plugins.WebScreenShare.permissionDeniedByUser", "Permission denied by user")));
                 },
                 onCloseCallback() {
-                    reject(new NotAllowedError("Permission denied by user"));
+                    reject(new NotAllowedError(tr("plugins.WebScreenShare.permissionDeniedByUser", "Permission denied by user")));
                 }
             }
         );
@@ -62,6 +63,7 @@ function OptionRadio<Settings extends object, Key extends keyof Settings, Option
     settingsKey: Key;
     onChange: (option: Options[number]) => void;
 }) {
+    useLocale();
     const { options, settings, settingsKey, labels, onChange } = props;
 
     return (
@@ -90,6 +92,7 @@ function ModalComponent({ modalProps, submit, close, options }: {
     close: () => void;
     options: DisplayMediaStreamOptions;
 }) {
+    useLocale();
     const liveSettings = settings.use();
     const disableStreamPreviewsValue = disableStreamPreviews.useSetting();
 
@@ -146,20 +149,20 @@ function ModalComponent({ modalProps, submit, close, options }: {
                     <div className={cl("summary")}>
                         <Text variant="text-md/semibold" color="text-strong" className={cl("source-or-preset-name")}>{liveSettings.contentHint === "motion" ? "Gaming" : liveSettings.contentHint === "detail" ? "Screenshare" : "Custom"}</Text>
                         <Text variant="text-xs/medium" color="text-muted" className={cl("summary-detail")}>
-                            <span>{liveSettings.contentHint === "motion" ? "Smoother video" : liveSettings.contentHint === "detail" ? "Cleaner text" : "User preset"}</span>
+                            <span>{liveSettings.contentHint === "motion" ? tr("plugins.WebScreenShare.smootherVideo", "Smoother video") : liveSettings.contentHint === "detail" ? tr("plugins.WebScreenShare.cleanerText", "Cleaner text") : tr("plugins.WebScreenShare.userPreset", "User preset")}</span>
                             <span className={cl("ellipsis")}>•</span>
                             <span>{liveSettings.resolution}p</span>
                             <span className={cl("ellipsis")}>•</span>
-                            <span>{liveSettings.frameRate}fps</span>
+                            <span>{liveSettings.frameRate}{tr("plugins.WebScreenShare.fps", "fps")}</span>
                             {liveSettings.systemAudio ? <span className={cl("ellipsis")}>•</span> : ""}
-                            {liveSettings.systemAudio ? <span>Stream Muted</span> : ""}
+                            {liveSettings.systemAudio ? <span>{tr("plugins.WebScreenShare.streamMuted", "Stream Muted")}</span> : ""}
                         </Text>
                     </div>
                 }
                 actions={[
                     {
                         variant: "primary",
-                        text: "Stream",
+                        text: tr("plugins.WebScreenShare.stream", "Stream"),
                         onClick: stream
                     }
                 ]}
@@ -168,7 +171,7 @@ function ModalComponent({ modalProps, submit, close, options }: {
                 <div>
                     <div className={cl("flex", "padding")}>
                         <section className={cl("quality-section")}>
-                            <Text tag="h2" variant="heading-md/semibold" color="text-strong">Resolution</Text>
+                            <Text tag="h2" variant="heading-md/semibold" color="text-strong">{tr("plugins.WebScreenShare.resolution", "Resolution")}</Text>
                             <OptionRadio
                                 options={StreamResolution}
                                 settings={liveSettings}
@@ -178,7 +181,7 @@ function ModalComponent({ modalProps, submit, close, options }: {
                         </section>
 
                         <section className={cl("quality-section")}>
-                            <Text tag="h2" variant="heading-md/semibold" color="text-strong">Frame Rate</Text>
+                            <Text tag="h2" variant="heading-md/semibold" color="text-strong">{tr("plugins.WebScreenShare.frameRate", "Frame Rate")}</Text>
                             <OptionRadio
                                 options={StreamFps}
                                 settings={liveSettings}
@@ -188,11 +191,11 @@ function ModalComponent({ modalProps, submit, close, options }: {
                         </section>
                     </div>
                     <div>
-                        <Text tag="h2" variant="heading-md/semibold" color="text-strong">Stream Mode</Text>
+                        <Text tag="h2" variant="heading-md/semibold" color="text-strong">{tr("plugins.WebScreenShare.streamMode", "Stream Mode")}</Text>
                         <div>
                             <OptionRadio
                                 options={StreamContentHint}
-                                labels={["Smoother video", "Cleaner text", "Custom"]}
+                                labels={[tr("plugins.WebScreenShare.smootherVideo", "Smoother video"), tr("plugins.WebScreenShare.cleanerText", "Cleaner text"), "Custom"]}
                                 settings={liveSettings}
                                 settingsKey="contentHint"
                                 onChange={option => (liveSettings.contentHint = option)}
@@ -207,8 +210,8 @@ function ModalComponent({ modalProps, submit, close, options }: {
                             shape="box"
                             reverse={true}>
                             <div className={cl("control-content")}>
-                                <Text tag="h2" variant="heading-md/semibold" color="text-strong">Mute Stream Audio</Text>
-                                <Text variant="text-sm/normal" color="text-subtle">Prevents system audio from being included in your stream.</Text>
+                                <Text tag="h2" variant="heading-md/semibold" color="text-strong">{tr("plugins.WebScreenShare.muteStreamAudio", "Mute Stream Audio")}</Text>
+                                <Text variant="text-sm/normal" color="text-subtle">{tr("plugins.WebScreenShare.preventsSystemAudioFromBeingIncludedInYourStream", "Prevents system audio from being included in your stream.")}</Text>
                             </div>
                         </Checkbox>
                     </div>
@@ -219,8 +222,8 @@ function ModalComponent({ modalProps, submit, close, options }: {
                             shape="box"
                             reverse={true}>
                             <div className={cl("control-content")}>
-                                <Text tag="h2" variant="heading-md/semibold" color="text-strong">Show Stream Previews</Text>
-                                <Text variant="text-sm/normal" color="text-subtle">Allows others to see a preview of your stream before they join.</Text>
+                                <Text tag="h2" variant="heading-md/semibold" color="text-strong">{tr("plugins.WebScreenShare.showStreamPreviews", "Show Stream Previews")}</Text>
+                                <Text variant="text-sm/normal" color="text-subtle">{tr("plugins.WebScreenShare.allowsOthersToSeeAPreviewOfYourStreamBeforeTheyJoin", "Allows others to see a preview of your stream before they join.")}</Text>
                             </div>
                         </Checkbox>
                     </div>

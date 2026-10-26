@@ -20,6 +20,7 @@ import { addServerListElement, removeServerListElement, ServerListRenderPosition
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 import { findStoreLazy } from "@webpack";
 import { GuildStore, PresenceStore, RelationshipStore, useStateFromStores } from "@webpack/common";
@@ -45,6 +46,7 @@ const settings = definePluginSettings({
 });
 
 function FriendsIndicator() {
+    useLocale();
     const onlineFriendsCount = useStateFromStores([RelationshipStore, PresenceStore], () => {
         let count = 0;
 
@@ -71,12 +73,13 @@ function FriendsIndicator() {
             textTransform: "uppercase",
             textAlign: "center",
         }}>
-            {onlineFriendsCount} online
+            {onlineFriendsCount}  {tr("plugins.ServerListIndicators.online", "online")}
         </span>
     );
 }
 
 function ServersIndicator() {
+    useLocale();
     const guildCount = useStateFromStores([GuildStore, UserGuildJoinRequestStore], () => {
         const guildJoinRequests: string[] = UserGuildJoinRequestStore.computeGuildIds();
         const guilds = GuildStore.getGuilds();
@@ -95,7 +98,7 @@ function ServersIndicator() {
             textTransform: "uppercase",
             textAlign: "center",
         }}>
-            {guildCount} servers
+            {guildCount}  {tr("plugins.ServerListIndicators.servers", "servers")}
         </span>
     );
 }

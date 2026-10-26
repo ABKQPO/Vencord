@@ -5,20 +5,24 @@
  */
 
 import { FormSwitch } from "@components/FormSwitch";
+import { tr, useLocale } from "@utils/localization";
 import { Margins } from "@utils/margins";
 import { Forms, Parser, TextInput, useEffect, useState } from "@webpack/common";
 
-const RegexGuide = {
-    "\\i": "Special regex escape sequence that matches identifiers (varnames, classnames, etc.)",
-    "$$": "Insert a $",
-    "$&": "Insert the entire match",
-    "$`\u200b": "Insert the substring before the match",
-    "$'": "Insert the substring after the match",
-    "$n": "Insert the nth capturing group ($1, $2...)",
-    "$self": "Insert the plugin instance",
-} as const;
+import { localizePatchError } from "./localizeError";
+
+function getRegexGuide() { return {
+    "\\i": tr("loader.settings.special.regex.escape.sequence.that.matches.identifiers.varnames.classnames.etc", "Special regex escape sequence that matches identifiers (varnames, classnames, etc.)"),
+    "$$": tr("loader.settings.insert.a", "Insert a $"),
+    "$&": tr("loader.settings.insert.the.entire.match", "Insert the entire match"),
+    "$`\u200b": tr("loader.settings.insert.the.substring.before.the.match", "Insert the substring before the match"),
+    "$'": tr("loader.settings.insert.the.substring.after.the.match", "Insert the substring after the match"),
+    "$n": tr("loader.settings.insert.the.nth.capturing.group.1.2", "Insert the nth capturing group ($1, $2...)"),
+    "$self": tr("loader.settings.insert.the.plugin.instance", "Insert the plugin instance"),
+} as const; }
 
 export function ReplacementInput({ replacement, setReplacement, replacementError }) {
+    useLocale();
     const [isFunc, setIsFunc] = useState(false);
     const [error, setError] = useState<string>();
 
@@ -52,17 +56,17 @@ export function ReplacementInput({ replacement, setReplacement, replacementError
     return (
         <>
             {/* FormTitle adds a class if className is not set, so we set it to an empty string to prevent that */}
-            <Forms.FormTitle className="">Replacement</Forms.FormTitle>
+            <Forms.FormTitle className="">{tr("loader.settings.replacement", "Replacement")}</Forms.FormTitle>
             <TextInput
                 value={replacement?.toString()}
                 onChange={onChange}
-                error={error ?? replacementError}
+                error={localizePatchError(error ?? replacementError)}
             />
             {!isFunc && (
                 <div>
-                    <Forms.FormTitle className={Margins.top8}>Cheat Sheet</Forms.FormTitle>
+                    <Forms.FormTitle className={Margins.top8}>{tr("loader.settings.cheat.sheet", "Cheat Sheet")}</Forms.FormTitle>
 
-                    {Object.entries(RegexGuide).map(([placeholder, desc]) => (
+                    {Object.entries(getRegexGuide()).map(([placeholder, desc]) => (
                         <Forms.FormText key={placeholder}>
                             {Parser.parse("`" + placeholder + "`")}: {desc}
                         </Forms.FormText>
@@ -74,8 +78,8 @@ export function ReplacementInput({ replacement, setReplacement, replacementError
                 className={Margins.top16}
                 value={isFunc}
                 onChange={setIsFunc}
-                title={"Treat Replacement as function"}
-                description='"Replacement" will be evaluated as a function if this is enabled'
+                title={tr("loader.settings.treat.replacement.as.function", "Treat Replacement as function")}
+                description={tr("loader.settings.replacement.will.be.evaluated.as.a.function.if.this.is.enabled", "\"Replacement\" will be evaluated as a function if this is enabled")}
                 hideBorder
             />
         </>

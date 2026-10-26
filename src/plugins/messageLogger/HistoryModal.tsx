@@ -7,6 +7,7 @@
 import ErrorBoundary from "@components/ErrorBoundary";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { classNameFactory } from "@utils/css";
+import { tr, useLocale } from "@utils/localization";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { RenderModalProps } from "@vencord/discord-types";
@@ -32,6 +33,7 @@ export function openHistoryModal(message: any) {
 }
 
 export function HistoryModal({ modalProps, message }: { modalProps: RenderModalProps; message: any; }) {
+    useLocale();
     const [currentTab, setCurrentTab] = useState(message.editHistory.length);
     const timestamps = [message.firstEditTimestamp, ...message.editHistory.map(m => m.timestamp)];
     const contents = [...message.editHistory.map(m => m.content), message.content];
@@ -40,7 +42,7 @@ export function HistoryModal({ modalProps, message }: { modalProps: RenderModalP
         <Modal
             {...modalProps}
             size="lg"
-            title="Message Edit History"
+            title={tr("plugins.MessageLogger.messageEditHistory", "Message Edit History")}
         >
             <TabBar
                 type="top"
@@ -50,7 +52,7 @@ export function HistoryModal({ modalProps, message }: { modalProps: RenderModalP
                 onItemSelect={setCurrentTab}
             >
                 {message.firstEditTimestamp.getTime() !== message.timestamp.getTime() && (
-                    <TooltipContainer text="This edit state was not logged so it can't be displayed.">
+                    <TooltipContainer text={tr("plugins.MessageLogger.thisEditStateWasNotLoggedSoItCanTBeDisplayed", "This edit state was not logged so it can't be displayed.")}>
                         <TabBar.Item
                             className="vc-settings-tab-bar-item"
                             id={-1}

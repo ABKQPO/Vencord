@@ -7,17 +7,19 @@
 import { Link } from "@components/Link";
 import { settings } from "@plugins/decor/settings";
 import { DecorationModalClasses, requireAvatarDecorationModal } from "@plugins/decor/ui";
+import { tr, useLocale } from "@utils/localization";
 import { RenderModalProps } from "@vencord/discord-types";
 import { ConfirmModal, Forms, openModal } from "@webpack/common";
 
 import { openCreateDecorationModal } from "./CreateDecorationModal";
 
 function GuidelinesModal(props: RenderModalProps) {
+    useLocale();
     return (
         <ConfirmModal
             {...props}
-            title="Hold on"
-            confirmText="Continue"
+            title={tr("plugins.Decor.holdOn", "Hold on")}
+            confirmText={tr("plugins.Decor.continue", "Continue")}
             variant="primary"
             onConfirm={() => {
                 settings.store.agreedToGuidelines = true;
@@ -27,11 +29,11 @@ function GuidelinesModal(props: RenderModalProps) {
         >
             <div className={DecorationModalClasses.modal}>
                 <Forms.FormText>
-                    By submitting a decoration, you agree to <Link
+                    {tr("plugins.Decor.bySubmittingADecorationYouAgreeTo", "By submitting a decoration, you agree to")} <Link
                         href="https://github.com/decor-discord/.github/blob/main/GUIDELINES.md"
                     >
-                        the guidelines
-                    </Link>. Not reading these guidelines may get your account suspended from creating more decorations in the future.
+                        {tr("plugins.Decor.theGuidelines", "the guidelines")}
+                    </Link>{tr("plugins.Decor.notReadingTheseGuidelinesMayGetYourAccountSuspendedFromCreatingMoreDecorationsInTheFuture", ". Not reading these guidelines may get your account suspended from creating more decorations in the future.")}
                 </Forms.FormText>
             </div>
         </ConfirmModal>

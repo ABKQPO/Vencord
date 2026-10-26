@@ -19,6 +19,7 @@
 import { popNotice, showNotice } from "@api/Notices";
 import { Link } from "@components/Link";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { ReporterTestable } from "@utils/types";
 import { findByCodeLazy } from "@webpack";
 import { ApplicationAssetUtils, FluxDispatcher, Forms, showToast } from "@webpack/common";
@@ -45,14 +46,17 @@ export default definePlugin({
     reporterTestable: ReporterTestable.None,
     hidden: IS_VESKTOP || "legcord" in window,
 
-    settingsAboutComponent: () => (
+    settingsAboutComponent: () => {
+        useLocale();
+        return (
         <>
-            <Forms.FormTitle tag="h3">How to use arRPC</Forms.FormTitle>
+            <Forms.FormTitle tag="h3">{tr("plugins.WebRichPresence (arRPC).howToUseArRPC", "How to use arRPC")}</Forms.FormTitle>
             <Forms.FormText>
-                <Link href="https://github.com/OpenAsar/arrpc/tree/main#server">Follow the instructions in the GitHub repo</Link> to get the server running, and then enable the plugin.
+                <Link href="https://github.com/OpenAsar/arrpc/tree/main#server">{tr("plugins.WebRichPresence (arRPC).followTheInstructionsInTheGitHubRepo", "Follow the instructions in the GitHub repo")}</Link>  {tr("plugins.WebRichPresence (arRPC).toGetTheServerRunningAndThenEnableThePlugin", "to get the server running, and then enable the plugin.")}
             </Forms.FormText>
         </>
-    ),
+    );
+    },
 
     async handleEvent(e: MessageEvent<any>) {
         const data = JSON.parse(e.data);
@@ -82,14 +86,14 @@ export default definePlugin({
 
         const connectionSuccessful = await new Promise(res => setTimeout(() => res(ws.readyState === WebSocket.OPEN), 5000)); // check if open after 5s
         if (!connectionSuccessful) {
-            showNotice("Failed to connect to arRPC, is it running?", "Retry", () => { // show notice about failure to connect, with retry/ignore
+            showNotice(tr("plugins.WebRichPresence (arRPC).failedToConnectToArRPCIsItRunning", "Failed to connect to arRPC, is it running?"), "Retry", () => { // show notice about failure to connect, with retry/ignore
                 popNotice();
                 this.start();
             });
             return;
         }
 
-        showToast({ text: "Connected to arRPC", variant: "success" });
+        showToast({ text: tr("plugins.WebRichPresence (arRPC).connectedToArRPC", "Connected to arRPC"), variant: "success" });
     },
 
     stop() {

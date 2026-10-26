@@ -18,6 +18,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
 import { ContextMenuApi, FluxDispatcher, Menu, MessageActions } from "@webpack/common";
@@ -68,6 +69,7 @@ function greet(channel: Channel, message: Message, stickers: string[]) {
 
 
 function GreetMenu({ channel, message }: { message: Message, channel: Channel; }) {
+    useLocale();
     const s = settings.use(["greetMode", "multiGreetChoices"]);
     const { greetMode, multiGreetChoices = [] } = s;
 
@@ -75,17 +77,17 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
         <Menu.Menu
             navId="greet-sticker-picker"
             onClose={() => FluxDispatcher.dispatch({ type: "CONTEXT_MENU_CLOSE" })}
-            aria-label="Greet Sticker Picker"
+            aria-label={tr("plugins.GreetStickerPicker.greetStickerPicker", "Greet Sticker Picker")}
         >
             <Menu.MenuGroup
-                label="Greet Mode"
+                label={tr("plugins.GreetStickerPicker.greetMode", "Greet Mode")}
             >
                 {Object.values(GreetMode).map(mode => (
                     <Menu.MenuRadioItem
                         key={mode}
                         group="greet-mode"
                         id={"greet-mode-" + mode}
-                        label={mode}
+                        label={mode === GreetMode.Greet ? tr("plugins.GreetStickerPicker.greet", "Greet") : tr("plugins.GreetStickerPicker.message", "Message")}
                         checked={mode === greetMode}
                         action={() => s.greetMode = mode}
                     />
@@ -95,7 +97,7 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
             <Menu.MenuSeparator />
 
             <Menu.MenuGroup
-                label="Greet Stickers"
+                label={tr("plugins.GreetStickerPicker.greetStickers", "Greet Stickers")}
             >
                 {WELCOME_STICKERS.map(sticker => (
                     <Menu.MenuItem
@@ -112,7 +114,7 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
                     <Menu.MenuSeparator />
 
                     <Menu.MenuItem
-                        label="Unholy Multi-Greet"
+                        label={tr("plugins.GreetStickerPicker.unholyMultiGreet", "Unholy Multi-Greet")}
                         id="unholy-multi-greet"
                     >
                         {WELCOME_STICKERS.map(sticker => {
@@ -137,7 +139,7 @@ function GreetMenu({ channel, message }: { message: Message, channel: Channel; }
                         <Menu.MenuSeparator />
                         <Menu.MenuItem
                             id="multi-greet-submit"
-                            label="Send Greets"
+                            label={tr("plugins.GreetStickerPicker.sendGreets", "Send Greets")}
                             action={() => greet(channel, message, multiGreetChoices!)}
                             disabled={multiGreetChoices.length === 0}
                         />

@@ -8,6 +8,7 @@ import { Card } from "@components/Card";
 import { ErrorCard } from "@components/ErrorCard";
 import { Flex } from "@components/Flex";
 import { Link } from "@components/Link";
+import { tr, useLocale } from "@utils/localization";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { relaunch } from "@utils/native";
@@ -57,17 +58,18 @@ export function Changes({ updates, repo, repoPending }: CommonProps & { updates:
 }
 
 export function Newer(props: CommonProps) {
+    useLocale();
     return (
         <>
             <Forms.FormText className={Margins.bottom8}>
-                Your local copy has more recent commits. Please stash or reset them.
-            </Forms.FormText>
+                {tr("loader.settings.your.local.copy.has.more.recent.commits.please.stash.or.reset.them", "Your local copy has more recent commits. Please stash or reset them.")}</Forms.FormText>
             <Changes {...props} updates={changes} />
         </>
     );
 }
 
 export function Updatable(props: CommonProps) {
+    useLocale();
     const [updates, setUpdates] = useState(changes);
     const [isChecking, setIsChecking] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -78,14 +80,14 @@ export function Updatable(props: CommonProps) {
         <>
             {!updates && updateError ? (
                 <>
-                    <Forms.FormText>Failed to check updates. Check the console for more info</Forms.FormText>
+                    <Forms.FormText>{tr("loader.settings.failed.to.check.updates.check.the.console.for.more.info", "Failed to check updates. Check the console for more info")}</Forms.FormText>
                     <ErrorCard style={{ padding: "1em" }}>
-                        <p>{updateError.stderr || updateError.stdout || "An unknown error occurred"}</p>
+                        <p>{updateError.stderr || updateError.stdout || tr("loader.settings.an.unknown.error.occurred", "An unknown error occurred")}</p>
                     </ErrorCard>
                 </>
             ) : (
                 <Forms.FormText className={Margins.bottom8}>
-                    {isOutdated ? (updates.length === 1 ? "There is 1 Update" : `There are ${updates.length} Updates`) : "Up to Date!"}
+                    {isOutdated ? tr("loader.settings.updateCount", updates.length === 1 ? "There is {count} Update" : "There are {count} Updates", { count: updates.length }) : tr("loader.settings.up.to.date", "Up to Date!")}
                 </Forms.FormText>
             )}
 
@@ -100,27 +102,27 @@ export function Updatable(props: CommonProps) {
                                 setUpdates([]);
 
                                 await new Promise<void>(r => {
-                                    openModal(props => (
-                                        <ConfirmModal
+                                    openModal(function LocalizedModal(props) {
+                useLocale();
+                return (<ConfirmModal
                                             {...props}
-                                            title="Update Success!"
-                                            subtitle="Successfully updated. Restart now to apply the changes?"
-                                            confirmText="Restart"
-                                            cancelText="Not now!"
+                                            title={tr("loader.settings.update.success", "Update Success!")}
+                                            subtitle={tr("loader.settings.successfully.updated.restart.now.to.apply.the.changes", "Successfully updated. Restart now to apply the changes?")}
+                                            confirmText={tr("loader.settings.restart", "Restart")}
+                                            cancelText={tr("loader.settings.not.now", "Not now!")}
                                             variant="primary"
                                             onConfirm={() => {
                                                 relaunch();
                                                 r();
                                             }}
                                             onCancel={r}
-                                        />
-                                    ));
+                                        />);
+            });
                                 });
                             }
                         })}
                     >
-                        Update Now
-                    </Button>
+                        {tr("loader.settings.update.now", "Update Now")}</Button>
                 )}
                 <Button
                     disabled={isUpdating || isChecking}
@@ -132,12 +134,11 @@ export function Updatable(props: CommonProps) {
                         } else {
                             setUpdates([]);
 
-                            showToast({ text: "No updates found!", position: "bottom" });
+                            showToast({ text: tr("loader.settings.no.updates.found", "No updates found!"), position: "bottom" });
                         }
                     })}
                 >
-                    Check for Updates
-                </Button>
+                    {tr("loader.settings.check.for.updates", "Check for Updates")}</Button>
             </Flex>
         </>
     );

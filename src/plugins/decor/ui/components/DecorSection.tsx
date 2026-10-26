@@ -10,6 +10,7 @@ import { useAuthorizationStore } from "@plugins/decor/lib/stores/AuthorizationSt
 import { useCurrentUserDecorationsStore } from "@plugins/decor/lib/stores/CurrentUserDecorationsStore";
 import { cl } from "@plugins/decor/ui";
 import { openChangeDecorationModal } from "@plugins/decor/ui/modals/ChangeDecorationModal";
+import { tr, useLocale } from "@utils/localization";
 import { findComponentByCodeLazy } from "@webpack";
 import { useEffect } from "@webpack/common";
 
@@ -22,6 +23,7 @@ export interface DecorSectionProps {
 }
 
 export default function DecorSection({ hideTitle = false, hideDivider = false, noMargin = false }: DecorSectionProps) {
+    useLocale();
     const authorization = useAuthorizationStore();
     const { selectedDecoration, select: selectDecoration, fetch: fetchDecorations } = useCurrentUserDecorationsStore();
 
@@ -45,14 +47,14 @@ export default function DecorSection({ hideTitle = false, hideDivider = false, n
                 variant="primary"
                 size="small"
             >
-                Change Decoration
+                {tr("plugins.Decor.changeDecoration", "Change Decoration")}
             </Button>
             {selectedDecoration && authorization.isAuthorized() && <Button
                 onClick={() => selectDecoration(null)}
                 variant="secondary"
                 size={"small"}
             >
-                Remove Decoration
+                {tr("plugins.Decor.removeDecoration", "Remove Decoration")}
             </Button>}
         </Flex>
     </CustomizationSection>;

@@ -8,6 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { CopyIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
+import { tr } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { Menu } from "@webpack/common";
@@ -63,11 +64,11 @@ export default definePlugin({
             children.push(
                 <Menu.MenuItem
                     id="vc-copy-emoji-markdown"
-                    label="Copy Emoji Markdown"
+                    label={tr("plugins.CopyEmojiMarkdown.copyEmojiMarkdown", "Copy Emoji Markdown")}
                     action={() => {
                         copyWithToast(
                             getEmojiMarkdown(target, settings.store.copyUnicode),
-                            "Success! Copied emoji markdown."
+                            tr("plugins.CopyEmojiMarkdown.successCopiedEmojiMarkdown", "Success! Copied emoji markdown.")
                         );
                     }}
                     leadingAccessory={{ type: "icon", icon: CopyIcon }}

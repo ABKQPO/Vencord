@@ -6,6 +6,7 @@
 
 import { addThemeChangeListener, removeThemeChangeListener } from "@api/Themes";
 import { Devs } from "@utils/constants";
+import { getLocale,tr } from "@utils/localization";
 import { sleep } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { GuildReadStateStore, NotificationSettingsStore, RelationshipStore, ThemeStore } from "@webpack/common";
@@ -45,16 +46,16 @@ async function setManifest() {
         display: "fullscreen",
         display_override: ["window-controls-overlay"],
         dir: "ltr",
-        lang: "en-US",
+        lang: getLocale(),
         background_color: colorToHex(styles.getPropertyValue("--background-base-lower")),
         theme_color: colorToHex(styles.getPropertyValue("--background-base-lowest")),
         scope: endpoint + "/", // scope of all possible URL"s
-        description: "Imagine a place...",
+        description: tr("plugins.WebPWA.imagineaplace", "Imagine a place..."),
         orientation: "any",
         categories: ["social"],
         shortcuts: [
             {
-                name: "Friends",
+                name: tr("plugins.WebPWA.friends", "Friends"),
                 url: appUrl,
                 icons: [{ src: icon, sizes: "256x256" }]
             }
@@ -63,13 +64,13 @@ async function setManifest() {
         launch_handler: { client_mode: "navigate-existing" },
         // Strange CDN but these links are straight from discord.com
         screenshots: [
-            { src: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/664723dbe91e5ee8db15cfe7_Discord_Website_Refresh_Activities.webp", sizes: "691x720", type: "image/webp", label: "Activities", form_factor: "wide" },
-            { src: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/664723da372be4a12a3dc9df_Discord_Website_Refresh_Hop-In.webp", sizes: "939x639", type: "image/webp", label: "Hop In", form_factor: "wide" },
-            { src: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/664723da94dd30e64e74357a_Discord_Website_Refresh_StatusHover.webp", sizes: "904x708", type: "image/webp", label: "Status", form_factor: "wide" },
-            { src: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/664723da0a2e6be98fa5216b_Discord_Website_Refresh_Emojis%2BSoundboard-p-1080.webp", sizes: "1080x918", type: "image/webp", label: "Emojis", form_factor: "wide" },
-            { src: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/6638bdbd1150b7c8509fb2be_Discord_Website_Refresh_SameRoom.webp", sizes: "796x593", type: "image/webp", label: "Rooms", form_factor: "wide" },
+            { src: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/664723dbe91e5ee8db15cfe7_Discord_Website_Refresh_Activities.webp", sizes: "691x720", type: "image/webp", label: tr("plugins.WebPWA.activities", "Activities"), form_factor: "wide" },
+            { src: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/664723da372be4a12a3dc9df_Discord_Website_Refresh_Hop-In.webp", sizes: "939x639", type: "image/webp", label: tr("plugins.WebPWA.hopIn", "Hop In"), form_factor: "wide" },
+            { src: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/664723da94dd30e64e74357a_Discord_Website_Refresh_StatusHover.webp", sizes: "904x708", type: "image/webp", label: tr("plugins.WebPWA.status", "Status"), form_factor: "wide" },
+            { src: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/664723da0a2e6be98fa5216b_Discord_Website_Refresh_Emojis%2BSoundboard-p-1080.webp", sizes: "1080x918", type: "image/webp", label: tr("plugins.WebPWA.emojis", "Emojis"), form_factor: "wide" },
+            { src: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/6638bdbd1150b7c8509fb2be_Discord_Website_Refresh_SameRoom.webp", sizes: "796x593", type: "image/webp", label: tr("plugins.WebPWA.rooms", "Rooms"), form_factor: "wide" },
             { src: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/68407334ccf9aeca71903bab_home-new.webp", sizes: "1716×1606", type: "image/webp", label: "Discord", form_factor: "wide" },
-            { src: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/6638bcb99c2b8dc14e6f67fd_Discord_Website_Refresh_Platforms.webp", sizes: "760x580", type: "image/webp", label: "Platforms", form_factor: "wide" }
+            { src: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/6638bcb99c2b8dc14e6f67fd_Discord_Website_Refresh_Platforms.webp", sizes: "760x580", type: "image/webp", label: tr("plugins.WebPWA.platforms", "Platforms"), form_factor: "wide" }
         ],
         icons: [
             {
@@ -179,7 +180,8 @@ export default definePlugin({
 
     renderKeybindsButton: () => (
         <div>
-            Custom global Push To X keybinds are supported. Navigate to <a onClick={() => { window.postMessage({ type: "OPEN_SHORTCUTS" }, "*"); }}>about://extensions/shortcuts</a> to change them. Hold To X keybinds are not supported.
+
+            {tr("plugins.WebPWA.customGlobalPushToXKeybindsAreSupportedNavigateTo", "Custom global Push To X keybinds are supported. Navigate to")} <a onClick={() => { window.postMessage({ type: "OPEN_SHORTCUTS" }, "*"); }}>about://extensions/shortcuts</a>  {tr("plugins.WebPWA.toChangeThemHoldToXKeybindsAreNotSupported", "to change them. Hold To X keybinds are not supported.")}
         </div>
     ),
 

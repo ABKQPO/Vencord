@@ -8,10 +8,12 @@ import "./ContributorModal.css";
 
 import { useSettings } from "@api/Settings";
 import { Link } from "@components/Link";
+import { LocalizedText } from "@components/settings/tabs/LocalizedText";
 import { DevsById } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { fetchUserProfile } from "@utils/discord";
-import { classes, pluralise } from "@utils/misc";
+import { tr, useLocale } from "@utils/localization";
+import { classes } from "@utils/misc";
 import { RenderModalProps, User } from "@vencord/discord-types";
 import { Forms, Modal, openModal, showToast, useEffect, useMemo, UserProfileStore, useStateFromStores } from "@webpack/common";
 
@@ -27,6 +29,7 @@ export function openContributorModal(user: User) {
 }
 
 function ContributorModal({ user, modalProps }: { user: User; modalProps: RenderModalProps; }) {
+    useLocale();
     useSettings();
 
     const profile = useStateFromStores([UserProfileStore], () => UserProfileStore.getUserProfile(user.id));
@@ -50,7 +53,7 @@ function ContributorModal({ user, modalProps }: { user: User; modalProps: Render
             .sort((a, b) => Number(a.required ?? false) - Number(b.required ?? false));
     }, [user.id, user.username]);
 
-    const ContributedHyperLink = <Link href="https://vencord.dev/source">contributed</Link>;
+    const ContributedHyperLink = <Link href="https://vencord.dev/source">{tr("contributor.contributed", "contributed")}</Link>;
 
     return (
         <Modal
@@ -84,12 +87,12 @@ function ContributorModal({ user, modalProps }: { user: User; modalProps: Render
                 plugins.length
                     ? (
                         <Forms.FormText>
-                            This person has {ContributedHyperLink} to {pluralise(plugins.length, "plugin")}!
+                            <LocalizedText id="contributor.plugins" fallback="This person has {link} to {count} plugins!" slots={{ link: ContributedHyperLink, count: plugins.length }} />
                         </Forms.FormText>
                     )
                     : (
                         <Forms.FormText>
-                            This person has not made any plugins. They likely {ContributedHyperLink} to Vencord in other ways!
+                            <LocalizedText id="contributor.other" fallback="This person has not made any plugins. They likely {link} to Vencord in other ways!" slots={{ link: ContributedHyperLink }} />
                         </Forms.FormText>
                     )
             }
@@ -101,7 +104,7 @@ function ContributorModal({ user, modalProps }: { user: User; modalProps: Render
                             key={p.name}
                             plugin={p}
                             disabled={p.required ?? false}
-                            onRestartNeeded={() => showToast({ text: "Restart to apply changes!" })}
+                            onRestartNeeded={() => showToast({ text: tr("loader.c137d4072118", "Restart to apply changes!") })}
                         />
                     )}
                 </div>

@@ -24,6 +24,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { SafetyIcon } from "@components/Icons";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Guild, RoleOrUserPermission } from "@vencord/discord-types";
@@ -65,7 +66,7 @@ function MenuItem(guildId: string, { id, type, withIcon }: { id?: string, type?:
     return (
         <Menu.MenuItem
             id="perm-viewer-permissions"
-            label="View Permissions"
+            label={tr("plugins.PermissionsViewer.viewPermissions", "View Permissions")}
             leadingAccessory={withIcon ? { type: "icon", icon: SafetyIcon } : undefined}
             action={() => {
                 const guild = GuildStore.getGuild(guildId);
@@ -176,6 +177,7 @@ export default definePlugin({
     ],
 
     ViewPermissionsButton: ErrorBoundary.wrap(({ className, guild, userId }: { className: string; guild: Guild; userId: string; }) => {
+        useLocale();
         const buttonRef = useRef(null);
         useEffect(() => void loadGetGuildPermissionSpecMap(), []);
 
@@ -194,7 +196,7 @@ export default definePlugin({
                 )}
             >
                 {popoutProps => (
-                    <TooltipContainer text="View Permissions">
+                    <TooltipContainer text={tr("plugins.PermissionsViewer.viewPermissions", "View Permissions")}>
                         <Button
                             {...popoutProps}
                             ref={buttonRef}

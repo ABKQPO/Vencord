@@ -23,6 +23,7 @@ import { addMemberListDecorator, removeMemberListDecorator } from "@api/MemberLi
 import { addMessageDecoration, removeMessageDecoration } from "@api/MessageDecorations";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 import { ClientStatusMap, DiscordPlatform, OnlineStatus, User } from "@vencord/discord-types";
 import { filters, findStoreLazy, mapMangledModuleLazy } from "@webpack";
@@ -47,7 +48,7 @@ const { useStatusFillColor } = mapMangledModuleLazy([".5625*", "translate"], {
 });
 
 const platformMap = {
-    embedded: "Embedded (Console or Game)",
+    get embedded() { return tr("plugins.PlatformIndicators.embeddedConsoleOrGame", "Embedded (Console or Game)"); },
     vr: "VR"
 };
 
@@ -122,10 +123,16 @@ function Icon(path: string, opts?: { viewBox?: string; width?: number; height?: 
 }
 
 function getPlatformTooltip(platform: DiscordPlatform): string {
-    return platformMap[platform] ?? platform.charAt(0).toUpperCase() + platform.slice(1);
+    switch (platform) {
+        case "desktop": return tr("plugins.PlatformIndicators.desktop", "Desktop");
+        case "web": return tr("plugins.PlatformIndicators.web", "Web");
+        case "mobile": return tr("plugins.PlatformIndicators.mobile", "Mobile");
+        default: return platformMap[platform] ?? platform.charAt(0).toUpperCase() + platform.slice(1);
+    }
 }
 
 const PlatformIcon = ({ platform, status, small }: { platform: DiscordPlatform, status: OnlineStatus; small: boolean; }) => {
+    useLocale();
     const tooltip = getPlatformTooltip(platform as DiscordPlatform);
 
     const Icon = Icons[platform] ?? Icons.desktop;
@@ -180,6 +187,7 @@ function getBadges({ userId }: BadgeUserArgs): ProfileBadge[] {
 }
 
 function PlatformIndicators({ statusMap, small }: { statusMap: ClientStatusMap; small: boolean; }) {
+    useLocale();
     const icons = Object.entries(statusMap).map(([platform, status]) => (
         <PlatformIcon
             key={platform}
@@ -208,11 +216,13 @@ function renderPlatformIndicators(user: User, small: boolean) {
 }
 
 function CurrentUserPlatformIndicators({ small }: { small: boolean; }) {
+    useLocale();
     const statusMap = useStateFromStores([SessionsStore], getOwnStatus);
     return statusMap ? <PlatformIndicators statusMap={statusMap} small={small} /> : null;
 }
 
 function OtherUserPlatformIndicators({ user, small = false }: { user: User; small?: boolean; }) {
+    useLocale();
     const statusMap = useStateFromStores([PresenceStore], () => PresenceStore.getClientStatus(user.id));
     return statusMap ? <PlatformIndicators statusMap={statusMap} small={small} /> : null;
 }

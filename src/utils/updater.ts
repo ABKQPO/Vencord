@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { tr } from "@utils/localization";
+
 import gitHash from "~git-hash";
 
 import { Logger } from "./Logger";
@@ -59,7 +61,7 @@ export async function update() {
     if (res) {
         isOutdated = false;
         if (!await Unwrap(VencordNative.updater.rebuild()))
-            throw new Error("The Build failed. Please try manually building the new update");
+            throw new Error(tr("loader.runtime.3c19deee2859", "The Build failed. Please try manually building the new update"));
     }
 
     return res;
@@ -75,7 +77,7 @@ export async function maybePromptToUpdate(confirmMessage: string, checkForDev = 
         const isOutdated = await checkForUpdates();
         if (isOutdated) {
             const wantsUpdate = confirm(confirmMessage);
-            if (wantsUpdate && isNewer) return alert("Your local copy has more recent commits. Please stash or reset them.");
+            if (wantsUpdate && isNewer) return alert(tr("loader.runtime.7f2a12e8d680", "Your local copy has more recent commits. Please stash or reset them."));
             if (wantsUpdate) {
                 await update();
                 relaunch();
@@ -83,6 +85,6 @@ export async function maybePromptToUpdate(confirmMessage: string, checkForDev = 
         }
     } catch (err) {
         UpdateLogger.error(err);
-        alert("That also failed :( Try updating or re-installing with the installer!");
+        alert(tr("loader.runtime.388496943dfe", "That also failed :( Try updating or re-installing with the installer!"));
     }
 }

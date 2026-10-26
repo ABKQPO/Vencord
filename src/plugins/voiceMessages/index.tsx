@@ -25,6 +25,7 @@ import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { tr, useLocale } from "@utils/localization";
 import { Margins } from "@utils/margins";
 import { useAwaiter } from "@utils/react";
 import definePlugin from "@utils/types";
@@ -67,7 +68,7 @@ const ctxMenuPatch: NavContextMenuPatchCallback = (children, props) => {
                 type: "icon",
                 icon: Microphone
             }}
-            label="Send Voice Message"
+            label={tr("plugins.VoiceMessages.sendVoiceMessage", "Send Voice Message")}
             action={() => openModal(modalProps => <VoiceMessageModal modalProps={modalProps} />)}
         />
     );
@@ -140,7 +141,7 @@ function sendAudio(blob: Blob, meta: AudioMetadata) {
             }
         });
     });
-    upload.on("error", () => showToast({ text: "Failed to upload voice message", variant: "critical" }));
+    upload.on("error", () => showToast({ text: tr("plugins.VoiceMessages.failedToUploadVoiceMessage", "Failed to upload voice message"), variant: "critical" }));
 
     upload.upload();
 }
@@ -157,6 +158,7 @@ function useObjectUrl() {
 }
 
 function VoiceMessageModal({ modalProps }: { modalProps: RenderModalProps; }) {
+    useLocale();
     const [isRecording, setRecording] = useState(false);
     const [blob, setBlob] = useState<Blob>();
     const [blobUrl, setBlobUrl] = useObjectUrl();
@@ -209,14 +211,14 @@ function VoiceMessageModal({ modalProps }: { modalProps: RenderModalProps; }) {
     return (
         <Modal
             {...modalProps}
-            title="Record Voice Message"
+            title={tr("plugins.VoiceMessages.recordVoiceMessage", "Record Voice Message")}
             actions={[{
-                text: "Send",
+                text: tr("plugins.VoiceMessages.send", "Send"),
                 variant: "primary",
                 onClick: () => {
                     sendAudio(blob!, meta ?? EMPTY_META);
                     modalProps.onClose();
-                    showToast({ text: "Now sending voice message... Please be patient", icon: ClockIcon, iconColor: "var(--text-default)" });
+                    showToast({ text: tr("plugins.VoiceMessages.nowSendingVoiceMessagePleaseBePatient", "Now sending voice message... Please be patient"), icon: ClockIcon, iconColor: "var(--text-default)" });
                 },
                 disabled: !blob
             }]}
@@ -239,13 +241,14 @@ function VoiceMessageModal({ modalProps }: { modalProps: RenderModalProps; }) {
                         }
                     }}
                 >
-                    Upload File
+
+                    {tr("plugins.VoiceMessages.uploadFile", "Upload File")}
                 </Button>
             </div>
 
-            <Forms.FormTitle>Preview</Forms.FormTitle>
+            <Forms.FormTitle>{tr("plugins.VoiceMessages.preview", "Preview")}</Forms.FormTitle>
             {metaError
-                ? <Paragraph className={cl("error")}>Failed to parse selected audio file: {metaError.message}</Paragraph>
+                ? <Paragraph className={cl("error")}>{tr("plugins.VoiceMessages.failedToParseSelectedAudioFile", "Failed to parse selected audio file:")} {metaError.message}</Paragraph>
                 : (
                     <VoicePreview
                         src={blobUrl}
@@ -256,10 +259,11 @@ function VoiceMessageModal({ modalProps }: { modalProps: RenderModalProps; }) {
 
             {isUnsupportedFormat && (
                 <Card variant="warning" className={Margins.top16} defaultPadding>
-                    <Forms.FormText>Voice Messages have to be OggOpus to be playable on iOS. This file is <code>{blob.type}</code> so it will not be playable on iOS.</Forms.FormText>
+                    <Forms.FormText>{tr("plugins.VoiceMessages.unsupportedFormat", "Voice Messages have to be OggOpus to be playable on iOS. This file is {format} so it will not be playable on iOS.", { format: blob.type })}</Forms.FormText>
 
                     <Forms.FormText className={Margins.top8}>
-                        To fix it, first convert it to OggOpus, for example using the <Link href="https://convertio.co/mp3-opus/">convertio web converter</Link>
+
+                        {tr("plugins.VoiceMessages.toFixItFirstConvertItToOggOpusForExampleUsingThe", "To fix it, first convert it to OggOpus, for example using the")} <Link href="https://convertio.co/mp3-opus/">{tr("plugins.VoiceMessages.convertioWebConverter", "convertio web converter")}</Link>
                     </Forms.FormText>
                 </Card>
             )}

@@ -1,0 +1,16 @@
+{
+    "commands.petpet.petpet.description": "创建摸头 GIF。只能指定一个图片选项",
+    "commands.petpet.petpet.delay.description": "每帧间的延迟（毫秒），会舍入至最接近的 10 毫秒。默认为最小值 20。",
+    "commands.petpet.petpet.resolution.description": "GIF 分辨率，默认为 120。如果输入过大的数值导致 Discord 卡住，后果自负。",
+    "commands.petpet.petpet.image.description": "要使用的图片附件",
+    "commands.petpet.petpet.url.description": "要获取图片的 URL",
+    "commands.petpet.petpet.user.description": "使用其头像作为图片的用户",
+    "commands.petpet.petpet.no-server-pfp.description": "使用 'user' 选项时使用普通头像，而非服务器专用头像",
+    "commands.SilentTyping.silenttype.description": "切换是否隐藏你的输入状态。",
+    "commands.SilentTyping.silenttype.value.description": "是否隐藏你的输入状态（默认为切换）",
+    "commands.SupportHelper.vencord-debug.description": "发送 Vencord 调试信息",
+    "commands.SupportHelper.vencord-plugins.description": "发送 Vencord 插件列表",
+    "commands.SpotifyShareCommands.track.description": "在聊天中分享你当前的 Spotify 曲目",
+    "commands.SpotifyShareCommands.album.description": "在聊天中分享你当前的 Spotify 专辑",
+    "commands.SpotifyShareCommands.artist.description": "在聊天中分享你当前的 Spotify 艺人"
+}

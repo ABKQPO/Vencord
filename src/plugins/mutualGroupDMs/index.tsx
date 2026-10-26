@@ -22,6 +22,7 @@ import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { isNonNullish } from "@utils/guards";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
 import definePlugin from "@utils/types";
@@ -57,7 +58,7 @@ const isBotOrSelf = (user: User) => user.bot || user.id === UserStore.getCurrent
 
 function getMutualGDMCountText(user: User) {
     const count = getMutualGroupDms(user.id).length;
-    return `${count === 0 ? "No" : count} Mutual Group${count !== 1 ? "s" : ""}`;
+    return count === 0 ? tr("plugins.MutualGroupDMs.noGroups", "No Mutual Groups") : count === 1 ? tr("plugins.MutualGroupDMs.oneGroup", "1 Mutual Group") : tr("plugins.MutualGroupDMs.countMutualGroups", "{count} Mutual Groups", { count });
 }
 
 function renderClickableGDMs(mutualDms: Channel[], onClose?: () => void) {
@@ -78,7 +79,7 @@ function renderClickableGDMs(mutualDms: Channel[], onClose?: () => void) {
             </Avatar>
             <div className={MutualsListClasses.details}>
                 <div className={MutualsListClasses.name}>{getGroupDMName(c)}</div>
-                <BaseText size="xs" weight="medium">{c.recipients.length + 1} Members</BaseText>
+                <BaseText size="xs" weight="medium">{tr("plugins.MutualGroupDMs.memberCount", "{count} Members", { count: c.recipients.length + 1 })}</BaseText>
             </div>
         </Clickable>
     ));
@@ -180,6 +181,7 @@ export default definePlugin({
     },
 
     renderMutualGDMs: ErrorBoundary.wrap(({ user, onClose, isLegacy }: { user: User, onClose: () => void; isLegacy: boolean; }) => {
+    useLocale();
         const mutualGDms = useMemo(() => getMutualGroupDms(user.id), [user.id]);
         const entries = renderClickableGDMs(mutualGDms, onClose);
 
@@ -194,7 +196,7 @@ export default definePlugin({
                     : (
                         <div className={ProfileListClasses.empty}>
                             <div className={ProfileListClasses.textContainer}>
-                                <BaseText tag="h3" size="md" weight="medium" style={{ color: "var(--text-strong)" }}>You don't have any group chats in common</BaseText>
+                                <BaseText tag="h3" size="md" weight="medium" style={{ color: "var(--text-strong)" }}>{tr("plugins.MutualGroupDMs.youDonTHaveAnyGroupChatsInCommon", "You don't have any group chats in common")}</BaseText>
                             </div>
                         </div>
                     )
@@ -204,6 +206,7 @@ export default definePlugin({
     }),
 
     renderDMPageList: ErrorBoundary.wrap(({ user, hasDivider, Divider, listStyle }: { user: User, hasDivider: boolean, Divider: JSX.Element, listStyle: string; }) => {
+    useLocale();
         const mutualGDms = getMutualGroupDms(user.id);
         if (mutualGDms.length === 0) return null;
 
@@ -212,7 +215,7 @@ export default definePlugin({
                 {hasDivider && Divider}
                 <ExpandableList
                     listClassName={classes(listStyle, "vc-mutual-gdms-dm-page-list")}
-                    header={"Mutual Groups"}
+                    header={tr("plugins.MutualGroupDMs.mutualGroups", "Mutual Groups")}
                     isLoading={false}
                     items={renderClickableGDMs(mutualGDms)}
                 />

@@ -7,6 +7,7 @@
 import { currentNotice, noticesQueue, popNotice, showNotice } from "@api/Notices";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { tr } from "@utils/localization";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import { FluxDispatcher } from "@webpack/common";
 
@@ -61,13 +62,13 @@ export default definePlugin({
             return;
         }
 
-        const backOnlineMessage = "Welcome back! Click the button to go online. Click the X to stay idle until reload.";
+        const backOnlineMessage = tr("plugins.CustomIdle.welcomeBackClickTheButtonToGoOnlineClickTheXToStayIdleUntilReload", "Welcome back! Click the button to go online. Click the X to stay idle until reload.");
         if (
             currentNotice?.[1] === backOnlineMessage ||
             noticesQueue.some(([, noticeMessage]) => noticeMessage === backOnlineMessage)
         ) return;
 
-        showNotice(backOnlineMessage, "Exit idle", () => {
+        showNotice(backOnlineMessage, tr("plugins.CustomIdle.exitIdle", "Exit idle"), () => {
             popNotice();
             FluxDispatcher.dispatch({
                 type: "IDLE",

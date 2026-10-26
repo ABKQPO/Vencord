@@ -22,6 +22,7 @@ import { blockUser, deleteReview, deleteReviewVote, reportReview, unblockUser, v
 import { settings } from "@plugins/reviewDB/settings";
 import { canBlockReviewAuthor, canDeleteReview, canReportReview, cl, showToast } from "@plugins/reviewDB/utils";
 import { openUserProfile } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { classes } from "@utils/misc";
 import { findCssClassesLazy } from "@webpack";
 import { ConfirmModal, IconUtils, openModal as openVencordModal, Parser, Timestamp, useEffect, useState } from "@webpack/common";
@@ -39,6 +40,7 @@ const BotTagClasses = findCssClassesLazy("botTagVerified", "botTagRegular", "bot
 const dateFormat = new Intl.DateTimeFormat();
 
 export default function ReviewComponent({ review, refetch, profileId }: { review: Review; refetch(): void; profileId: string; }) {
+    useLocale();
     const [showAll, setShowAll] = useState(false);
     const [localVote, setLocalVote] = useState<boolean | null>(review.userVote ?? null);
     const [score, setScore] = useState(review.score ?? 0);
@@ -57,13 +59,13 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
         openVencordModal(props => (
             <ConfirmModal
                 {...props}
-                title="Are you sure?"
-                subtitle="Do you really want to delete this review?"
-                confirmText="Delete"
-                cancelText="Nevermind"
+                title={tr("plugins.ReviewDB.areYouSure", "Are you sure?")}
+                subtitle={tr("plugins.ReviewDB.doYouReallyWantToDeleteThisReview", "Do you really want to delete this review?")}
+                confirmText={tr("plugins.ReviewDB.delete", "Delete")}
+                cancelText={tr("plugins.ReviewDB.nevermind", "Nevermind")}
                 onConfirm={async () => {
                     if (!(await getToken())) {
-                        return showToast({ text: "You must be logged in to delete reviews.", variant: "critical" });
+                        return showToast({ text: tr("plugins.ReviewDB.youMustBeLoggedInToDeleteReviews", "You must be logged in to delete reviews."), variant: "critical" });
                     }
                     const res = await deleteReview(review.id);
                     if (res) refetch();
@@ -76,13 +78,13 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
         openVencordModal(props => (
             <ConfirmModal
                 {...props}
-                title="Are you sure?"
-                subtitle="Do you really want to report this review?"
-                confirmText="Report"
-                cancelText="Nevermind"
+                title={tr("plugins.ReviewDB.areYouSure", "Are you sure?")}
+                subtitle={tr("plugins.ReviewDB.doYouReallyWantToReportThisReview", "Do you really want to report this review?")}
+                confirmText={tr("plugins.ReviewDB.report", "Report")}
+                cancelText={tr("plugins.ReviewDB.nevermind", "Nevermind")}
                 onConfirm={async () => {
                     if (!(await getToken())) {
-                        return showToast({ text: "You must be logged in to report reviews.", variant: "critical" });
+                        return showToast({ text: tr("plugins.ReviewDB.youMustBeLoggedInToReportReviews", "You must be logged in to report reviews."), variant: "critical" });
                     }
                     await reportReview(review.id);
                 }}
@@ -99,13 +101,13 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
         openVencordModal(props => (
             <ConfirmModal
                 {...props}
-                title="Are you sure?"
-                subtitle="Do you really want to block this user? They will be unable to leave further reviews on your profile. You can unblock users in the plugin settings."
-                confirmText="Block"
-                cancelText="Nevermind"
+                title={tr("plugins.ReviewDB.areYouSure", "Are you sure?")}
+                subtitle={tr("plugins.ReviewDB.doYouReallyWantToBlockThisUserTheyWillBeUnableToLeaveFurtherReviewsOnYourProfileYouCanUnblockUsersInThePluginS", "Do you really want to block this user? They will be unable to leave further reviews on your profile. You can unblock users in the plugin settings.")}
+                confirmText={tr("plugins.ReviewDB.block", "Block")}
+                cancelText={tr("plugins.ReviewDB.nevermind", "Nevermind")}
                 onConfirm={async () => {
                     if (!(await getToken())) {
-                        return showToast({ text: "You must be logged in to block users.", variant: "critical" });
+                        return showToast({ text: tr("plugins.ReviewDB.youMustBeLoggedInToBlockUsers", "You must be logged in to block users."), variant: "critical" });
                     }
                     await blockUser(review.sender.discordID);
                 }}
@@ -117,7 +119,7 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
         if (isVoting) return;
 
         if (review.sender.discordID === Auth.user?.discordID) {
-            return showToast({ text: "You cannot vote on your own review.", variant: "critical" });
+            return showToast({ text: tr("plugins.ReviewDB.youCannotVoteOnYourOwnReview", "You cannot vote on your own review."), variant: "critical" });
         }
 
         setIsVoting(true);
@@ -204,7 +206,8 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
                         className={classes(BotTagClasses.botTagVerified, BotTagClasses.botTagRegular, BotTagClasses.px, BotTagClasses.rem)}
                         style={{ marginLeft: "4px" }}>
                         <span className={BotTagClasses.botText}>
-                            System
+
+                            {tr("plugins.ReviewDB.system", "System")}
                         </span>
                     </span>
                 )}
@@ -212,7 +215,7 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
             {isAuthorBlocked && (
                 <ReviewBadge
                     name="You have blocked this user"
-                    description="You have blocked this user"
+                    description={tr("plugins.ReviewDB.blockedUserDescription", "You have blocked this user")}
                     icon="/assets/aaee57e0090991557b66.svg"
                     type={0}
                     onClick={() => openBlockModal()}
@@ -232,7 +235,7 @@ export default function ReviewComponent({ review, refetch, profileId }: { review
                         <>
                             {Parser.parseGuildEventDescription(review.comment.substring(0, 200))}...
                             <br />
-                            <a onClick={() => setShowAll(true)}>Read more</a>
+                            <a onClick={() => setShowAll(true)}>{tr("plugins.ReviewDB.readMore", "Read more")}</a>
                         </>
                     )
                     : Parser.parseGuildEventDescription(review.comment)}

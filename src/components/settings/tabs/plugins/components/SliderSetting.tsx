@@ -25,12 +25,12 @@ import { resolveError, SettingProps, SettingsSection } from "./Common";
 export function SliderSetting({ setting, pluginSettings, definedSettings, id, onChange }: SettingProps<PluginSettingSliderDef>) {
     const def = pluginSettings[id] ?? setting.default;
 
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<boolean | string>(true);
 
     function handleChange(newValue: number): void {
         const isValid = setting.isValid?.call(definedSettings, newValue) ?? true;
 
-        setError(resolveError(isValid));
+        setError(isValid);
 
         if (isValid === true) {
             onChange(newValue);
@@ -38,7 +38,7 @@ export function SliderSetting({ setting, pluginSettings, definedSettings, id, on
     }
 
     return (
-        <SettingsSection name={setting.displayName} id={id} description={setting.description} error={error}>
+        <SettingsSection name={setting.displayName} id={id} description={setting.description} error={resolveError(error)}>
             <Slider
                 markers={setting.markers}
                 minValue={setting.markers[0]}

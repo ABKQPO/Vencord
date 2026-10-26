@@ -27,13 +27,13 @@ export function BooleanSetting({ setting, pluginSettings, definedSettings, id, o
     const def = pluginSettings[id] ?? setting.default;
 
     const [state, setState] = useState(def ?? false);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<boolean | string>(true);
 
     function handleChange(newValue: boolean): void {
         const isValid = setting.isValid?.call(definedSettings, newValue) ?? true;
 
         setState(newValue);
-        setError(resolveError(isValid));
+        setError(isValid);
 
         if (isValid === true) {
             onChange(newValue);
@@ -41,7 +41,7 @@ export function BooleanSetting({ setting, pluginSettings, definedSettings, id, o
     }
 
     return (
-        <SettingsSection tag="label" name={setting.displayName} id={id} description={setting.description} error={error} inlineSetting>
+        <SettingsSection tag="label" name={setting.displayName} id={id} description={setting.description} error={resolveError(error)} inlineSetting>
             <Switch
                 checked={state}
                 onChange={handleChange}

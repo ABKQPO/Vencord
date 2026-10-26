@@ -7,6 +7,7 @@
 import * as DataStore from "@api/DataStore";
 import { AUTHORIZE_URL, CLIENT_ID } from "@plugins/decor/lib/constants";
 import { proxyLazy } from "@utils/lazy";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import { OAuth2AuthorizeModal, openModal, showToast, UserStore, zustandCreate, zustandPersist } from "@webpack/common";
 
@@ -50,7 +51,9 @@ export const useAuthorizationStore = proxyLazy(() => zustandCreate(
             },
             async authorize() {
                 return new Promise((resolve, reject) => openModal(props =>
-                    <OAuth2AuthorizeModal
+                    {
+    useLocale();
+    return <OAuth2AuthorizeModal
                         {...props}
                         scopes={["identify"]}
                         responseType="code"
@@ -74,13 +77,14 @@ export const useAuthorizationStore = proxyLazy(() => zustandCreate(
                                 resolve(void 0);
                             } catch (e) {
                                 if (e instanceof Error) {
-                                    showToast({ text: `Failed to authorize: ${e.message}`, variant: "critical" });
+                                    showToast({ text: tr("plugins.Decor.failedToAuthorizeMessage", "Failed to authorize: {message}", { message: e.message }), variant: "critical" });
                                     new Logger("Decor").error("Failed to authorize", e);
                                     reject(e);
                                 }
                             }
                         }}
-                    />, {
+                    />;
+}, {
                     onCloseCallback() {
                         reject(new Error("Authorization cancelled"));
                     },

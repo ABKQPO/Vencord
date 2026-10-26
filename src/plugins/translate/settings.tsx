@@ -18,6 +18,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
+import { tr, useLocale } from "@utils/localization";
 import { OptionType } from "@utils/types";
 
 import { openTranslateModal } from "./TranslateModal";
@@ -82,11 +83,14 @@ export const settings = definePluginSettings({
     },
     manageTranslateSettings: {
         type: OptionType.COMPONENT,
-        component: () => (
-            <Button onClick={openTranslateModal}>
-                Customize translation languages & Auto-Translate
-            </Button>
-        )
+        component: () => {
+            useLocale();
+            return (
+                <Button onClick={openTranslateModal}>
+                    {tr("plugins.Translate.customizeLanguages", "Customize translation languages & Auto-Translate")}
+                </Button>
+            );
+        }
     }
 }, {
     deeplApiKey: {

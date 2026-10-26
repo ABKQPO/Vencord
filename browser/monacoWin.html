@@ -46,6 +46,10 @@
         <div id="container"></div>
 
         <script>
+            (() => {
+            document.documentElement.lang = quickCssLocale;
+            document.title = quickCssTitle;
+            document.getElementById("title-bar").textContent = quickCssTitle;
             const script = document.createElement("script");
             script.src = new URL("/vendor/monaco/index.js", baseUrl);
 
@@ -54,7 +58,18 @@
             style.rel = "stylesheet";
             style.href = new URL("/vendor/monaco/index.css", baseUrl);
 
-            document.body.append(style, script);
+            document.body.append(style);
+            if (quickCssLocale === "zh-CN") {
+                const messages = document.createElement("script");
+                messages.src = new URL("/vendor/monaco/nls.zh-cn.js", baseUrl);
+                messages.onload = () => document.body.append(script);
+                document.body.append(messages);
+            } else {
+                globalThis._VSCODE_NLS_MESSAGES = undefined;
+                globalThis._VSCODE_NLS_LANGUAGE = undefined;
+                document.body.append(script);
+            }
+            })();
         </script>
     </body>
 </html>

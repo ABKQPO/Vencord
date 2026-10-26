@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { tr, useLocale } from "@utils/localization";
 import { PluginNative } from "@utils/types";
 import { Button, MediaEngineStore, showToast, useState } from "@webpack/common";
 
@@ -25,6 +26,7 @@ import { settings } from "./settings";
 const Native = VencordNative.pluginHelpers.VoiceMessages as PluginNative<typeof import("./native")>;
 
 export const VoiceRecorderDesktop: VoiceRecorder = ({ setAudioBlob, onRecordingChange }) => {
+    useLocale();
     const [recording, setRecording] = useState(false);
 
     const changeRecording = (recording: boolean) => {
@@ -47,7 +49,7 @@ export const VoiceRecorderDesktop: VoiceRecorder = ({ setAudioBlob, onRecordingC
                     if (success)
                         changeRecording(true);
                     else
-                        showToast({ text: "Failed to start recording", variant: "critical" });
+                        showToast({ text: tr("plugins.VoiceMessages.failedToStartRecording", "Failed to start recording"), variant: "critical" });
                 }
             );
         } else {
@@ -57,7 +59,7 @@ export const VoiceRecorderDesktop: VoiceRecorder = ({ setAudioBlob, onRecordingC
                     if (buf)
                         setAudioBlob(new Blob([buf], { type: "audio/ogg; codecs=opus" }));
                     else
-                        showToast({ text: "Failed to finish recording", variant: "critical" });
+                        showToast({ text: tr("plugins.VoiceMessages.failedToFinishRecording", "Failed to finish recording"), variant: "critical" });
                 }
                 changeRecording(false);
             });
@@ -66,7 +68,7 @@ export const VoiceRecorderDesktop: VoiceRecorder = ({ setAudioBlob, onRecordingC
 
     return (
         <Button onClick={toggleRecording}>
-            {recording ? "Stop" : "Start"} recording
+            {recording ? "Stop" : "Start"}  {tr("plugins.VoiceMessages.recording", "recording")}
         </Button>
     );
 };

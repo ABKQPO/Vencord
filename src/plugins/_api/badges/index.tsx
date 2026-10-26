@@ -27,6 +27,7 @@ import DonateButton from "@components/settings/DonateButton";
 import { openContributorModal } from "@components/settings/tabs";
 import { Devs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { shouldShowContributorBadge } from "@utils/misc";
@@ -37,7 +38,7 @@ const CONTRIBUTOR_BADGE = "https://cdn.discordapp.com/emojis/1562267648857997356
 
 const ContributorBadge: ProfileBadge = {
     id: "vencord_contributor_badge",
-    description: "Vencord Contributor",
+    get description() { return tr("plugins.BadgeAPI.contributorBadge", "Vencord Contributor"); },
     iconSrc: CONTRIBUTOR_BADGE,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => shouldShowContributorBadge(userId),
@@ -58,16 +59,17 @@ async function loadBadges(noCache = false) {
 let intervalId: any;
 
 function BadgeContextMenu({ badge }: { badge: Omit<ProfileBadge, "id"> & BadgeUserArgs; }) {
+    useLocale();
     return (
         <Menu.Menu
             navId="vc-badge-context"
             onClose={ContextMenuApi.closeContextMenu}
-            aria-label="Badge Options"
+            aria-label={tr("plugins.BadgeAPI.badgeOptions", "Badge Options")}
         >
             {badge.description && (
                 <Menu.MenuItem
                     id="vc-badge-copy-name"
-                    label="Copy Badge Name"
+                    label={tr("plugins.BadgeAPI.copyBadgeName", "Copy Badge Name")}
                     action={() => copyWithToast(badge.description!)}
                     leadingAccessory={{ type: "icon", icon: CopyIcon }}
                 />
@@ -75,7 +77,7 @@ function BadgeContextMenu({ badge }: { badge: Omit<ProfileBadge, "id"> & BadgeUs
             {badge.iconSrc && (
                 <Menu.MenuItem
                     id="vc-badge-copy-link"
-                    label="Copy Badge Image Link"
+                    label={tr("plugins.BadgeAPI.copyBadgeImageLink", "Copy Badge Image Link")}
                     action={() => copyWithToast(badge.iconSrc!)}
                     leadingAccessory={{ type: "icon", icon: LinkIcon }}
                 />
@@ -131,7 +133,7 @@ export default definePlugin({
     toolboxActions: {
         async "Refetch Badges"() {
             await loadBadges(true);
-            showToast({ text: "Successfully refetched badges!", variant: "success" });
+            showToast({ text: tr("plugins.BadgeAPI.successfullyRefetchedBadges", "Successfully refetched badges!"), variant: "success" });
         }
     },
 
@@ -160,6 +162,7 @@ export default definePlugin({
     },
 
     renderBadgeComponent: ErrorBoundary.wrap((badge: ProfileBadge & BadgeUserArgs) => {
+        useLocale();
         const Component = badge.component!;
         return <Component {...badge} />;
     }, { noop: true }),
@@ -212,7 +215,8 @@ export default definePlugin({
                                 >
                                     <Flex justifyContent="center" alignItems="center" gap="0.5em">
                                         <Heart />
-                                        Vencord Donor
+
+                                        {tr("plugins.BadgeAPI.vencordDonor", "Vencord Donor")}
                                     </Flex>
                                 </Forms.FormTitle>
                             }
@@ -234,10 +238,12 @@ export default definePlugin({
                                 </Flex>
                                 <div style={{ padding: "1em" }}>
                                     <Forms.FormText>
-                                        This Badge is a special perk for Vencord Donors
+
+                                        {tr("plugins.BadgeAPI.thisBadgeIsASpecialPerkForVencordDonors", "This Badge is a special perk for Vencord Donors")}
                                     </Forms.FormText>
                                     <Forms.FormText className={Margins.top20}>
-                                        Please consider supporting the development of Vencord by becoming a donor. It would mean a lot!!
+
+                                        {tr("plugins.BadgeAPI.pleaseConsiderSupportingTheDevelopmentOfVencordByBecomingADonorItWouldMeanALot", "Please consider supporting the development of Vencord by becoming a donor. It would mean a lot!!")}
                                     </Forms.FormText>
                                 </div>
                             </div>

@@ -9,6 +9,7 @@ import "./styles.css";
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import { identity } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { FluxDispatcher, GIFPickerViewStore, LocaleStore, RestAPI, Select, useEffect } from "@webpack/common";
@@ -163,6 +164,7 @@ export default definePlugin({
     },
 
     SearchWrapper: ErrorBoundary.wrap(({ Component, placeholder, "aria-label": ariaLabel, ref, ...restProps }) => {
+    useLocale();
         const { provider } = settings.use(["provider"]);
 
         // restProps contains `autoFocus: true`, which should in theory focus the input automatically.
@@ -180,7 +182,7 @@ export default definePlugin({
             <div className="vc-tenorGifSearch-wrapper">
                 <Component placeholder={placeholder} aria-label={ariaLabel} ref={ref} {...restProps} />
                 <Select
-                    placeholder="Provider"
+                    placeholder={tr("plugins.GifProviderSwitcher.provider", "Provider")}
                     options={settings.def.provider.options}
                     isSelected={v => v === provider}
                     select={v => settings.store.provider = v}

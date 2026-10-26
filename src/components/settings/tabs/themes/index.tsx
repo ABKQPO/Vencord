@@ -25,6 +25,8 @@ import { Link } from "@components/Link";
 import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsTab, wrapTab } from "@components/settings/tabs/BaseTab";
+import { LocalizedText } from "@components/settings/tabs/LocalizedText";
+import { tr, useLocale } from "@utils/localization";
 import { getStylusWebStoreUrl } from "@utils/web";
 import { Forms, React, TabBar, useState } from "@webpack/common";
 
@@ -38,6 +40,7 @@ const enum ThemeTab {
 }
 
 function ThemesTab() {
+    useLocale();
     const [currentTab, setCurrentTab] = useState(ThemeTab.LOCAL);
 
     return (
@@ -53,24 +56,21 @@ function ThemesTab() {
                     className="vc-settings-tab-bar-item"
                     id={ThemeTab.LOCAL}
                 >
-                    Local Themes
-                </TabBar.Item>
+                    {tr("loader.settings.local.themes", "Local Themes")}</TabBar.Item>
                 <TabBar.Item
                     className="vc-settings-tab-bar-item"
                     id={ThemeTab.ONLINE}
                 >
-                    Online Themes
-                </TabBar.Item>
+                    {tr("loader.settings.online.themes", "Online Themes")}</TabBar.Item>
             </TabBar>
 
             <Flex flexDirection="column" gap="1em">
                 <CspErrorCard />
 
                 <Card variant="warning">
-                    <BaseText tag="h3" size="md" weight="medium" className={Margins.bottom8}>Theme Performance</BaseText>
+                    <BaseText tag="h3" size="md" weight="medium" className={Margins.bottom8}>{tr("loader.settings.theme.performance", "Theme Performance")}</BaseText>
                     <Paragraph>
-                        Themes and custom CSS have the potential to cause major lag! If you experience performance issues, try
-                        disabling your themes and CSS to see if they're the cause. The most common cause of lag is the <code>:has()</code> operator.
+                        <LocalizedText id="loader.settings.themes.and.custom.css.have.the.potential.to.cause.major.lag.if.you.experience.performance.issue" fallback="Themes and custom CSS have the potential to cause major lag! If you experience performance issues, try disabling your themes and CSS to see if they are the cause. The most common cause of lag is the {operator} operator." slots={{ operator: <code>:has()</code> }} />
                     </Paragraph>
                 </Card>
 
@@ -82,13 +82,14 @@ function ThemesTab() {
 }
 
 function UserscriptThemesTab() {
+    useLocale();
     return (
         <SettingsTab>
             <Card variant="danger">
-                <Forms.FormTitle tag="h5">Themes are not supported on the Userscript!</Forms.FormTitle>
+                <Forms.FormTitle tag="h5">{tr("loader.settings.themes.are.not.supported.on.the.userscript", "Themes are not supported on the Userscript!")}</Forms.FormTitle>
 
                 <Forms.FormText>
-                    You can instead install themes with the <Link href={getStylusWebStoreUrl()}>Stylus extension</Link>!
+                    <LocalizedText id="loader.settings.you.can.instead.install.themes.with.the.extension" fallback="You can instead install themes with the {extension}!" slots={{ extension: <Link href={getStylusWebStoreUrl()}>{tr("loader.settings.stylus.extension", "Stylus extension")}</Link> }} />
                 </Forms.FormText>
             </Card>
         </SettingsTab>

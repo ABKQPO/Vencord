@@ -9,6 +9,7 @@ import "./styles.css";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 import { Tooltip } from "@webpack/common";
 
@@ -38,8 +39,9 @@ export default definePlugin({
     ],
 
     PictureInPictureButton: ErrorBoundary.wrap(() => {
+        useLocale();
         return (
-            <Tooltip text="Toggle Picture in Picture">
+            <Tooltip text={tr("plugins.PictureInPicture.togglePictureInPicture", "Toggle Picture in Picture")}>
                 {tooltipProps => (
                     <div
                         {...tooltipProps}

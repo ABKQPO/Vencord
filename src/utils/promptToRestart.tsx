@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ConfirmModalProps } from "@vencord/discord-types";
+import { tr, useLocale } from "@utils/localization";
+import { ConfirmModalProps, RenderModalProps } from "@vencord/discord-types";
 import { ConfirmModal, openModal } from "@webpack/common";
 
 import { relaunch } from "./native";
@@ -15,29 +16,26 @@ import { relaunch } from "./native";
  */
 export function promptToRestart(
     type: "relaunch" | "reload",
-    {
-        title = "Restart Required",
-        subtitle = "A restart is required to apply this change",
-        confirmText = "Restart now",
-        cancelText = "Later!",
-        ...props
-    }: Partial<ConfirmModalProps> = {}
+    props: Partial<ConfirmModalProps> = {}
 ) {
     const onConfirm = type === "relaunch"
         ? relaunch
         : () => location.reload();
 
-    openModal(modalProps => (
+    openModal(modalProps => <RestartModal {...modalProps} {...props} onConfirm={onConfirm} />);
+}
+
+function RestartModal(props: Partial<ConfirmModalProps> & RenderModalProps) {
+    useLocale();
+    return (
         <ConfirmModal
             variant="primary"
-            {...modalProps}
             {...props}
 
-            title={title}
-            subtitle={subtitle}
-            confirmText={confirmText}
-            cancelText={cancelText}
-            onConfirm={onConfirm}
+            title={props.title ?? tr("loader.5e0716dcc27f", "Restart Required")}
+            subtitle={props.subtitle ?? tr("loader.0c2eb35a645e", "A restart is required to apply this change")}
+            confirmText={props.confirmText ?? tr("loader.09af1002abaf", "Restart now")}
+            cancelText={props.cancelText ?? tr("loader.ddaeaad65c51", "Later!")}
         />
-    ));
+    );
 }

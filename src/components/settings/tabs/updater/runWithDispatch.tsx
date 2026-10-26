@@ -5,21 +5,22 @@
  */
 
 import { ErrorCard } from "@components/ErrorCard";
+import { tr, useLocale } from "@utils/localization";
 import { UpdateLogger } from "@utils/updater";
 import { ConfirmModal,openModal, Parser } from "@webpack/common";
 
 function getErrorMessage(e: any) {
     if (!e?.code || !e.cmd)
-        return "An unknown error occurred.\nPlease try again or see the console for more info.";
+        return tr("loader.settings.updater.unknownError", "An unknown error occurred.\nPlease try again or see the console for more info.");
 
     const { code, path, cmd, stderr } = e;
 
     if (code === "ENOENT")
-        return `Command \`${path}\` not found.\nPlease install it and try again.`;
+        return tr("loader.settings.updater.error.command", "Command `{command}` not found.\nPlease install it and try again.", { command: path });
 
-    const extra = stderr || `Code \`${code}\`. See the console for more info.`;
+    const extra = stderr || tr("loader.settings.updater.error.code", "Code `{code}`. See the console for more info.", { code: code });
 
-    return `An error occurred while running \`${cmd}\`:\n${extra}`;
+    return tr("loader.settings.updater.error.cmd.extra", "An error occurred while running `{cmd}`:\n{extra}", { cmd: cmd, extra: extra });
 }
 
 export function runWithDispatch(dispatch: React.Dispatch<React.SetStateAction<boolean>>, action: () => any) {
@@ -31,13 +32,15 @@ export function runWithDispatch(dispatch: React.Dispatch<React.SetStateAction<bo
         } catch (e: any) {
             UpdateLogger.error(e);
 
-            const err = getErrorMessage(e);
 
-            openModal(props => (
-                <ConfirmModal
+
+            openModal(function LocalizedModal(props) {
+                useLocale();
+                const err = getErrorMessage(e);
+                return (<ConfirmModal
                     {...props}
-                    title="Oops!"
-                    confirmText="OK"
+                    title={tr("loader.settings.oops", "Oops!")}
+                    confirmText={tr("loader.settings.ok", "OK")}
                     variant="primary"
                 >
                     <ErrorCard>
@@ -45,8 +48,8 @@ export function runWithDispatch(dispatch: React.Dispatch<React.SetStateAction<bo
                             <div key={idx}>{Parser.parse(line)}</div>
                         )}
                     </ErrorCard>
-                </ConfirmModal>
-            ));
+                </ConfirmModal>);
+            });
         } finally {
             dispatch(false);
         }

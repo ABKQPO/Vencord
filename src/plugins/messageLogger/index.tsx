@@ -26,6 +26,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { EyeIcon } from "@components/Icons";
 import { Devs, SUPPORT_CATEGORY_ID, VENBOT_USER_ID } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
@@ -220,7 +221,7 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (children, props) =
             <Menu.MenuItem
                 id={TOGGLE_DELETE_STYLE_ID}
                 key={TOGGLE_DELETE_STYLE_ID}
-                label="Toggle Deleted Highlight"
+                label={tr("plugins.MessageLogger.toggleDeletedHighlight", "Toggle Deleted Highlight")}
                 leadingAccessory={{ type: "icon", icon: EyeIcon }}
                 action={() => domElement.classList.toggle("messagelogger-deleted")}
             />
@@ -231,7 +232,7 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (children, props) =
         <Menu.MenuItem
             id={REMOVE_HISTORY_ID}
             key={REMOVE_HISTORY_ID}
-            label="Clear Message History"
+            label={tr("plugins.MessageLogger.clearMessageHistory", "Clear Message History")}
             leadingAccessory={{ type: "icon", icon: ClearHistoryIcon }}
             color="danger"
             action={() => {
@@ -249,7 +250,7 @@ const patchChannelContextMenu: NavContextMenuPatchCallback = (children, { channe
     group.push(
         <Menu.MenuItem
             id="vc-ml-clear-channel"
-            label="Clear Message Log"
+            label={tr("plugins.MessageLogger.clearMessageLog", "Clear Message Log")}
             color="danger"
             action={() => {
                 messages.forEach(msg => {
@@ -300,7 +301,7 @@ export default definePlugin({
                 return null;
 
             return {
-                label: "Clear history",
+                label: tr("plugins.MessageLogger.clearHistory", "Clear history"),
                 icon: ClearHistoryIcon,
                 onClick: () => {
                     const latest = MessageStore.getMessage(message.channel_id, message.id) as MLMessage | undefined;
@@ -313,6 +314,7 @@ export default definePlugin({
     },
 
     renderEdits: ErrorBoundary.wrap(({ message: { id: messageId, channel_id: channelId } }: { message: Message; }) => {
+        useLocale();
         const message = useStateFromStores(
             [MessageStore],
             () => MessageStore.getMessage(channelId, messageId) as MLMessage,
@@ -453,20 +455,20 @@ export default definePlugin({
             6,
             "count",
             {
-                "=0": ["No deleted messages"],
+                "=0": [tr("plugins.MessageLogger.noDeletedMessages", "No deleted messages")],
                 one: [
                     [
                         1,
                         "count"
                     ],
-                    " deleted message"
+                    tr("plugins.MessageLogger.deletedMessage", " deleted message")
                 ],
                 other: [
                     [
                         1,
                         "count"
                     ],
-                    " deleted messages"
+                    tr("plugins.MessageLogger.deletedMessages", " deleted messages")
                 ]
             },
             0,

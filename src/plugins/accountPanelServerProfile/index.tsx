@@ -8,6 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { getCurrentChannel } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
@@ -25,6 +26,7 @@ let openAlternatePopout = false;
 let accountPanelRef: React.RefObject<HTMLDivElement | null> = { current: null };
 
 const AccountPanelContextMenu = ErrorBoundary.wrap(() => {
+    useLocale();
     const { prioritizeServerProfile } = settings.use(["prioritizeServerProfile"]);
 
     return (
@@ -34,7 +36,7 @@ const AccountPanelContextMenu = ErrorBoundary.wrap(() => {
         >
             <Menu.MenuItem
                 id="vc-ap-view-alternate-popout"
-                label={prioritizeServerProfile ? "View Account Profile" : "View Server Profile"}
+                label={prioritizeServerProfile ? tr("plugins.AccountPanelServerProfile.viewAccountProfile", "View Account Profile") : tr("plugins.AccountPanelServerProfile.viewServerProfile", "View Server Profile")}
                 disabled={getCurrentChannel()?.getGuildId() == null}
                 action={e => {
                     openAlternatePopout = true;
@@ -43,7 +45,7 @@ const AccountPanelContextMenu = ErrorBoundary.wrap(() => {
             />
             <Menu.MenuCheckboxItem
                 id="vc-ap-prioritize-server-profile"
-                label="Prioritize Server Profile"
+                label={tr("plugins.AccountPanelServerProfile.prioritizeServerProfile", "Prioritize Server Profile")}
                 checked={prioritizeServerProfile}
                 action={() => settings.store.prioritizeServerProfile = !prioritizeServerProfile}
             />

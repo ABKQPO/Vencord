@@ -5,6 +5,7 @@
  */
 
 import * as DataStore from "@api/DataStore";
+import { tr } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import { OAuth2AuthorizeModal, openModal, showToast, UserStore } from "@webpack/common";
 
@@ -60,13 +61,13 @@ export function authorize(callback?: () => void) {
 
                     if (!res.ok) {
                         const { message } = await res.json();
-                        showToast({ text: message ?? "An error occured while authorizing", variant: "critical" });
+                        showToast({ text: message ?? tr("plugins.ReviewDB.anErrorOccuredWhileAuthorizing", "An error occured while authorizing"), variant: "critical" });
                         return;
                     }
 
                     const { token } = await res.json();
                     updateAuth({ token });
-                    showToast({ text: "Successfully logged in!", variant: "success" });
+                    showToast({ text: tr("plugins.ReviewDB.successfullyLoggedIn", "Successfully logged in!"), variant: "success" });
                     callback?.();
                 } catch (e) {
                     new Logger("ReviewDB").error("Failed to authorize", e);

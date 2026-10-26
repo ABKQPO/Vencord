@@ -18,10 +18,12 @@
 
 import { Devs } from "@utils/constants";
 import { insertTextIntoChatInputBox } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin from "@utils/types";
 import { ChannelStore, PermissionsBits, PermissionStore } from "@webpack/common";
 
 function Icon({ height = 24, width = 24, className = "icon" }: { height?: number | string; width?: number | string; className?: string; }) {
+    useLocale();
     return (
         <svg
             className={className}
@@ -50,7 +52,7 @@ export default definePlugin({
             if (channel.guild_id && !PermissionStore.can(PermissionsBits.SEND_MESSAGES, channel)) return null;
 
             return {
-                label: "Quick Mention",
+                label: tr("plugins.QuickMention.quickMention", "Quick Mention"),
                 icon: Icon,
                 onClick: () => insertTextIntoChatInputBox(`<@${msg.author.id}> `)
             };

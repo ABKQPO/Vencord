@@ -5,6 +5,7 @@
  */
 
 import { classNameFactory } from "@utils/css";
+import { tr, useLocale } from "@utils/localization";
 import { classes } from "@utils/misc";
 import { wordsFromCamel, wordsToTitle } from "@utils/text";
 import { DefinedSettings, PluginSettingDefCommon } from "@utils/types";
@@ -31,7 +32,7 @@ export type ComponentSettingProps<T extends Omit<PluginSettingDefCommon, "descri
 export function resolveError(isValidResult: boolean | string) {
     if (typeof isValidResult === "string") return isValidResult;
 
-    return isValidResult ? null : "Invalid input provided";
+    return isValidResult ? null : tr("loader.2546e4c6e381", "Invalid input provided");
 }
 
 interface SettingsSectionProps extends PropsWithChildren {
@@ -44,6 +45,7 @@ interface SettingsSectionProps extends PropsWithChildren {
 }
 
 export function SettingsSection({ tag: Tag = "div", name, id, description, error, inlineSetting, children }: SettingsSectionProps) {
+    useLocale();
     return (
         <Tag className={cl("section")}>
             <div className={classes(cl("content"), inlineSetting && cl("inline"))}>

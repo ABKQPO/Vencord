@@ -23,6 +23,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
+import { getLocale, tr, useLocale } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy, findCssClassesLazy, findStoreLazy } from "@webpack";
 import { Constants, React, RestAPI, SettingsRouter, Tooltip } from "@webpack/common";
@@ -101,6 +102,7 @@ export default definePlugin({
     }, { noop: true }),
 
     renderDescription: ErrorBoundary.wrap(({ session, description }: { session: Session, description: string; }) => {
+        useLocale();
         const [label, timeLabel] = description.split(" \xb7 ");
 
         return (
@@ -109,7 +111,7 @@ export default definePlugin({
                 {timeLabel && (
                     <>
                         {" \xb7 "}
-                        <Tooltip text={session.approx_last_used_time.toLocaleString()}>
+                        <Tooltip text={session.approx_last_used_time.toLocaleString(getLocale())}>
                             {props => (
                                 <span {...props} className={TimestampClasses.timestamp}>
                                     {timeLabel}
@@ -161,7 +163,7 @@ export default definePlugin({
             savedSessionsCache.set(session.id_hash, { name: "", isNew: true });
             showNotification({
                 title: "BetterSessions",
-                body: `New session:\n${session.client_info.os} · ${session.client_info.platform} · ${session.client_info.location}`,
+                body: tr("plugins.BetterSessions.newSessionOsPlatformLocation", "New session:\n{os} · {platform} · {location}", { os: session.client_info.os, platform: session.client_info.platform, location: session.client_info.location }),
                 permanent: true,
                 onClick: () => SettingsRouter.openUserSettings("sessions_panel")
             });

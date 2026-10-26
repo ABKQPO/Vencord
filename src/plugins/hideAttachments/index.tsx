@@ -23,6 +23,7 @@ import { updateMessage } from "@api/MessageUpdater";
 import { migratePluginSettings } from "@api/Settings";
 import { ImageInvisible, ImageVisible } from "@components/Icons";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import { classes } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
@@ -74,7 +75,7 @@ export default definePlugin({
             const isHidden = hiddenMessages.has(msg.id);
 
             return {
-                label: isHidden ? "Show Media" : "Hide Media",
+                label: isHidden ? tr("plugins.HideMedia.showMedia", "Show Media") : tr("plugins.HideMedia.hideMedia", "Hide Media"),
                 icon: isHidden ? ImageVisible : ImageInvisible,
                 onClick: () => toggleHide(msg.channel_id, msg.id)
             };
@@ -82,11 +83,12 @@ export default definePlugin({
     },
 
     renderMessageAccessory({ message }) {
+        useLocale();
         if (!this.shouldHide(message.id)) return null;
 
         return (
             <span className={classes("vc-hideAttachments-accessory", !message.content && "vc-hideAttachments-no-content")}>
-                Media Hidden
+                {tr("plugins.HideMedia.mediaHidden", "Media Hidden")}
             </span>
         );
     },

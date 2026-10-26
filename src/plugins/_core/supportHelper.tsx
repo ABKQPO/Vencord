@@ -24,8 +24,10 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { Link } from "@components/Link";
 import { openSettingsTabModal, UpdaterTab } from "@components/settings";
+import { LocalizedText } from "@components/settings/tabs/LocalizedText";
 import { CONTRIB_ROLE_ID, Devs, DONOR_ROLE_ID, KNOWN_ISSUES_CHANNEL_ID, REGULAR_ROLE_ID, SUPPORT_CATEGORY_ID, SUPPORT_CHANNEL_ID, VENBOT_USER_ID, VENCORD_GUILD_ID } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { isPluginDev, tryOrElse } from "@utils/misc";
@@ -133,13 +135,14 @@ const settings = definePluginSettings({}).withPrivateSettings<{
 }>();
 
 function DevBuildConfirmModal(props: RenderModalProps) {
+    useLocale();
     const s = settings.use(["dismissedDevBuildWarning"]);
 
     return (
         <ConfirmModal
             {...props}
-            title="Hold on!"
-            confirmText="Understood"
+            title={tr("loader.be5b6042d3f0", "Hold on!")}
+            confirmText={tr("loader.501721f0699e", "Understood")}
             variant="primary"
             checkboxProps={{
                 checked: s.dismissedDevBuildWarning === true,
@@ -147,14 +150,16 @@ function DevBuildConfirmModal(props: RenderModalProps) {
             }}
         >
             <div>
-                <Forms.FormText>You are using a custom build of Vencord, which we do not provide support for!</Forms.FormText>
+                <Forms.FormText>{tr("loader.ddf3ca688344", "You are using a custom build of Vencord, which we do not provide support for!")}</Forms.FormText>
 
                 <Forms.FormText className={Margins.top8}>
-                    We only provide support for <Link href="https://vencord.dev/download">official builds</Link>.
-                    Either <Link href="https://vencord.dev/download">switch to an official build</Link> or figure your issue out yourself.
+                    <LocalizedText id="support.officialOnly" fallback="We only provide support for {official}. Either {switchBuild} or figure your issue out yourself." slots={{
+                        official: <Link href="https://vencord.dev/download">{tr("loader.381ab9ef8595", "official builds")}</Link>,
+                        switchBuild: <Link href="https://vencord.dev/download">{tr("loader.0c77105f45f4", "switch to an official build")}</Link>
+                    }} />
                 </Forms.FormText>
 
-                <Text variant="text-md/bold" className={Margins.top8}>You will be banned from receiving support if you ignore this rule.</Text>
+                <Text variant="text-md/bold" className={Margins.top8}>{tr("loader.1ea7a8ae4584", "You will be banned from receiving support if you ignore this rule.")}</Text>
             </div>
         </ConfirmModal>
     );
@@ -208,19 +213,19 @@ export default definePlugin({
                         <ConfirmModal
                             {...props}
                             variant="primary"
-                            title="Hold on!"
-                            confirmText="Update & Restart Now"
-                            cancelText="View Updates"
+                            title={tr("loader.be5b6042d3f0", "Hold on!")}
+                            confirmText={tr("loader.11cb6942675b", "Update & Restart Now")}
+                            cancelText={tr("loader.384719ba9151", "View Updates")}
                             onConfirm={forceUpdate}
                             onCancel={() => openSettingsTabModal(UpdaterTab!)}
                         >
                             <div>
-                                <Forms.FormText>You are using an outdated version of Vencord! Chances are, your issue is already fixed.</Forms.FormText>
+                                <Forms.FormText>{tr("loader.cd2a4b4fc7ce", "You are using an outdated version of Vencord! Chances are, your issue is already fixed.")}</Forms.FormText>
                                 <Forms.FormText className={Margins.top8}>
-                                    Please first update before asking for support!
+                                    {tr("loader.10ca2540a43e", "Please first update before asking for support!")}
                                 </Forms.FormText>
                                 <Forms.FormText className={Margins.top8}>
-                                    If you know what you're doing or cannot update, you can dismiss this prompt.
+                                    {tr("loader.9ee4513ae11c", "If you know what you're doing or cannot update, you can dismiss this prompt.")}
                                 </Forms.FormText>
                             </div>
                         </ConfirmModal>
@@ -236,15 +241,16 @@ export default definePlugin({
                 openModal(props => (
                     <ConfirmModal
                         {...props}
-                        title="Hold on!"
-                        confirmText="OK"
+                        title={tr("loader.be5b6042d3f0", "Hold on!")}
+                        confirmText={tr("loader.565339bc4d33", "OK")}
                         variant="primary"
                     >
                         <div>
-                            <Forms.FormText>You are using an externally updated Vencord version, which we do not provide support for!</Forms.FormText>
+                            <Forms.FormText>{tr("loader.3239f605e8da", "You are using an externally updated Vencord version, which we do not provide support for!")}</Forms.FormText>
                             <Forms.FormText className={Margins.top8}>
-                                Please either switch to an <Link href="https://vencord.dev/download">officially supported version of Vencord</Link>, or
-                                contact your package maintainer for support instead.
+                                <LocalizedText id="support.externalBuild" fallback="Please either switch to an {official}, or contact your package maintainer for support instead." slots={{
+                                    official: <Link href="https://vencord.dev/download">{tr("loader.82757e332b1b", "officially supported version of Vencord")}</Link>
+                                }} />
                             </Forms.FormText>
                         </div>
                     </ConfirmModal>
@@ -280,16 +286,16 @@ export default definePlugin({
                     onClick={async () => {
                         try {
                             if (await forceUpdate())
-                                showToast({ text: "Success! Restarting...", variant: "success" });
+                                showToast({ text: tr("loader.2f8e8ba757f5", "Success! Restarting..."), variant: "success" });
                             else
-                                showToast({ text: "Already up to date!" });
+                                showToast({ text: tr("loader.05ce07e5106d", "Already up to date!") });
                         } catch (e) {
                             new Logger(this.name).error("Error while updating:", e);
-                            showToast({ text: "Failed to update :(", variant: "critical" });
+                            showToast({ text: tr("loader.ae53a99550ad", "Failed to update :("), variant: "critical" });
                         }
                     }}
                 >
-                    Update Now
+                    {tr("loader.f96f4d46e788", "Update Now")}
                 </Button>
             );
         }
@@ -302,14 +308,14 @@ export default definePlugin({
                         color={Button.Colors.PRIMARY}
                         onClick={async () => sendMessage(props.channel.id, { content: await generateDebugInfoMessage() })}
                     >
-                        Run /vencord-debug
+                        {tr("loader.7e3907a8e2ef", "Run /vencord-debug")}
                     </Button>,
                     <Button
                         key="vc-plg-list"
                         color={Button.Colors.PRIMARY}
                         onClick={async () => sendMessage(props.channel.id, { content: generatePluginList() })}
                     >
-                        Run /vencord-plugins
+                        {tr("loader.7f38ea58a46a", "Run /vencord-plugins")}
                     </Button>
                 );
             }
@@ -321,16 +327,17 @@ export default definePlugin({
     },
 
     renderContributorDmWarningCard: ErrorBoundary.wrap(({ channel }) => {
+        useLocale();
         const userId = channel.getRecipientId();
         if (!isPluginDev(userId)) return null;
         if (RelationshipStore.isFriend(userId) || isPluginDev(UserStore.getCurrentUser()?.id)) return null;
 
         return (
             <Card variant="warning" className={Margins.top8} defaultPadding>
-                Please do not private message Vencord plugin developers for support!
+                {tr("loader.b95796d69d8b", "Please do not private message Vencord plugin developers for support!")}
                 <br />
-                Instead, use the Vencord support channel: {Parser.parse("https://discord.com/channels/1015060230222131221/1026515880080842772")}
-                {!ChannelStore.getChannel(SUPPORT_CHANNEL_ID) && " (Click the link to join)"}
+                {tr("loader.d92e9f4b000d", "Instead, use the Vencord support channel:")} {Parser.parse("https://discord.com/channels/1015060230222131221/1026515880080842772")}
+                {!ChannelStore.getChannel(SUPPORT_CHANNEL_ID) && tr("support.clickToJoin", " (Click the link to join)")}
             </Card>
         );
     }, { noop: true }),

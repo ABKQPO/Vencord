@@ -5,15 +5,16 @@
  */
 
 import { PlainSettings } from "@api/Settings";
+import { tr } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import { chooseFile, saveFile } from "@utils/web";
 import { moment, showToast } from "@webpack/common";
 
 const toastSuccess = () =>
-    showToast({ text: "Settings successfully imported. Restart to apply changes!", variant: "success" });
+    showToast({ text: tr("loader.runtime.547715a0350d", "Settings successfully imported. Restart to apply changes!"), variant: "success" });
 
 const toastFailure = (err: any) =>
-    showToast({ text: `Failed to import settings: ${String(err)}`, variant: "critical" });
+    showToast({ text: tr("loader.runtime.ce82662be4dd", "Failed to import settings: {value0}", { value0: String(err) }), variant: "critical" });
 
 const logger = new Logger("SettingsSync:Offline", "#39b7e0");
 
@@ -41,14 +42,14 @@ export async function importSettings(data: string) {
     }
 
     if (!isSafeObject(parsed))
-        throw new Error("Unsafe Settings");
+        throw new Error(tr("loader.runtime.d2e18b3d4f86", "Unsafe Settings"));
 
     if ("settings" in parsed && "quickCss" in parsed) {
         Object.assign(PlainSettings, parsed.settings);
         await VencordNative.settings.set(parsed.settings);
         await VencordNative.quickCss.set(parsed.quickCss);
     } else
-        throw new Error("Invalid Settings. Is this even a Vencord Settings file?");
+        throw new Error(tr("loader.runtime.c1c0c4874597", "Invalid Settings. Is this even a Vencord Settings file?"));
 }
 
 export async function exportSettings({ minify }: { minify?: boolean; } = {}) {
@@ -73,7 +74,7 @@ export async function uploadSettingsBackup(showToast = true): Promise<void> {
     if (IS_DISCORD_DESKTOP) {
         const [file] = await DiscordNative.fileManager.openFiles({
             filters: [
-                { name: "Vencord Settings Backup", extensions: ["json"] },
+                { name: tr("loader.runtime.4c99c9ff93e2", "Vencord Settings Backup"), extensions: ["json"] },
                 { name: "all", extensions: ["*"] }
             ]
         });

@@ -8,13 +8,15 @@ import { Auth } from "@plugins/reviewDB/auth";
 import { ReviewDBUser } from "@plugins/reviewDB/entities";
 import { fetchBlocks, unblockUser } from "@plugins/reviewDB/reviewDbApi";
 import { cl } from "@plugins/reviewDB/utils";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import { useAwaiter } from "@utils/react";
 import { Forms, Modal,openModal, Tooltip, useState } from "@webpack/common";
 
 function UnblockButton(props: { onClick?(): void; }) {
+    useLocale();
     return (
-        <Tooltip text="Unblock user">
+        <Tooltip text={tr("plugins.ReviewDB.unblockUser", "Unblock user")}>
             {tooltipProps => (
                 <div
                     {...tooltipProps}
@@ -32,6 +34,7 @@ function UnblockButton(props: { onClick?(): void; }) {
 }
 
 function BlockedUser({ user, isBusy, setIsBusy }: { user: ReviewDBUser; isBusy: boolean; setIsBusy(v: boolean): void; }) {
+    useLocale();
     const [gone, setGone] = useState(false);
     if (gone) return null;
 
@@ -55,6 +58,7 @@ function BlockedUser({ user, isBusy, setIsBusy }: { user: ReviewDBUser; isBusy: 
 }
 
 function BlockedUsersList() {
+    useLocale();
     const [isBusy, setIsBusy] = useState(false);
     const [blocks, error, pending] = useAwaiter(fetchBlocks, {
         onError: e => new Logger("ReviewDB").error("Failed to fetch blocks", e),
@@ -64,9 +68,9 @@ function BlockedUsersList() {
     if (pending)
         return null;
     if (error)
-        return <Forms.FormText>Failed to fetch blocks: ${String(error)}</Forms.FormText>;
+        return <Forms.FormText>{tr("plugins.ReviewDB.fetchBlocksError", "Failed to fetch blocks: {error}", { error: String(error) })}</Forms.FormText>;
     if (!blocks.length)
-        return <Forms.FormText>No blocked users.</Forms.FormText>;
+        return <Forms.FormText>{tr("plugins.ReviewDB.noBlockedUsers", "No blocked users.")}</Forms.FormText>;
 
     return (
         <>
@@ -86,10 +90,10 @@ export function openBlockModal() {
     openModal(modalProps => (
         <Modal
             {...modalProps}
-            title="Blocked Users"
+            title={tr("plugins.ReviewDB.blockedUsers", "Blocked Users")}
         >
             <div className={cl("block-modal")}>
-                {Auth.token ? <BlockedUsersList /> : <Forms.FormText>You are not logged into ReviewDB!</Forms.FormText>}
+                {Auth.token ? <BlockedUsersList /> : <Forms.FormText>{tr("plugins.ReviewDB.youAreNotLoggedIntoReviewDB", "You are not logged into ReviewDB!")}</Forms.FormText>}
             </div>
         </Modal>
     ));

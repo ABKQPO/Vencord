@@ -8,6 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { isNonNullish } from "@utils/guards";
+import { getLocale, tr, useLocale } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { AuthenticationStore, SnowflakeUtils, Tooltip } from "@webpack/common";
@@ -73,6 +74,11 @@ export default definePlugin({
             seconds: Math.floor(delta / 1000 % 60),
             milliseconds: Math.floor(delta % 1000)
         };
+
+        if (getLocale() === "zh-CN") {
+            const units: Record<DiffKey, string> = { days: tr("plugins.MessageLatency.days", "days"), hours: tr("plugins.MessageLatency.hours", "hours"), minutes: tr("plugins.MessageLatency.minutes", "minutes"), seconds: tr("plugins.MessageLatency.seconds", "seconds"), milliseconds: tr("plugins.MessageLatency.milliseconds", "milliseconds") };
+            return (Object.keys(diff) as DiffKey[]).filter(k => diff[k] > 0).map(k => diff[k] + units[k]).join(" ") || tr("plugins.MessageLatency.zeroSeconds", "0 seconds");
+        }
 
         const str = (k: DiffKey) => diff[k] > 0 ? `${diff[k]} ${diff[k] > 1 ? k : k.substring(0, k.length - 1)}` : null;
         const keys = Object.keys(diff) as DiffKey[];
@@ -145,15 +151,16 @@ export default definePlugin({
 
     Tooltip() {
         return ErrorBoundary.wrap(({ message }: { message: Message; }) => {
+    useLocale();
             const d = this.latencyTooltipData(message);
 
             if (!isNonNullish(d)) return null;
 
             let text: string;
             if (!d.delta) {
-                text = "User is suspected to be on an old Discord Android client";
+                text = tr("plugins.MessageLatency.userIsSuspectedToBeOnAnOldDiscordAndroidClient", "User is suspected to be on an old Discord Android client");
             } else {
-                text = (d.ahead ? `This user's clock is ${d.delta} ahead.` : `This message was sent with a delay of ${d.delta}.`) + (d.isDiscordKotlin ? " User is suspected to be on an old Discord Android client." : "");
+                text = (d.ahead ? tr("plugins.MessageLatency.thisUserSClockIsDeltaAhead", "This user's clock is {delta} ahead.", { delta: d.delta }) : tr("plugins.MessageLatency.thisMessageWasSentWithADelayOfDelta", "This message was sent with a delay of {delta}.", { delta: d.delta })) + (d.isDiscordKotlin ? tr("plugins.MessageLatency.userIsSuspectedToBeOnAnOldDiscordAndroidClientSuffix", " User is suspected to be on an old Discord Android client.") : "");
             }
 
             return <Tooltip
@@ -178,6 +185,7 @@ export default definePlugin({
             "aria-label"?: string;
         };
     }) {
+    useLocale();
         return <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -186,7 +194,7 @@ export default definePlugin({
             role="img"
             fill="none"
             style={{ marginRight: "8px", verticalAlign: -1 }}
-            aria-label={delta ?? "Old Discord Android client"}
+            aria-label={delta ?? tr("plugins.MessageLatency.oldDiscordAndroidClient", "Old Discord Android client")}
             aria-hidden="false"
             {...props}
         >

@@ -5,6 +5,7 @@
  */
 
 import { getCurrentChannel } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { isObjectEmpty } from "@utils/misc";
 import { ChannelStore, GuildMemberCountStore, PermissionsBits, PermissionStore, SelectedChannelStore, Tooltip, useEffect, useStateFromStores, VoiceStateStore } from "@webpack/common";
 
@@ -14,6 +15,7 @@ import { OnlineMemberCountStore } from "./OnlineMemberCountStore";
 import { VoiceIcon } from "./VoiceIcon";
 
 export function MemberCount({ isTooltip, tooltipGuildId }: { isTooltip?: true; tooltipGuildId?: string; }) {
+    useLocale();
     const { voiceActivity } = settings.use(["voiceActivity"]);
     const includeVoice = voiceActivity && !isTooltip;
 
@@ -106,7 +108,7 @@ export function MemberCount({ isTooltip, tooltipGuildId }: { isTooltip?: true; t
 
     return (
         <div className={cl("widget", { tooltip: isTooltip, "member-list": !isTooltip })}>
-            <Tooltip text={`${formattedOnlineCount} online in this channel`} position="bottom">
+            <Tooltip text={tr("plugins.MemberCount.countOnlineInThisChannel", "{count} online in this channel", { count: formattedOnlineCount })} position="bottom">
                 {props => (
                     <div {...props} className={cl("container")}>
                         <CircleIcon className={cl("online-count")} />
@@ -115,7 +117,7 @@ export function MemberCount({ isTooltip, tooltipGuildId }: { isTooltip?: true; t
                 )}
             </Tooltip>
 
-            <Tooltip text={`${numberFormat(totalCount)} total server members`} position="bottom">
+            <Tooltip text={tr("plugins.MemberCount.countTotalServerMembers", "{count} total server members", { count: numberFormat(totalCount) })} position="bottom">
                 {props => (
                     <div {...props} className={cl("container")}>
                         <CircleIcon className={cl("total-count")} />
@@ -125,7 +127,7 @@ export function MemberCount({ isTooltip, tooltipGuildId }: { isTooltip?: true; t
             </Tooltip>
 
             {includeVoice && voiceActivityCount > 0 &&
-                <Tooltip text={`${formattedVoiceCount} members in voice`} position="bottom">
+                <Tooltip text={tr("plugins.MemberCount.countMembersInVoice", "{count} members in voice", { count: formattedVoiceCount })} position="bottom">
                     {props => (
                         <div {...props} className={cl("container")}>
                             <VoiceIcon className={cl("voice-icon")} />

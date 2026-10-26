@@ -17,22 +17,24 @@
 */
 
 import { isSettingDisabled } from "@api/PluginManager";
+import { tr, useLocale } from "@utils/localization";
 import { PluginSettingSelectDef } from "@utils/types";
 import { React, Select, useState } from "@webpack/common";
 
 import { resolveError, SettingProps, SettingsSection } from "./Common";
 
 export function SelectSetting({ setting, pluginSettings, definedSettings, onChange, id }: SettingProps<PluginSettingSelectDef>) {
+    useLocale();
     const def = pluginSettings[id] ?? setting.options?.find(o => o.default)?.value;
 
     const [state, setState] = useState<any>(def ?? null);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<boolean | string>(true);
 
     function handleChange(newValue: any) {
         const isValid = setting.isValid?.call(definedSettings, newValue) ?? true;
 
         setState(newValue);
-        setError(resolveError(isValid));
+        setError(isValid);
 
         if (isValid === true) {
             onChange(newValue);
@@ -40,9 +42,9 @@ export function SelectSetting({ setting, pluginSettings, definedSettings, onChan
     }
 
     return (
-        <SettingsSection name={setting.displayName} id={id} description={setting.description} error={error}>
+        <SettingsSection name={setting.displayName} id={id} description={setting.description} error={resolveError(error)}>
             <Select
-                placeholder={setting.placeholder ?? "Select an option"}
+                placeholder={setting.placeholder ?? tr("loader.fb1cbc38fb40", "Select an option")}
                 options={setting.options}
                 maxVisibleItems={5}
                 closeOnSelect={true}

@@ -8,6 +8,7 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import { definePluginSettings } from "@api/Settings";
 import { SearchIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
+import { tr } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 import { Menu } from "@webpack/common";
 
@@ -76,7 +77,7 @@ function makeSearchItem(src: string) {
 
         return (
             <Menu.MenuItem
-                label={`Search with ${name}`}
+                label={tr("plugins.ReplaceGoogleSearch.searchWith", "Search with {name}", { name: name })}
                 key="search-custom-engine"
                 id="vc-search-custom-engine"
                 action={() => search(src, Engines[name!])}
@@ -86,7 +87,7 @@ function makeSearchItem(src: string) {
 
     return (
         <Menu.MenuItem
-            label="Search Text"
+            label={tr("plugins.ReplaceGoogleSearch.searchText", "Search Text")}
             key="search-text"
             id="vc-search-text"
             leadingAccessory={{ type: "icon", icon: SearchIcon }}

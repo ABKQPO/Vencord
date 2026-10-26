@@ -4,9 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { tr, useLocale } from "@utils/localization";
 import { Margins } from "@utils/margins";
 import { Patch, ReplaceFn } from "@utils/types";
 import { Forms, TextArea, useEffect, useRef, useState } from "@webpack/common";
+
+import { localizePatchError } from "./localizeError";
 
 export interface FullPatchInputProps {
     setFind(v: string): void;
@@ -16,6 +19,7 @@ export interface FullPatchInputProps {
 }
 
 export function FullPatchInput({ setFind, setParsedFind, setMatch, setReplacement }: FullPatchInputProps) {
+    useLocale();
     const [patch, setPatch] = useState<string>("");
     const [error, setError] = useState<string>("");
 
@@ -69,15 +73,14 @@ export function FullPatchInput({ setFind, setParsedFind, setMatch, setReplacemen
     return (
         <>
             <Forms.FormText className={Margins.bottom8}>
-                Paste your full JSON patch here to fill out the fields
-            </Forms.FormText>
+                {tr("loader.settings.paste.your.full.json.patch.here.to.fill.out.the.fields", "Paste your full JSON patch here to fill out the fields")}</Forms.FormText>
             <TextArea
                 inputRef={textAreaRef}
                 value={patch}
                 onChange={setPatch}
                 onBlur={update}
             />
-            {error !== "" && <Forms.FormText style={{ color: "var(--text-feedback-critical)" }}>{error}</Forms.FormText>}
+            {error !== "" && <Forms.FormText style={{ color: "var(--text-feedback-critical)" }}>{localizePatchError(error)}</Forms.FormText>}
         </>
     );
 }

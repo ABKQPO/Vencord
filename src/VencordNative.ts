@@ -72,7 +72,8 @@ export default {
         },
 
         openFile: () => invoke<void>(IpcEvents.OPEN_QUICKCSS),
-        openEditor: () => invoke<void>(IpcEvents.OPEN_MONACO_EDITOR),
+        openEditor: (locale?: string) => invoke<void>(IpcEvents.OPEN_MONACO_EDITOR, locale),
+        setEditorLocale: (locale: string) => invoke<void>(IpcEvents.SET_MONACO_LOCALE, locale),
         getEditorTheme: () => sendSync<string>(IpcEvents.GET_MONACO_THEME),
     },
 
@@ -96,8 +97,8 @@ export default {
          */
         isDomainAllowed: (url: string, directives: string[]) => invoke<boolean>(IpcEvents.CSP_IS_DOMAIN_ALLOWED, url, directives),
         removeOverride: (url: string) => invoke<boolean>(IpcEvents.CSP_REMOVE_OVERRIDE, url),
-        requestAddOverride: (url: string, directives: string[], callerName: string) =>
-            invoke<CspRequestResult>(IpcEvents.CSP_REQUEST_ADD_OVERRIDE, url, directives, callerName),
+        requestAddOverride: (url: string, directives: string[], callerName: string, locale?: string) =>
+            invoke<CspRequestResult>(IpcEvents.CSP_REQUEST_ADD_OVERRIDE, url, directives, callerName, locale),
     },
 
     pluginHelpers: PluginHelpers

@@ -19,11 +19,13 @@
 import { TextButton } from "@components/Button";
 import { SessionInfo } from "@plugins/betterSessions/types";
 import { getDefaultName, savedSessionsCache, saveSessionsToDataStore } from "@plugins/betterSessions/utils";
+import { tr, useLocale } from "@utils/localization";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Forms, Modal,React, TextInput } from "@webpack/common";
 import { KeyboardEvent } from "react";
 
 export function RenameModal({ props, session, state }: { props: RenderModalProps, session: SessionInfo["session"], state: [string, React.Dispatch<React.SetStateAction<string>>]; }) {
+    useLocale();
     const [title, setTitle] = state;
     const [value, setValue] = React.useState(savedSessionsCache.get(session.id_hash)?.name ?? "");
 
@@ -42,22 +44,22 @@ export function RenameModal({ props, session, state }: { props: RenderModalProps
     return (
         <Modal
             {...props}
-            title="Rename"
+            title={tr("plugins.BetterSessions.rename", "Rename")}
             actions={[
                 {
-                    text: "Cancel",
+                    text: tr("plugins.BetterSessions.cancel", "Cancel"),
                     variant: "secondary",
                     onClick: () => props.onClose()
                 },
                 {
-                    text: "Save",
+                    text: tr("plugins.BetterSessions.save", "Save"),
                     variant: "primary",
                     onClick: onSaveClick
                 }
             ]}
         >
             <div>
-                <Forms.FormTitle tag="h5">New device name</Forms.FormTitle>
+                <Forms.FormTitle tag="h5">{tr("plugins.BetterSessions.newDeviceName", "New device name")}</Forms.FormTitle>
                 <TextInput
                     style={{ marginBottom: "10px" }}
                     placeholder={getDefaultName(session.client_info)}
@@ -76,7 +78,7 @@ export function RenameModal({ props, session, state }: { props: RenderModalProps
                     }}
                     onClick={() => setValue("")}
                 >
-                    Reset Name
+                    {tr("plugins.BetterSessions.resetName", "Reset Name")}
                 </TextButton>
             </div>
         </Modal>

@@ -27,6 +27,8 @@ import { debounce } from "@shared/debounce";
 import { gitRemote } from "@shared/vencordUserAgent";
 import { classNameFactory } from "@utils/css";
 import { proxyLazy } from "@utils/lazy";
+import { tr, useLocale } from "@utils/localization";
+import { getLocalizedSetting, getPluginDescription, getPluginDisplayName, getPluginTagLabel } from "@utils/localization/plugins";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { OptionType, Plugin, PluginTag } from "@utils/types";
@@ -69,21 +71,23 @@ function makeDummyUser(user: { username: string; id?: string; avatar?: string; }
 }
 
 function PluginTags({ tags }: { tags: PluginTag[]; }) {
+    useLocale();
     return (
         <div className={cl("tags")}>
             {tags.map(tag => (
-                <div key={tag} className={cl("tag")}>{tag}</div>
+                <div key={tag} className={cl("tag")}>{getPluginTagLabel(tag)}</div>
             ))}
         </div>
     );
 }
 
 export default function PluginModal({ plugin, onRestartNeeded, onClose, transitionState }: PluginModalProps) {
+    const locale = useLocale();
     const pluginSettings = useSettings([`plugins.${plugin.name}.*`]).plugins[plugin.name];
     const hasSettings = hasAnyVisibleSettings(plugin);
 
     // avoid layout shift by showing dummy users while loading users
-    const fallbackAuthors = useMemo(() => [makeDummyUser({ username: "Loading...", id: "-1465912127305809920" })], []);
+    const fallbackAuthors = useMemo(() => [makeDummyUser({ username: tr("loader.47d2a515ef2f", "Loading..."), id: "-1465912127305809920" })], [locale]);
     const [authors, setAuthors] = useState<Partial<User>[]>([]);
 
     useEffect(() => {
@@ -106,7 +110,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
     function renderSettings() {
         const { settings } = plugin;
         if (!hasSettings || !settings)
-            return <Forms.FormText>There are no settings for this plugin.</Forms.FormText>;
+            return <Forms.FormText>{tr("loader.95e770f7d721", "There are no settings for this plugin.")}</Forms.FormText>;
 
         const options = Object.entries(settings.def).map(([key, setting]) => {
             if (setting.type === OptionType.CUSTOM) return null;
@@ -127,7 +131,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 <ErrorBoundary noop key={key}>
                     <Component
                         id={key}
-                        setting={setting}
+                        setting={getLocalizedSetting(plugin, key, setting, locale)}
                         onChange={debounce(onChange)}
                         pluginSettings={pluginSettings}
                         definedSettings={settings}
@@ -173,7 +177,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
             size="lg"
             title={
                 <div className={cl("header")}>
-                    <BaseText tag="h1" weight="semibold" size="lg">{plugin.name}</BaseText>
+                    <BaseText tag="h1" weight="semibold" size="lg">{getPluginDisplayName(plugin)}</BaseText>
                     {!pluginMeta.userPlugin && (
                         <div className="vc-settings-modal-links">
                             <FavoriteButton
@@ -181,11 +185,11 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                                 onClick={() => pluginSettings.isFavorite = !pluginSettings.isFavorite}
                             />
                             <WebsiteButton
-                                text="View more info"
+                                text={tr("loader.a261ae8c0e86", "View more info")}
                                 href={`https://vencord.dev/plugins/${plugin.name}`}
                             />
                             <GithubButton
-                                text="View source code"
+                                text={tr("loader.a46e92d02960", "View source code")}
                                 href={`https://github.com/${gitRemote}/tree/main/src/plugins/${pluginMeta.folderName}`}
                             />
                         </div>
@@ -195,7 +199,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
             subtitle={
                 <div className={cl("info")}>
                     <div>
-                        <Forms.FormText>{plugin.description}</Forms.FormText>
+                        <Forms.FormText>{getPluginDescription(plugin)}</Forms.FormText>
                         {!!plugin.tags?.length && <PluginTags tags={plugin.tags} />}
                     </div>
                 </div>
@@ -203,7 +207,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
         >
             <div className={"vc-settings-modal-content"}>
                 <section>
-                    <Text variant="heading-lg/semibold" className={classes(Margins.top8, Margins.bottom8)}>Authors</Text>
+                    <Text variant="heading-lg/semibold" className={classes(Margins.top8, Margins.bottom8)}>{tr("loader.2c00c9aaa72c", "Authors")}</Text>
                     <div style={{ width: "fit-content" }}>
                         <ErrorBoundary noop>
                             <UserSummaryItem
@@ -234,7 +238,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 {!!plugin.settingsAboutComponent && (
                     <div className={Margins.top16}>
                         <section>
-                            <ErrorBoundary message="An error occurred while rendering this plugin's custom Info Component">
+                            <ErrorBoundary message={tr("loader.cf4963b7fefd", "An error occurred while rendering this plugin's custom Info Component")}>
                                 <plugin.settingsAboutComponent />
                             </ErrorBoundary>
                         </section>
@@ -242,7 +246,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 )}
 
                 <section>
-                    <Text variant="heading-lg/semibold" className={classes(Margins.top16, Margins.bottom8)}>Settings</Text>
+                    <Text variant="heading-lg/semibold" className={classes(Margins.top16, Margins.bottom8)}>{tr("loader.74a883a037bc", "Settings")}</Text>
                     {renderSettings()}
                 </section>
             </div>

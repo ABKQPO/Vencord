@@ -42,6 +42,7 @@ export const enum IpcEvents {
     BUILD = "VencordBuild",
 
     OPEN_MONACO_EDITOR = "VencordOpenMonacoEditor",
+    SET_MONACO_LOCALE = "VencordSetMonacoLocale",
     GET_MONACO_THEME = "VencordGetMonacoTheme",
 
     GET_PLUGIN_IPC_METHOD_MAP = "VencordGetPluginIpcMethodMap",

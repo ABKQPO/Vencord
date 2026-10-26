@@ -19,6 +19,7 @@ import DecorationGridNone from "@plugins/decor/ui/components/DecorationGridNone"
 import DecorDecorationGridDecoration from "@plugins/decor/ui/components/DecorDecorationGridDecoration";
 import SectionedGridList from "@plugins/decor/ui/components/SectionedGridList";
 import { copyWithToast, openInviteModal } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { Margins } from "@utils/margins";
 import { Queue } from "@utils/Queue";
 import { RenderModalProps, User } from "@vencord/discord-types";
@@ -89,6 +90,7 @@ function SectionHeader({ section }: SectionHeaderProps) {
 }
 
 function ChangeDecorationModal(props: RenderModalProps) {
+    useLocale();
     // undefined = not trying, null = none, Decoration = selected
     const [tryingDecoration, setTryingDecoration] = useState<Decoration | null | undefined>(undefined);
     const isTryingDecoration = typeof tryingDecoration !== "undefined";
@@ -120,8 +122,8 @@ function ChangeDecorationModal(props: RenderModalProps) {
 
     const data = [
         {
-            title: "Your Decorations",
-            subtitle: "You can delete your own decorations by right clicking on them.",
+            title: tr("plugins.Decor.yourDecorations", "Your Decorations"),
+            subtitle: tr("plugins.Decor.youCanDeleteYourOwnDecorationsByRightClickingOnThem", "You can delete your own decorations by right clicking on them."),
             sectionKey: "ownDecorations",
             items: ["none", ...ownDecorations, "create"]
         },
@@ -136,16 +138,16 @@ function ChangeDecorationModal(props: RenderModalProps) {
 
     return <Modal
         {...props}
-        title="Change Decoration"
+        title={tr("plugins.Decor.changeDecoration", "Change Decoration")}
         size="lg"
         actions={[
             {
-                text: "Cancel",
+                text: tr("plugins.Decor.cancel", "Cancel"),
                 variant: "secondary",
                 onClick: props.onClose
             },
             {
-                text: "Apply",
+                text: tr("plugins.Decor.apply", "Apply"),
                 variant: "primary",
                 onClick: () => {
                     selectDecoration(tryingDecoration!).then(props.onClose);
@@ -155,7 +157,7 @@ function ChangeDecorationModal(props: RenderModalProps) {
         ]}
         preview={
             <div className={cl("modal-footer-btn-container", Margins.top8)}>
-                <Tooltip text="Join Decor's Discord Server for notifications on your decoration's review, and when new presets are released">
+                <Tooltip text={tr("plugins.Decor.joinDecorSDiscordServerForNotificationsOnYourDecorationSReviewAndWhenNewPresetsAreReleased", "Join Decor's Discord Server for notifications on your decoration's review, and when new presets are released")}>
                     {tooltipProps => <NewButton
                         {...tooltipProps}
                         onClick={async () => {
@@ -173,26 +175,29 @@ function ChangeDecorationModal(props: RenderModalProps) {
                         }}
                         variant="link"
                     >
-                        Discord Server
+                        {tr("plugins.Decor.discordServer", "Discord Server")}
                     </NewButton>}
                 </Tooltip>
                 <NewButton
-                    onClick={() => openModal(modalProps => (
+                    onClick={() => openModal(modalProps => {
+    useLocale();
+    return (
                         <ConfirmModal
                             {...modalProps}
-                            title="Log Out"
-                            subtitle="Are you sure you want to log out of Decor?"
-                            confirmText="Log Out"
-                            cancelText="Cancel"
+                            title={tr("plugins.Decor.logOut", "Log Out")}
+                            subtitle={tr("plugins.Decor.areYouSureYouWantToLogOutOfDecor", "Are you sure you want to log out of Decor?")}
+                            confirmText={tr("plugins.Decor.logOut", "Log Out")}
+                            cancelText={tr("plugins.Decor.cancel", "Cancel")}
                             onConfirm={() => {
                                 useAuthorizationStore.getState().remove(UserStore.getCurrentUser().id);
                                 props.onClose();
                             }}
                         />
-                    ))}
+                    );
+})}
                     variant="dangerSecondary"
                 >
-                    Log Out
+                    {tr("plugins.Decor.logOut", "Log Out")}
                 </NewButton>
             </div>
         }
@@ -209,7 +214,7 @@ function ChangeDecorationModal(props: RenderModalProps) {
                                     onSelect={() => setTryingDecoration(null)}
                                 />;
                             case "create":
-                                return <Tooltip text="You already have a decoration pending review" shouldShow={hasDecorationPendingReview}>
+                                return <Tooltip text={tr("plugins.Decor.youAlreadyHaveADecorationPendingReview", "You already have a decoration pending review")} shouldShow={hasDecorationPendingReview}>
                                     {tooltipProps => <DecorationGridCreate
                                         className={cl("change-decoration-modal-decoration")}
                                         {...tooltipProps}
@@ -218,7 +223,7 @@ function ChangeDecorationModal(props: RenderModalProps) {
                                 </Tooltip>;
                         }
                     } else {
-                        return <Tooltip text={"Pending review"} shouldShow={item.reviewed === false}>
+                        return <Tooltip text={tr("plugins.Decor.pendingReview", "Pending review")} shouldShow={item.reviewed === false}>
                             {tooltipProps => (
                                 <DecorDecorationGridDecoration
                                     {...tooltipProps}
@@ -242,7 +247,7 @@ function ChangeDecorationModal(props: RenderModalProps) {
                     avatarDecoration={avatarDecoration}
                     user={UserStore.getCurrentUser()}
                 />
-                {isActiveDecorationPreset && <Forms.FormTitle className="">Part of the {activeDecorationPreset.name} Preset</Forms.FormTitle>}
+                {isActiveDecorationPreset && <Forms.FormTitle className="">{tr("plugins.Decor.partOfThe", "Part of the")} {activeDecorationPreset.name} {tr("plugins.Decor.preset", "Preset")}</Forms.FormTitle>}
                 {typeof activeSelectedDecoration === "object" &&
                     <Text
                         variant="text-sm/semibold"
@@ -253,12 +258,12 @@ function ChangeDecorationModal(props: RenderModalProps) {
                 }
                 {activeDecorationHasAuthor && (
                     <Text key={`createdBy-${activeSelectedDecoration.authorId}`}>
-                        Created by {Parser.parse(`<@${activeSelectedDecoration.authorId}>`)}
+                        {tr("plugins.Decor.createdBy", "Created by")} {Parser.parse(`<@${activeSelectedDecoration.authorId}>`)}
                     </Text>
                 )}
                 {isActiveDecorationPreset && (
                     <Button onClick={() => copyWithToast(activeDecorationPreset.id)}>
-                        Copy Preset ID
+                        {tr("plugins.Decor.copyPresetID", "Copy Preset ID")}
                     </Button>
                 )}
             </div>

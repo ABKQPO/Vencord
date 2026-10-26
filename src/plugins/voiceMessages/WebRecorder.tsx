@@ -16,12 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { tr, useLocale } from "@utils/localization";
 import { Button, MediaEngineStore, useState } from "@webpack/common";
 
 import type { VoiceRecorder } from ".";
 import { settings } from "./settings";
 
 export const VoiceRecorderWeb: VoiceRecorder = ({ setAudioBlob, onRecordingChange }) => {
+    useLocale();
     const [recording, setRecording] = useState(false);
     const [paused, setPaused] = useState(false);
     const [recorder, setRecorder] = useState<MediaRecorder>();
@@ -71,7 +73,7 @@ export const VoiceRecorderWeb: VoiceRecorder = ({ setAudioBlob, onRecordingChang
     return (
         <>
             <Button onClick={toggleRecording}>
-                {recording ? "Stop" : "Start"} recording
+                {recording ? "Stop" : "Start"}  {tr("plugins.VoiceMessages.recording", "recording")}
             </Button>
 
             <Button
@@ -82,7 +84,7 @@ export const VoiceRecorderWeb: VoiceRecorder = ({ setAudioBlob, onRecordingChang
                     else recorder?.pause();
                 }}
             >
-                {paused ? "Resume" : "Pause"} recording
+                {paused ? "Resume" : "Pause"}  {tr("plugins.VoiceMessages.recording", "recording")}
             </Button>
         </>
     );

@@ -64,6 +64,13 @@ const MonacoWorkerEntryPoints = [
 /** @type {import("esbuild").BuildOptions[]} */
 const buildConfigs = [
     {
+        entryPoints: ["node_modules/monaco-editor/esm/nls.messages.zh-cn.js"],
+        bundle: true,
+        minify: true,
+        format: "iife",
+        outfile: "dist/vendor/monaco/nls.zh-cn.js"
+    },
+    {
         entryPoints: MonacoWorkerEntryPoints.map(entry => `node_modules/monaco-editor/esm/${entry}`),
         bundle: true,
         minify: true,

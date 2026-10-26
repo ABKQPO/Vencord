@@ -19,6 +19,7 @@
 import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { tr } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import { canonicalizeMatch, canonicalizeReplace } from "@utils/patches";
 import definePlugin, { OptionType, ReporterTestable } from "@utils/types";
@@ -98,8 +99,8 @@ function initWs(isManual = false) {
         logger.info("Connected to WebSocket");
 
         (settings.store.notifyOnAutoConnect || isManual) && showNotification({
-            title: "Dev Companion Connected",
-            body: "Connected to WebSocket",
+            title: tr("plugins.DevCompanion.devCompanionConnected", "Dev Companion Connected"),
+            body: tr("plugins.DevCompanion.connectedToWebSocket", "Connected to WebSocket"),
             noPersist: true
         });
     });
@@ -112,8 +113,8 @@ function initWs(isManual = false) {
         logger.error("Dev Companion Error:", e);
 
         showNotification({
-            title: "Dev Companion Error",
-            body: (e as ErrorEvent).message || "No Error Message",
+            title: tr("plugins.DevCompanion.devCompanionError", "Dev Companion Error"),
+            body: (e as ErrorEvent).message || tr("plugins.DevCompanion.noErrorMessage", "No Error Message"),
             color: "var(--status-danger, red)",
             noPersist: true,
         });
@@ -125,8 +126,8 @@ function initWs(isManual = false) {
         logger.info("Dev Companion Disconnected:", e.code, e.reason);
 
         showNotification({
-            title: "Dev Companion Disconnected",
-            body: e.reason || "No Reason provided",
+            title: tr("plugins.DevCompanion.devCompanionDisconnected", "Dev Companion Disconnected"),
+            body: e.reason || tr("plugins.DevCompanion.noReasonProvided", "No Reason provided"),
             color: "var(--status-danger, red)",
             noPersist: true,
         });
@@ -263,7 +264,7 @@ export default definePlugin({
     },
 
     stop() {
-        socket?.close(1000, "Plugin Stopped");
+        socket?.close(1000, tr("plugins.DevCompanion.pluginStopped", "Plugin Stopped"));
         socket = void 0;
     }
 });

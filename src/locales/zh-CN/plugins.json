@@ -1,0 +1,2561 @@
+{
+    "AccountPanelServerProfile": {
+        "name": "账户面板服务器个人资料",
+        "description": "右键点击左下角的账户面板，即可查看你在当前服务器的个人资料",
+        "settings": {
+            "prioritizeServerProfile": {
+                "name": "优先显示服务器个人资料",
+                "description": "左键点击账户面板时，优先显示服务器个人资料"
+            }
+        }
+    },
+    "AddAttachments": {
+        "name": "编辑时添加附件",
+        "description": "允许在编辑消息时添加新附件",
+        "settings": {}
+    },
+    "AlwaysAnimate": {
+        "name": "始终播放动画",
+        "description": "让所有支持动画的内容始终播放动画",
+        "settings": {}
+    },
+    "AlwaysExpandRoles": {
+        "name": "始终展开身份组",
+        "description": "始终展开个人资料弹出窗口中的身份组列表",
+        "settings": {}
+    },
+    "AlwaysTrust": {
+        "name": "始终信任",
+        "description": "移除不受信任的域名和可疑文件的弹窗提示",
+        "settings": {
+            "domain": {
+                "name": "信任域名",
+                "description": "打开链接时移除不受信任的域名提示"
+            },
+            "file": {
+                "name": "信任文件",
+                "description": "打开链接时移除“可能有危险的下载”提示"
+            }
+        }
+    },
+    "AnonymiseFileNames": {
+        "name": "匿名化文件名",
+        "description": "匿名化上传文件的文件名",
+        "settings": {
+            "anonymiseByDefault": {
+                "name": "默认匿名化",
+                "description": "默认匿名化文件名"
+            },
+            "method": {
+                "name": "匿名化方式",
+                "description": "文件名匿名化方式",
+                "options": {
+                    "number:0": "随机字符",
+                    "number:1": "固定文件名",
+                    "number:2": "时间戳"
+                }
+            },
+            "randomisedLength": {
+                "name": "随机字符长度",
+                "description": "随机文件名的字符数"
+            },
+            "consistent": {
+                "name": "固定文件名",
+                "description": "使用的固定文件名"
+            }
+        }
+    },
+    "AutoDNDWhilePlaying": {
+        "name": "游戏时自动切换状态",
+        "description": "启动游戏时自动更改在线状态（在线、闲置或请勿打扰）",
+        "settings": {
+            "statusToSet": {
+                "name": "游戏时状态",
+                "description": "玩游戏时使用的状态",
+                "options": {
+                    "string:online": "在线",
+                    "string:idle": "闲置",
+                    "string:dnd": "请勿打扰",
+                    "string:invisible": "隐身"
+                }
+            }
+        }
+    },
+    "BadgeAPI": {
+        "name": "徽章 API",
+        "description": "用于为用户添加徽章的 API",
+        "settings": {}
+    },
+    "BetterFolders": {
+        "name": "增强服务器文件夹",
+        "description": "在独立侧边栏中显示服务器文件夹，并改进文件夹功能",
+        "settings": {
+            "sidebar": {
+                "name": "独立侧边栏",
+                "description": "在独立侧边栏中显示文件夹内的服务器"
+            },
+            "sidebarAnim": {
+                "name": "侧边栏动画",
+                "description": "打开文件夹侧边栏时播放动画"
+            },
+            "closeAllFolders": {
+                "name": "关闭所有文件夹",
+                "description": "选择不在文件夹内的服务器时，关闭所有文件夹"
+            },
+            "closeAllHomeButton": {
+                "name": "点击主页时关闭",
+                "description": "点击主页按钮时，关闭所有文件夹"
+            },
+            "closeOthers": {
+                "name": "关闭其他文件夹",
+                "description": "打开文件夹时，关闭其他文件夹"
+            },
+            "closeServerFolder": {
+                "name": "选择服务器后关闭",
+                "description": "选择文件夹内的服务器时，关闭该文件夹"
+            },
+            "forceOpen": {
+                "name": "切换时展开文件夹",
+                "description": "切换到文件夹中的服务器时，强制展开该文件夹"
+            },
+            "keepIcons": {
+                "name": "保留服务器图标",
+                "description": "文件夹在增强侧边栏中打开时，仍在主服务器栏的文件夹内显示服务器图标"
+            },
+            "showFolderIcon": {
+                "name": "显示文件夹图标",
+                "description": "在增强侧边栏中的服务器上方显示文件夹图标",
+                "options": {
+                    "number:0": "从不",
+                    "number:1": "始终",
+                    "number:2": "展开多个文件夹时"
+                }
+            }
+        }
+    },
+    "BetterGifAltText": {
+        "name": "改进 GIF 替代文本",
+        "description": "使用 GIF 的标签或文件名作为替代文本，而非仅显示“GIF”",
+        "settings": {}
+    },
+    "BetterGifPicker": {
+        "name": "改进 GIF 选择器",
+        "description": "让 GIF 选择器默认打开收藏分类",
+        "settings": {}
+    },
+    "BetterRoleContext": {
+        "name": "增强身份组右键菜单",
+        "description": "右键点击个人资料或成员列表中的身份组时，可复制身份组颜色、编辑身份组或查看身份组图标",
+        "settings": {
+            "roleIconFileFormat": {
+                "name": "身份组图标格式",
+                "description": "查看身份组图标时使用的文件格式",
+                "options": {
+                    "string:png": "png",
+                    "string:webp": "webp",
+                    "string:jpg": "jpg"
+                }
+            }
+        }
+    },
+    "BetterRoleDot": {
+        "name": "增强身份组圆点",
+        "description": "点击身份组颜色圆点（无障碍设置）即可复制颜色，并可同时显示身份组圆点和彩色用户名",
+        "settings": {
+            "bothStyles": {
+                "name": "同时显示两种样式",
+                "description": "同时显示身份组颜色圆点和彩色用户名"
+            },
+            "copyRoleColorInProfilePopout": {
+                "name": "点击复制身份组颜色",
+                "description": "允许点击个人资料弹出窗口中的身份组圆点来复制颜色"
+            }
+        }
+    },
+    "BetterSessions": {
+        "name": "增强设备会话",
+        "description": "改进会话（设备）菜单：查看精确时间、自定义会话名称，并在发现新会话时接收通知",
+        "settings": {
+            "backgroundCheck": {
+                "name": "后台检查",
+                "description": "在后台检查新会话，并在发现时发送通知"
+            },
+            "checkInterval": {
+                "name": "检查间隔",
+                "description": "后台检查新会话的间隔，单位为分钟（需启用后台检查）"
+            }
+        }
+    },
+    "BetterSettings": {
+        "name": "改进设置菜单",
+        "description": "改善打开设置菜单的体验",
+        "settings": {
+            "disableFade": {
+                "name": "禁用淡入淡出",
+                "description": "禁用交叉淡入淡出动画"
+            },
+            "organizeMenu": {
+                "name": "菜单分类",
+                "description": "将设置齿轮的右键菜单按类别整理"
+            },
+            "eagerLoad": {
+                "name": "预先加载",
+                "description": "移除首次打开菜单时的加载延迟"
+            }
+        }
+    },
+    "BetterUploadButton": {
+        "name": "改进上传按钮",
+        "description": "单击上传文件，右键点击打开菜单",
+        "settings": {}
+    },
+    "BiggerStreamPreview": {
+        "name": "放大直播预览",
+        "description": "允许放大直播预览",
+        "settings": {}
+    },
+    "BlurNSFW": {
+        "name": "模糊成人内容",
+        "description": "模糊成人内容频道中的附件，悬停时显示",
+        "settings": {
+            "blurAmount": {
+                "name": "模糊程度",
+                "description": "模糊程度，单位为像素"
+            }
+        }
+    },
+    "CallTimer": {
+        "name": "通话计时器",
+        "description": "在语音频道中显示通话计时器",
+        "settings": {
+            "format": {
+                "name": "计时格式",
+                "description": "计时器的显示格式，支持任意有效的 moment.js 格式",
+                "options": {
+                    "string:stopwatch": "30天 23:00:42",
+                    "string:human": "30天 23时 00分 42秒"
+                }
+            }
+        }
+    },
+    "CharacterCounter": {
+        "name": "字符计数器",
+        "description": "在聊天输入框中显示字符数",
+        "settings": {
+            "colorEffects": {
+                "name": "颜色提示",
+                "description": "接近字符数上限时，以黄色或红色提示"
+            }
+        }
+    },
+    "ChatInputButtonAPI": {
+        "name": "聊天输入框按钮 API",
+        "description": "用于为聊天输入框添加按钮的 API",
+        "settings": {}
+    },
+    "ClearURLs": {
+        "name": "清理链接",
+        "description": "自动移除所发送链接中的追踪参数",
+        "settings": {}
+    },
+    "ClientTheme": {
+        "name": "客户端主题配色",
+        "description": "重现旧版客户端主题实验功能，为 Discord 客户端主题添加自定义颜色",
+        "settings": {
+            "color": {},
+            "resetColor": {}
+        }
+    },
+    "ColorSighted": {
+        "name": "简化状态图标",
+        "description": "移除状态图标中的色盲辅助标记，恢复 Discord 在 2015 至 2017 年间的样式",
+        "settings": {}
+    },
+    "CommandsAPI": {
+        "name": "命令 API",
+        "description": "为使用命令的功能提供所需的 API",
+        "settings": {}
+    },
+    "ConcatenatedComponentExtractor": {
+        "name": "合并组件提取器",
+        "description": "提取被打包工具合并的组件",
+        "settings": {}
+    },
+    "ConsoleJanitor": {
+        "name": "控制台清理",
+        "description": "禁用烦人的控制台消息和错误日志",
+        "settings": {
+            "disableLoggers": {
+                "name": "禁用日志记录器",
+                "description": "禁用 Discord 的日志记录器"
+            },
+            "disableSpotifyLogger": {
+                "name": "禁用 Spotify 日志",
+                "description": "禁用可能泄露账户信息和访问令牌的 Spotify 日志记录器"
+            },
+            "whitelistedLoggers": {
+                "name": "允许的日志记录器",
+                "description": "即使隐藏其他日志，也允许显示的日志记录器列表，以分号（;）分隔"
+            },
+            "allowLevel": {}
+        }
+    },
+    "ConsoleShortcuts": {
+        "name": "控制台快捷别名",
+        "description": "为 window 中的多种对象添加简短别名，运行 `shortcutList` 可查看列表",
+        "settings": {}
+    },
+    "ContextMenuAPI": {
+        "name": "右键菜单 API",
+        "description": "用于添加或移除右键菜单项的 API",
+        "settings": {}
+    },
+    "CopyEmojiMarkdown": {
+        "name": "复制表情 Markdown",
+        "description": "允许复制表情的格式化字符串（如 <:blobcatcozy:1026533070955872337>）",
+        "settings": {
+            "copyUnicode": {
+                "name": "复制 Unicode 字符",
+                "description": "对于默认表情（如 👽），复制原始 Unicode 字符而非 :名称:"
+            }
+        }
+    },
+    "CopyFileContents": {
+        "name": "复制文件内容",
+        "description": "为文本附件添加复制内容按钮",
+        "settings": {}
+    },
+    "CopyStickerLinks": {
+        "name": "复制贴纸链接",
+        "description": "允许复制和打开贴纸链接",
+        "settings": {}
+    },
+    "CopyUserURLs": {
+        "name": "复制用户链接",
+        "description": "在用户右键菜单中添加“复制用户链接”选项",
+        "settings": {}
+    },
+    "CrashHandler": {
+        "name": "崩溃处理",
+        "description": "处理崩溃，并尝试在无需重启的情况下恢复客户端",
+        "settings": {
+            "attemptToPreventCrashes": {
+                "name": "尝试防止崩溃",
+                "description": "尝试防止 Discord 崩溃"
+            },
+            "attemptToNavigateToHome": {
+                "name": "尝试返回主页",
+                "description": "防止 Discord 崩溃时，尝试跳转至主页"
+            }
+        }
+    },
+    "CustomCommands": {
+        "name": "自定义命令",
+        "description": "允许创建自定义斜杠命令和文本标签",
+        "settings": {
+            "tagsList": {},
+            "tagComponent": {}
+        }
+    },
+    "CustomIdle": {
+        "name": "自定义闲置时间",
+        "description": "自定义 Discord 进入闲置状态前的时间，或禁用自动闲置",
+        "settings": {
+            "idleTimeout": {
+                "name": "闲置等待时间",
+                "description": "Discord 进入闲置状态前的分钟数，设为 0 可禁用自动闲置"
+            },
+            "remainInIdle": {
+                "name": "保持闲置状态",
+                "description": "返回 Discord 后仍保持闲置，直到你确认恢复在线状态"
+            }
+        }
+    },
+    "CustomRPC": {
+        "name": "自定义丰富状态",
+        "description": "为 Discord 个人资料添加可完全自定义的丰富状态（游戏状态）",
+        "settings": {
+            "enablePresence": {
+                "name": "显示丰富状态",
+                "description": "是否显示自定义丰富状态"
+            },
+            "config": {}
+        }
+    },
+    "Dearrow": {
+        "name": "Dearrow 标题与缩略图",
+        "description": "借助 Dearrow 减少 YouTube 嵌入内容中标题和缩略图的夸张宣传",
+        "settings": {
+            "hideButton": {
+                "name": "隐藏 Dearrow 按钮",
+                "description": "隐藏 YouTube 嵌入内容上的 Dearrow 按钮"
+            },
+            "replaceElements": {
+                "name": "替换内容",
+                "description": "选择替换嵌入内容中的哪些元素",
+                "options": {
+                    "number:0": "全部（标题和缩略图）",
+                    "number:1": "标题",
+                    "number:2": "缩略图"
+                }
+            },
+            "dearrowByDefault": {
+                "name": "默认启用 Dearrow",
+                "description": "自动为视频应用 Dearrow"
+            }
+        }
+    },
+    "Decor": {
+        "name": "Decor 头像装饰",
+        "description": "创建并使用自己的头像装饰，或从预设中选择喜欢的装饰",
+        "settings": {
+            "changeDecoration": {},
+            "agreedToGuidelines": {
+                "name": "已同意使用准则",
+                "description": "已同意使用准则"
+            }
+        }
+    },
+    "DevCompanion": {
+        "name": "开发助手",
+        "description": "开发助手插件",
+        "settings": {
+            "notifyOnAutoConnect": {
+                "name": "自动连接通知",
+                "description": "开发助手自动连接时是否发送通知"
+            }
+        }
+    },
+    "DirectFileDownload": {
+        "name": "直接下载文件",
+        "description": "直接从 Discord 下载文件，避免在浏览器中打开",
+        "settings": {}
+    },
+    "DisableCallIdle": {
+        "name": "禁用通话闲置断开",
+        "description": "禁用私信语音通话闲置 3 分钟后自动断开，以及自动移至挂机语音频道的行为",
+        "settings": {}
+    },
+    "DisableDeepLinks": {
+        "name": "禁用深层链接",
+        "description": "禁用 Discord 尝试强制打开桌面应用的深层链接功能",
+        "settings": {}
+    },
+    "DontRoundMyTimestamps": {
+        "name": "时间戳向下取整",
+        "description": "始终将相对时间戳向下取整，例如将 7.6 年显示为 7 年，而非 8 年",
+        "settings": {}
+    },
+    "DynamicImageModalAPI": {
+        "name": "动态图片弹窗 API",
+        "description": "允许打开图片弹窗时省略宽度或高度之一",
+        "settings": {}
+    },
+    "Experiments": {
+        "name": "实验功能",
+        "description": "启用 Discord 实验功能及其他仅供开发者使用的功能",
+        "settings": {}
+    },
+    "ExpressionCloner": {
+        "name": "表情与贴纸克隆",
+        "description": "右键点击表情或贴纸，即可将其复制到自己的服务器",
+        "settings": {}
+    },
+    "F8Break": {
+        "name": "F8 暂停调试",
+        "description": "开发者工具及断点开启时，按 F8 暂停客户端执行",
+        "settings": {}
+    },
+    "FakeNitro": {
+        "name": "模拟 Nitro",
+        "description": "允许发送模拟表情和贴纸、使用 Nitro 主题，以及以 Nitro 画质直播",
+        "settings": {
+            "enableEmojiBypass": {
+                "name": "启用模拟表情",
+                "description": "允许发送模拟表情，也可绕过缺少使用自定义表情权限的限制"
+            },
+            "emojiSize": {
+                "name": "表情大小",
+                "description": "发送表情时使用的大小",
+                "options": {
+                    "number:16": "16px",
+                    "number:32": "32px",
+                    "number:48": "48px",
+                    "number:56": "56px",
+                    "number:64": "64px",
+                    "number:96": "96px",
+                    "number:128": "128px",
+                    "number:160": "160px",
+                    "number:256": "256px",
+                    "number:512": "512px",
+                    "number:1024": "1024px"
+                }
+            },
+            "transformEmojis": {
+                "name": "还原表情显示",
+                "description": "将模拟表情显示为真正的表情"
+            },
+            "enableStickerBypass": {
+                "name": "启用模拟贴纸",
+                "description": "允许发送模拟贴纸，也可绕过缺少使用贴纸权限的限制"
+            },
+            "stickerSize": {
+                "name": "贴纸大小",
+                "description": "发送贴纸时使用的大小",
+                "options": {
+                    "number:16": "16px",
+                    "number:32": "32px",
+                    "number:48": "48px",
+                    "number:56": "56px",
+                    "number:64": "64px",
+                    "number:96": "96px",
+                    "number:128": "128px",
+                    "number:160": "160px",
+                    "number:256": "256px",
+                    "number:512": "512px",
+                    "number:1024": "1024px"
+                }
+            },
+            "transformStickers": {
+                "name": "还原贴纸显示",
+                "description": "将模拟贴纸显示为真正的贴纸"
+            },
+            "transformCompoundSentence": {
+                "name": "还原混合消息",
+                "description": "在同时包含其他内容的消息中，也将模拟表情或贴纸链接还原显示"
+            },
+            "enableStreamQualityBypass": {
+                "name": "解锁 Nitro 直播画质",
+                "description": "允许使用 Nitro 直播画质"
+            },
+            "useHyperLinks": {
+                "name": "使用超链接",
+                "description": "发送模拟表情和贴纸时使用超链接"
+            },
+            "hyperLinkText": {
+                "name": "超链接文本",
+                "description": "超链接显示的文本。{{NAME}} 会替换为表情或贴纸名称"
+            },
+            "disableEmbedPermissionCheck": {
+                "name": "禁用嵌入权限检查",
+                "description": "发送模拟表情和贴纸时不检查嵌入链接权限"
+            }
+        }
+    },
+    "FakeProfileThemes": {
+        "name": "模拟个人资料主题",
+        "description": "借助不可见的 3y3 编码将颜色藏在自我介绍中，实现个人资料主题配色",
+        "settings": {
+            "nitroFirst": {
+                "name": "优先配色来源",
+                "description": "两种配色均存在时默认使用的来源",
+                "options": {
+                    "boolean:true": "Nitro 配色",
+                    "boolean:false": "模拟配色"
+                }
+            }
+        }
+    },
+    "FavoriteEmojiFirst": {
+        "name": "收藏表情优先",
+        "description": "在表情自动补全中优先显示收藏的表情",
+        "settings": {}
+    },
+    "FixCodeblockGap": {
+        "name": "修复代码块间隙",
+        "description": "移除代码块与下方文本之间的间隙",
+        "settings": {}
+    },
+    "FixDiscordCss": {
+        "name": "修复 Discord CSS",
+        "description": "修复 Discord 的 CSS 卡顿问题",
+        "settings": {}
+    },
+    "FixImagesQuality": {
+        "name": "原画质图片",
+        "description": "以原始分辨率加载图片，提高图片质量",
+        "settings": {
+            "originalImagesInChat": {
+                "name": "聊天中加载原图",
+                "description": "也在聊天中加载原始图片。注意：请先阅读上方的注意事项"
+            }
+        }
+    },
+    "FixSpotifyEmbeds": {
+        "name": "调整 Spotify 嵌入音量",
+        "description": "自定义 Spotify 嵌入播放器的音量，解决音量过大的问题",
+        "settings": {
+            "volume": {
+                "name": "音量",
+                "description": "Spotify 嵌入播放器的音量百分比。超过 10% 时音量会非常大"
+            }
+        }
+    },
+    "FixYoutubeEmbeds": {
+        "name": "修复 YouTube 嵌入播放",
+        "description": "绕过 YouTube 视频在 Discord 中无法显示的限制（例如 UMG 设置的限制）",
+        "settings": {}
+    },
+    "ForceOwnerCrown": {
+        "name": "始终显示服主皇冠",
+        "description": "即使在大型服务器中，也始终在服务器所有者的用户名旁显示皇冠",
+        "settings": {}
+    },
+    "FriendInvites": {
+        "name": "好友邀请",
+        "description": "通过斜杠命令创建和管理好友邀请链接（/create friend invite、/view friend invites、/revoke friend invites）",
+        "settings": {}
+    },
+    "FullSearchContext": {
+        "name": "完整搜索结果菜单",
+        "description": "让消息搜索结果的右键菜单包含所有常用选项",
+        "settings": {}
+    },
+    "FullUserInChatbox": {
+        "name": "输入框用户菜单",
+        "description": "为输入框中的用户提及添加左键、右键点击等功能",
+        "settings": {}
+    },
+    "GameActivityToggle": {
+        "name": "游戏活动开关",
+        "description": "在静音与拒听按钮旁添加游戏活动开关，右键点击可切换 Spotify 活动",
+        "settings": {
+            "oldIcon": {
+                "name": "使用旧版图标",
+                "description": "使用 Discord 图标改版前的旧样式"
+            },
+            "location": {
+                "name": "按钮位置",
+                "description": "游戏活动开关按钮的显示位置",
+                "options": {
+                    "string:PANEL": "静音与拒听按钮旁",
+                    "string:TOOLBOX": "Vencord 工具箱"
+                }
+            }
+        }
+    },
+    "GifPaste": {
+        "name": "GIF 插入输入框",
+        "description": "选择 GIF 时将链接插入输入框，供你确认后发送",
+        "settings": {}
+    },
+    "GifProviderSwitcher": {
+        "name": "切换 GIF 来源",
+        "description": "允许使用 Tenor 或 Giphy 搜索 GIF，替代 Klipy",
+        "settings": {
+            "provider": {
+                "name": "GIF 来源",
+                "description": "使用的 GIF 提供商，也可直接在 GIF 选择器中更改",
+                "options": {
+                    "string:tenor": "Tenor",
+                    "string:giphy": "Giphy",
+                    "string:klipy": "Klipy"
+                }
+            }
+        }
+    },
+    "GreetStickerPicker": {
+        "name": "选择打招呼贴纸",
+        "description": "右键点击“挥手打个招呼！”按钮，可选择任意打招呼贴纸",
+        "settings": {
+            "greetMode": {
+                "name": "打招呼模式",
+                "description": "选择打招呼的发送方式",
+                "options": {
+                    "string:Greet": "打招呼（最多 3 次）",
+                    "string:Message": "普通消息（可重复发送）"
+                }
+            }
+        }
+    },
+    "HideMedia": {
+        "name": "隐藏媒体内容",
+        "description": "通过消息悬停按钮隐藏单条消息的附件和嵌入内容",
+        "settings": {}
+    },
+    "IgnoreActivities": {
+        "name": "隐藏指定活动",
+        "description": "仅阻止指定活动显示在你的状态中。可在“已注册的游戏”和“活动”选项卡中选择要隐藏的活动，或使用下方通用设置",
+        "settings": {
+            "importCustomRPC": {},
+            "listMode": {
+                "name": "列表模式",
+                "description": "更改过滤列表的模式",
+                "options": {
+                    "number:0": "白名单",
+                    "number:1": "黑名单"
+                }
+            },
+            "idsList": {},
+            "ignorePlaying": {
+                "name": "隐藏游戏活动",
+                "description": "隐藏所有“正在玩”活动，通常包括游戏和 RPC 活动"
+            },
+            "ignoreStreaming": {
+                "name": "隐藏直播活动",
+                "description": "隐藏所有直播活动"
+            },
+            "ignoreListening": {
+                "name": "隐藏收听活动",
+                "description": "隐藏所有“正在听”活动，通常包括 Spotify 活动"
+            },
+            "ignoreWatching": {
+                "name": "隐藏观看活动",
+                "description": "隐藏所有“正在看”活动"
+            },
+            "ignoreCompeting": {
+                "name": "隐藏竞赛活动",
+                "description": "隐藏所有“正在参加”活动，通常是特殊游戏活动"
+            },
+            "ignoredActivities": {}
+        }
+    },
+    "iLoveSpam": {
+        "name": "显示疑似垃圾消息",
+        "description": "显示“疑似垃圾消息发送者”的消息",
+        "settings": {}
+    },
+    "ImageFilename": {
+        "name": "显示图片文件名",
+        "description": "悬停在图片和 GIF 上时，通过提示显示文件名",
+        "settings": {
+            "showFullUrl": {
+                "name": "显示完整链接",
+                "description": "显示图片的完整链接。GIF 通常没有有意义的文件名，因此始终显示完整链接"
+            }
+        }
+    },
+    "ImageLink": {
+        "name": "保留图片链接",
+        "description": "始终显示消息中的图片链接，即使消息仅包含该链接",
+        "settings": {}
+    },
+    "ImageZoom": {
+        "name": "图片放大镜",
+        "description": "放大图片和 GIF。滚动鼠标滚轮调整缩放，按住 Shift 滚动可调整放大镜半径或大小",
+        "settings": {
+            "saveZoomValues": {
+                "name": "保存缩放设置",
+                "description": "保存缩放比例和放大镜大小"
+            },
+            "invertScroll": {
+                "name": "反转滚动方向",
+                "description": "反转滚动方向"
+            },
+            "nearestNeighbour": {
+                "name": "最近邻插值",
+                "description": "缩放图片时使用最近邻插值"
+            },
+            "square": {
+                "name": "方形放大镜",
+                "description": "将放大镜设为方形"
+            },
+            "zoom": {
+                "name": "缩放比例",
+                "description": "放大镜的缩放比例"
+            },
+            "size": {
+                "name": "放大镜大小",
+                "description": "放大镜的半径或大小"
+            },
+            "zoomSpeed": {
+                "name": "缩放速度",
+                "description": "缩放比例和放大镜大小的调整速度"
+            }
+        }
+    },
+    "ImplicitRelationships": {
+        "name": "潜在好友",
+        "description": "在好友选项卡中显示与你有潜在联系的用户",
+        "settings": {
+            "sortByAffinity": {
+                "name": "按亲密度排序",
+                "description": "按与你的亲密度排序潜在好友"
+            }
+        }
+    },
+    "IrcColors": {
+        "name": "IRC 用户名配色",
+        "description": "为聊天中的用户名分配不同颜色，类似 IRC 客户端",
+        "settings": {
+            "lightness": {
+                "name": "亮度",
+                "description": "颜色亮度百分比，颜色过亮或过暗时可调整"
+            },
+            "memberListColors": {
+                "name": "成员列表配色",
+                "description": "替换成员列表中的身份组颜色"
+            },
+            "applyColorOnlyToUsersWithoutColor": {
+                "name": "仅为无颜色用户配色",
+                "description": "仅为没有预设颜色的用户应用配色"
+            },
+            "applyColorOnlyInDms": {
+                "name": "仅在私信中配色",
+                "description": "仅在私信中应用颜色，不应用于服务器"
+            }
+        }
+    },
+    "JumpToTop": {
+        "name": "跳转至频道开头",
+        "description": "添加跳转到频道第一条消息的按钮",
+        "settings": {}
+    },
+    "KeepCurrentChannel": {
+        "name": "记住当前频道",
+        "description": "切换账户或加载 Discord 后，尝试回到上次所在的频道",
+        "settings": {}
+    },
+    "LoadingQuotes": {
+        "name": "自定义加载提示语",
+        "description": "替换 Discord 加载时显示的提示语",
+        "settings": {
+            "replaceEvents": {
+                "name": "替换节日提示语",
+                "description": "在使用特殊节日提示语的活动期间也应用插件，例如万圣节"
+            },
+            "enablePluginPresetQuotes": {
+                "name": "启用插件预设提示语",
+                "description": "启用本插件预设的提示语"
+            },
+            "enableDiscordPresetQuotes": {
+                "name": "启用 Discord 预设提示语",
+                "description": "启用 Discord 预设提示语，包括活动期间的节日提示语"
+            },
+            "additionalQuotes": {
+                "name": "自定义提示语",
+                "description": "可能显示的其他自定义提示语，使用下方设置的分隔符隔开"
+            },
+            "additionalQuotesDelimiter": {
+                "name": "提示语分隔符",
+                "description": "自定义提示语之间使用的分隔符"
+            }
+        }
+    },
+    "MemberCount": {
+        "name": "成员统计",
+        "description": "在成员列表和服务器提示中显示在线成员、总成员及语音频道用户数量",
+        "settings": {
+            "toolTip": {
+                "name": "服务器提示",
+                "description": "在服务器悬停提示中显示成员数量"
+            },
+            "memberList": {
+                "name": "成员列表",
+                "description": "在成员列表中显示成员数量"
+            },
+            "voiceActivity": {
+                "name": "语音活动",
+                "description": "在成员列表的成员统计中显示语音活动人数"
+            }
+        }
+    },
+    "MemberListDecoratorsAPI": {
+        "name": "成员列表装饰 API",
+        "description": "用于为服务器及私信成员列表添加装饰的 API",
+        "settings": {}
+    },
+    "MentionAvatars": {
+        "name": "提及头像",
+        "description": "在提及中显示用户头像和身份组图标",
+        "settings": {
+            "showAtSymbol": {
+                "name": "显示 @ 符号",
+                "description": "在用户提及中显示 @ 符号"
+            }
+        }
+    },
+    "MessageAccessoriesAPI": {
+        "name": "消息附加组件 API",
+        "description": "用于为消息添加附加组件的 API",
+        "settings": {}
+    },
+    "MessageClickActions": {
+        "name": "消息点击操作",
+        "description": "按住退格键点击删除消息，双击编辑或回复消息",
+        "settings": {
+            "enableDeleteOnClick": {
+                "name": "点击删除",
+                "description": "按住退格键时，点击即可删除消息"
+            },
+            "enableDoubleClickToEdit": {
+                "name": "双击编辑",
+                "description": "启用双击编辑消息"
+            },
+            "enableDoubleClickToReply": {
+                "name": "双击回复",
+                "description": "启用双击回复消息"
+            },
+            "requireModifier": {
+                "name": "需要辅助键",
+                "description": "仅在按住 Shift 或 Ctrl 时执行双击操作"
+            }
+        }
+    },
+    "MessageDecorationsAPI": {
+        "name": "消息装饰 API",
+        "description": "用于为消息添加装饰的 API",
+        "settings": {}
+    },
+    "MessageEventsAPI": {
+        "name": "消息事件 API",
+        "description": "为使用消息事件的功能提供所需的 API",
+        "settings": {}
+    },
+    "MessageLatency": {
+        "name": "消息发送延迟",
+        "description": "为发送耗时达到设定秒数的消息显示延迟标记",
+        "settings": {
+            "latency": {
+                "name": "延迟阈值",
+                "description": "显示延迟标记的时间阈值，单位为秒"
+            },
+            "detectDiscordKotlin": {
+                "name": "检测旧版 Android 客户端",
+                "description": "检测旧版 Discord Android 客户端"
+            },
+            "showMillis": {
+                "name": "显示毫秒",
+                "description": "显示毫秒数"
+            },
+            "ignoreSelf": {
+                "name": "忽略自己的消息",
+                "description": "不为自己发送的消息添加延迟标记"
+            }
+        }
+    },
+    "MessageLinkEmbeds": {
+        "name": "消息链接预览",
+        "description": "为指向其他消息的链接添加消息预览",
+        "settings": {
+            "messageBackgroundColor": {
+                "name": "消息背景色",
+                "description": "为丰富嵌入预览中的消息显示背景色"
+            },
+            "automodEmbeds": {
+                "name": "自动审核样式预览",
+                "description": "使用更紧凑但信息较少的自动审核样式预览",
+                "options": {
+                    "string:always": "始终使用自动审核样式预览",
+                    "string:prefer": "优先使用自动审核样式，内容无法完整显示时使用丰富嵌入预览",
+                    "string:never": "从不使用自动审核样式预览"
+                }
+            },
+            "listMode": {
+                "name": "列表模式",
+                "description": "将 ID 列表用作黑名单或白名单",
+                "options": {
+                    "string:blacklist": "黑名单",
+                    "string:whitelist": "白名单"
+                }
+            },
+            "idList": {
+                "name": "ID 列表",
+                "description": "加入黑名单或白名单的服务器、频道或用户 ID，以逗号分隔"
+            },
+            "clearMessageCache": {}
+        }
+    },
+    "MessageLogger": {
+        "name": "消息记录",
+        "description": "临时记录已删除和已编辑的消息",
+        "settings": {
+            "deleteStyle": {
+                "name": "删除消息样式",
+                "description": "已删除消息的显示样式",
+                "options": {
+                    "string:text": "红色文字",
+                    "string:overlay": "红色背景"
+                }
+            },
+            "logDeletes": {
+                "name": "记录删除",
+                "description": "记录已删除的消息"
+            },
+            "collapseDeleted": {
+                "name": "折叠已删除消息",
+                "description": "像已屏蔽消息一样折叠已删除的消息"
+            },
+            "logEdits": {
+                "name": "记录编辑",
+                "description": "记录已编辑的消息"
+            },
+            "logDeletedAttachments": {
+                "name": "记录删除的附件",
+                "description": "记录已删除的附件"
+            },
+            "inlineEdits": {
+                "name": "行内编辑记录",
+                "description": "在消息内容中显示编辑历史"
+            },
+            "ignoreBots": {
+                "name": "忽略机器人",
+                "description": "不记录机器人的消息"
+            },
+            "ignoreSelf": {
+                "name": "忽略自己的消息",
+                "description": "不记录自己发送的消息"
+            },
+            "ignoreUsers": {
+                "name": "忽略用户",
+                "description": "要忽略的用户 ID 列表，以逗号分隔"
+            },
+            "ignoreChannels": {
+                "name": "忽略频道",
+                "description": "要忽略的频道 ID 列表，以逗号分隔"
+            },
+            "ignoreGuilds": {
+                "name": "忽略服务器",
+                "description": "要忽略的服务器 ID 列表，以逗号分隔"
+            }
+        }
+    },
+    "MessagePopoverAPI": {
+        "name": "消息悬停菜单 API",
+        "description": "用于为消息悬停菜单添加按钮的 API",
+        "settings": {}
+    },
+    "MessageUpdaterAPI": {
+        "name": "消息更新 API",
+        "description": "用于更新和重新渲染消息的 API",
+        "settings": {}
+    },
+    "MoreQuickReactions": {
+        "name": "更多快捷反应",
+        "description": "增加悬停快捷反应菜单中可选的表情数量",
+        "settings": {
+            "reactionCount": {
+                "name": "反应数量",
+                "description": "快捷反应数量（0 至 42）"
+            }
+        }
+    },
+    "MusicRichPresence": {
+        "name": "音乐丰富状态",
+        "description": "为 Last.fm 和 ListenBrainz 提供音乐丰富状态",
+        "settings": {
+            "scrobblerBackend": {
+                "name": "音乐记录服务",
+                "description": "使用的音乐记录服务",
+                "options": {
+                    "string:lastfm": "Last.FM",
+                    "string:listenbrainz": "ListenBrainz",
+                    "string:listenbrainz-compatible": "兼容 ListenBrainz 的自托管服务"
+                }
+            },
+            "instanceBaseURL": {
+                "name": "实例地址",
+                "description": "ListenBrainz 实例的基础网址",
+                "placeholder": "https://example.org"
+            },
+            "instanceAPIBaseUrl": {
+                "name": "实例 API 地址",
+                "description": "ListenBrainz API 的基础网址",
+                "placeholder": "https://api.example.org"
+            },
+            "apiKey": {
+                "name": "API 密钥",
+                "description": "Last.fm API 密钥。并非必填，但强烈建议设置，以免共享密钥触发请求频率限制"
+            },
+            "username": {
+                "name": "用户名",
+                "description": "用户名"
+            },
+            "shareUsername": {
+                "name": "分享个人主页",
+                "description": "显示音乐记录服务的个人主页链接"
+            },
+            "clickableLinks": {
+                "name": "可点击的音乐链接",
+                "description": "允许点击歌曲、艺人和专辑名称打开链接"
+            },
+            "hideWithSpotify": {
+                "name": "Spotify 运行时隐藏",
+                "description": "Spotify 正在运行时隐藏此丰富状态"
+            },
+            "hideWithActivity": {
+                "name": "有其他活动时隐藏",
+                "description": "已有其他丰富状态时隐藏此丰富状态"
+            },
+            "statusName": {
+                "name": "状态文本",
+                "description": "自定义状态文本，可使用变量：{artist} | {album} | {title}"
+            },
+            "statusDisplayType": {
+                "name": "成员列表显示内容",
+                "description": "在成员列表中显示歌曲或艺人名称",
+                "options": {
+                    "string:off": "不显示（使用通用收听状态）",
+                    "string:artist": "显示艺人名称",
+                    "string:track": "显示歌曲名称"
+                }
+            },
+            "nameFormat": {
+                "name": "名称格式",
+                "description": "状态名称中歌曲和艺人的显示格式",
+                "options": {
+                    "string:status-name": "使用自定义状态文本",
+                    "string:service-name": "使用音乐服务名称（不可用时使用自定义状态文本）",
+                    "string:artist-first": "使用“艺人 - 歌曲”格式",
+                    "string:song-first": "使用“歌曲 - 艺人”格式",
+                    "string:artist": "仅显示艺人名称",
+                    "string:song": "仅显示歌曲名称",
+                    "string:album": "使用专辑名称（歌曲无专辑时使用自定义状态文本）"
+                }
+            },
+            "useListeningStatus": {
+                "name": "使用收听状态",
+                "description": "显示“正在听”状态"
+            },
+            "missingArt": {
+                "name": "缺少封面时",
+                "description": "缺少专辑或专辑封面时的显示方式",
+                "options": {
+                    "string:logo": "使用音乐记录服务的大图标",
+                    "string:placeholder": "使用通用占位图"
+                }
+            },
+            "showLogo": {
+                "name": "显示服务标志",
+                "description": "在专辑封面旁显示音乐记录服务的标志"
+            },
+            "showAlbumCover": {
+                "name": "显示专辑封面",
+                "description": "显示专辑封面。关闭后显示占位图，适合音乐封面包含不宜展示内容的情况"
+            }
+        }
+    },
+    "MutualGroupDMs": {
+        "name": "共同私信群组",
+        "description": "在个人资料中显示共同的私信群组",
+        "settings": {}
+    },
+    "NewGuildSettings": {
+        "name": "新服务器默认设置",
+        "description": "加入服务器时自动静音，并调整其他默认设置",
+        "settings": {
+            "guild": {
+                "name": "静音服务器",
+                "description": "自动将新加入的服务器静音"
+            },
+            "messages": {
+                "name": "消息通知",
+                "description": "新服务器的通知设置",
+                "options": {
+                    "number:0": "所有消息",
+                    "number:1": "仅限 @提及",
+                    "number:2": "无",
+                    "number:3": "服务器默认"
+                }
+            },
+            "everyone": {
+                "name": "屏蔽全体提及",
+                "description": "屏蔽 @everyone 和 @here 提及通知"
+            },
+            "role": {
+                "name": "屏蔽身份组提及",
+                "description": "屏蔽所有身份组提及通知"
+            },
+            "highlights": {
+                "name": "屏蔽精选内容",
+                "description": "自动屏蔽精选内容通知"
+            },
+            "events": {
+                "name": "静音新活动",
+                "description": "自动静音新活动通知"
+            },
+            "showAllChannels": {
+                "name": "显示所有频道",
+                "description": "自动显示所有频道"
+            }
+        }
+    },
+    "NoBlockedMessages": {
+        "name": "隐藏已屏蔽消息",
+        "description": "完全隐藏聊天中已屏蔽或已忽略用户的消息",
+        "settings": {
+            "ignoreMessages": {
+                "name": "忽略传入消息",
+                "description": "完全忽略已屏蔽用户的传入消息；启用相应选项后，也会忽略已忽略用户"
+            },
+            "applyToIgnoredUsers": {
+                "name": "应用于已忽略用户",
+                "description": "也对已忽略的用户应用此功能"
+            }
+        }
+    },
+    "NoDevtoolsWarning": {
+        "name": "移除开发者工具警告",
+        "description": "禁用控制台中的“HOLD UP”警告，同时阻止 Discord 隐藏令牌，避免因此意外退出登录",
+        "settings": {}
+    },
+    "NoF1": {
+        "name": "禁用 F1 帮助",
+        "description": "禁用 F1 帮助快捷键",
+        "settings": {}
+    },
+    "NoMaskedUrlPaste": {
+        "name": "禁用粘贴为文本链接",
+        "description": "选中文本后粘贴链接时，不将其转换为带链接的文本",
+        "settings": {}
+    },
+    "NoMiddleClickPaste": {
+        "name": "禁用中键粘贴",
+        "description": "禁用 Linux 的鼠标中键粘贴功能，仅适用于 Linux",
+        "settings": {}
+    },
+    "NoMosaic": {
+        "name": "禁用图片拼贴",
+        "description": "移除 Discord 的图片拼贴布局",
+        "settings": {
+            "inlineVideo": {
+                "name": "行内播放视频",
+                "description": "直接播放视频，无需打开轮播弹窗"
+            }
+        }
+    },
+    "NoOnboardingDelay": {
+        "name": "跳过入门引导等待",
+        "description": "跳过入门引导中的等待时间",
+        "settings": {}
+    },
+    "NoPendingCount": {
+        "name": "隐藏待处理数量",
+        "description": "隐藏收到的好友请求、消息请求和 Nitro 优惠的数量角标",
+        "settings": {
+            "hideFriendRequestsCount": {
+                "name": "隐藏好友请求数量",
+                "description": "隐藏收到的好友请求数量"
+            },
+            "hideMessageRequestsCount": {
+                "name": "隐藏消息请求数量",
+                "description": "隐藏消息请求数量"
+            },
+            "hidePremiumOffersCount": {
+                "name": "隐藏 Nitro 优惠数量",
+                "description": "隐藏 Nitro 优惠数量"
+            }
+        }
+    },
+    "NoProfileThemes": {
+        "name": "隐藏他人个人资料主题",
+        "description": "完全移除其他用户的 Nitro 个人资料主题，保留自己的主题",
+        "settings": {}
+    },
+    "NoReplyMention": {
+        "name": "默认不提及回复对象",
+        "description": "回复时默认关闭提及通知",
+        "settings": {
+            "userList": {
+                "name": "用户列表",
+                "description": "允许或免除提及通知的用户 ID 列表，以逗号或空格分隔"
+            },
+            "roleList": {
+                "name": "身份组列表",
+                "description": "允许或免除提及通知的身份组 ID 列表，以逗号或空格分隔"
+            },
+            "shouldPingListed": {
+                "name": "通知规则",
+                "description": "对列表中用户和身份组的提及通知规则",
+                "options": {
+                    "boolean:false": "不向列表中的用户或身份组发送提及通知",
+                    "boolean:true": "仅向列表中的用户或身份组发送提及通知"
+                }
+            },
+            "inverseShiftReply": {
+                "name": "反转 Shift 回复行为",
+                "description": "反转 Discord 的 Shift 回复行为，启用后按住 Shift 回复将提及用户"
+            }
+        }
+    },
+    "NoServerEmojis": {
+        "name": "限制服务器表情补全",
+        "description": "在自动补全菜单中隐藏服务器表情",
+        "settings": {
+            "shownEmojis": {
+                "name": "显示的表情",
+                "description": "自动补全菜单中显示的表情类型",
+                "options": {
+                    "string:onlyUnicode": "仅 Unicode 表情",
+                    "string:currentServer": "Unicode 表情和当前服务器的表情",
+                    "string:all": "Unicode 表情和所有服务器表情（Discord 默认）"
+                }
+            }
+        }
+    },
+    "NoSystemBadge": {
+        "name": "禁用系统未读角标",
+        "description": "禁用任务栏和系统托盘中的未读数量角标",
+        "settings": {}
+    },
+    "NoticesAPI": {
+        "name": "通知横幅 API",
+        "description": "修复通知横幅被自动关闭的问题",
+        "settings": {}
+    },
+    "NotificationVolume": {
+        "name": "通知音量",
+        "description": "单独设置通知和应用内提示音的音量",
+        "settings": {
+            "notificationVolume": {
+                "name": "通知音量",
+                "description": "通知提示音的音量"
+            }
+        }
+    },
+    "NoTrack": {
+        "name": "禁用追踪",
+        "description": "禁用 Discord 的追踪分析、指标收集和 Sentry 崩溃报告",
+        "settings": {
+            "disableAnalytics": {
+                "name": "禁用分析追踪",
+                "description": "阻止 Discord 的分析追踪。若希望徽章记录直播时长等进度，请关闭此选项"
+            }
+        }
+    },
+    "NoTypingAnimation": {
+        "name": "禁用正在输入动画",
+        "description": "禁用消耗 CPU 的正在输入圆点动画",
+        "settings": {}
+    },
+    "NoUnblockToJump": {
+        "name": "直接跳转到屏蔽消息",
+        "description": "无需解除屏蔽或忽略，即可跳转到已屏蔽用户、已忽略用户及疑似垃圾消息发送者的消息",
+        "settings": {}
+    },
+    "oneko": {
+        "name": "跟随鼠标的小猫",
+        "description": "让小猫跟着鼠标跑（真的）",
+        "settings": {}
+    },
+    "OnePingPerDM": {
+        "name": "每条私信会话只响一次",
+        "description": "同一私信会话有未读消息时，只播放一次提示音；阅读消息后重置",
+        "settings": {
+            "channelToAffect": {
+                "name": "适用私信类型",
+                "description": "选择插件适用的私信类型",
+                "options": {
+                    "string:both_dms": "全部",
+                    "string:user_dm": "一对一私信",
+                    "string:group_dm": "私信群组"
+                }
+            },
+            "allowMentions": {
+                "name": "允许提及提示音",
+                "description": "被 @提及时仍播放提示音"
+            },
+            "allowEveryone": {
+                "name": "允许全体提及提示音",
+                "description": "私信群组中出现 @everyone 和 @here 时仍播放提示音"
+            }
+        }
+    },
+    "OpenInApp": {
+        "name": "在应用中打开",
+        "description": "使用相应应用打开链接",
+        "settings": {}
+    },
+    "OverrideForumDefaults": {
+        "name": "自定义论坛默认布局",
+        "description": "覆盖论坛的默认布局和排序方式，仍可为各频道单独调整",
+        "settings": {
+            "defaultLayout": {
+                "name": "默认布局",
+                "description": "默认使用的论坛布局",
+                "options": {
+                    "number:1": "列表",
+                    "number:2": "画廊"
+                }
+            },
+            "defaultSortOrder": {
+                "name": "默认排序",
+                "description": "默认使用的排序方式",
+                "options": {
+                    "number:0": "最近活跃",
+                    "number:1": "发布日期"
+                }
+            }
+        }
+    },
+    "PauseInvitesForever": {
+        "name": "无限期暂停邀请",
+        "description": "恢复 Discord 移除的无限期暂停邀请选项",
+        "settings": {}
+    },
+    "PermissionFreeWill": {
+        "name": "自由编辑频道权限",
+        "description": "移除客户端对频道权限管理的限制",
+        "settings": {
+            "lockout": {
+                "name": "绕过权限锁定保护",
+                "description": "绕过防止失去频道访问权限的限制（“你确定要这么做吗”提示）"
+            },
+            "onboarding": {
+                "name": "绕过入门引导要求",
+                "description": "绕过服务器入门引导的要求（“此更改将导致服务器不兼容……”提示）"
+            }
+        }
+    },
+    "PermissionsViewer": {
+        "name": "权限查看器",
+        "description": "查看用户或频道的权限，以及服务器的身份组",
+        "settings": {
+            "permissionsSortOrder": {
+                "name": "权限来源排序",
+                "description": "确定哪个身份组授予用户某项权限时采用的排序方式",
+                "options": {
+                    "number:0": "最高身份组",
+                    "number:1": "最低身份组"
+                }
+            }
+        }
+    },
+    "petpet": {
+        "name": "摸头 GIF",
+        "description": "添加 /petpet 斜杠命令，可使用任意图片制作摸头 GIF",
+        "settings": {}
+    },
+    "PictureInPicture": {
+        "name": "画中画",
+        "description": "为视频添加画中画按钮，位于下载按钮旁",
+        "settings": {
+            "loop": {
+                "name": "循环播放",
+                "description": "循环播放画中画视频"
+            }
+        }
+    },
+    "PinDMs": {
+        "name": "置顶私信",
+        "description": "将私信频道置顶到列表顶部；右键点击私信可置顶、取消置顶或调整顺序",
+        "settings": {
+            "pinOrder": {
+                "name": "置顶顺序",
+                "description": "置顶私信的排列顺序",
+                "options": {
+                    "number:0": "最新消息",
+                    "number:1": "自定义（右键点击频道调整顺序）"
+                }
+            },
+            "canCollapseDmSection": {
+                "name": "允许折叠私信区域",
+                "description": "允许折叠未分类的私信区域"
+            },
+            "dmSectionCollapsed": {
+                "name": "折叠私信区域",
+                "description": "折叠私信区域"
+            },
+            "userBasedCategoryList": {}
+        }
+    },
+    "PlainFolderIcon": {
+        "name": "简洁文件夹图标",
+        "description": "隐藏服务器文件夹图标内的小型服务器图标",
+        "settings": {}
+    },
+    "PlatformIndicators": {
+        "name": "设备平台标记",
+        "description": "为用户显示桌面端、移动端、网页端等平台标记",
+        "settings": {
+            "list": {
+                "name": "成员列表",
+                "description": "在成员列表中显示平台标记"
+            },
+            "badges": {
+                "name": "个人资料徽章",
+                "description": "在个人资料中以徽章形式显示平台标记"
+            },
+            "messages": {
+                "name": "消息",
+                "description": "在消息中显示平台标记"
+            },
+            "colorMobileIndicator": {
+                "name": "移动端标记配色",
+                "description": "让移动端标记与用户状态的颜色一致"
+            }
+        }
+    },
+    "PreviewMessage": {
+        "name": "消息预览",
+        "description": "发送前预览消息",
+        "settings": {}
+    },
+    "QuickMention": {
+        "name": "快捷提及",
+        "description": "在消息操作栏添加快捷提及按钮",
+        "settings": {}
+    },
+    "QuickReply": {
+        "name": "快捷回复",
+        "description": "使用快捷键回复（Ctrl+上/下）或编辑（Ctrl+Shift+上/下）消息",
+        "settings": {
+            "shouldMention": {
+                "name": "默认提及",
+                "description": "回复时默认是否发送提及通知",
+                "options": {
+                    "number:2": "跟随“默认不提及回复对象”插件（若已启用）",
+                    "number:1": "启用",
+                    "number:0": "禁用"
+                }
+            },
+            "ignoreBlockedAndIgnored": {
+                "name": "跳过屏蔽和忽略用户",
+                "description": "浏览消息时跳过已屏蔽或已忽略用户的消息"
+            }
+        }
+    },
+    "ReactErrorDecoder": {
+        "name": "React 错误解码",
+        "description": "将压缩后的 React 错误信息替换为实际错误内容",
+        "settings": {}
+    },
+    "ReadAllNotificationsButton": {
+        "name": "全部标为已读按钮",
+        "description": "一键将所有服务器通知标为已读",
+        "settings": {}
+    },
+    "RelationshipNotifier": {
+        "name": "好友与群组变动通知",
+        "description": "在被好友删除、移出群聊或移出服务器时通知你",
+        "settings": {
+            "notices": {
+                "name": "显示顶部通知",
+                "description": "被移除时也在屏幕顶部显示通知横幅，避免错过提醒"
+            },
+            "offlineRemovals": {
+                "name": "离线变动通知",
+                "description": "启动 Discord 时，通知你离线期间被移除的情况"
+            },
+            "friends": {
+                "name": "好友删除通知",
+                "description": "被好友删除时通知"
+            },
+            "friendRequestCancels": {
+                "name": "请求取消通知",
+                "description": "好友请求被取消时通知"
+            },
+            "servers": {
+                "name": "服务器移除通知",
+                "description": "被移出服务器时通知"
+            },
+            "groups": {
+                "name": "群聊移除通知",
+                "description": "被移出群聊时通知"
+            }
+        }
+    },
+    "ReplaceGoogleSearch": {
+        "name": "替换 Google 搜索",
+        "description": "将 Google 搜索替换为其他搜索引擎",
+        "settings": {
+            "customEngineName": {
+                "name": "自定义搜索引擎名称",
+                "description": "自定义搜索引擎的名称",
+                "placeholder": "Google"
+            },
+            "customEngineURL": {
+                "name": "自定义搜索引擎网址",
+                "description": "自定义搜索引擎的网址",
+                "placeholder": "https://google.com/search?q="
+            },
+            "replacementEngine": {
+                "name": "替换搜索引擎",
+                "description": "直接使用指定搜索引擎，避免添加选择菜单",
+                "options": {
+                    "string:off": "关闭",
+                    "string:custom": "自定义搜索引擎",
+                    "string:Google": "Google",
+                    "string:DuckDuckGo": "DuckDuckGo",
+                    "string:Brave": "Brave",
+                    "string:Bing": "Bing",
+                    "string:Yahoo": "Yahoo",
+                    "string:Yandex": "Yandex",
+                    "string:GitHub": "GitHub",
+                    "string:Reddit": "Reddit",
+                    "string:Wikipedia": "维基百科",
+                    "string:Startpage": "Startpage",
+                    "string:Kagi": "Kagi"
+                }
+            }
+        }
+    },
+    "ReplyTimestamp": {
+        "name": "回复时间戳",
+        "description": "在回复消息预览中显示时间戳",
+        "settings": {}
+    },
+    "RevealAllSpoilers": {
+        "name": "显示所有剧透",
+        "description": "按住 Ctrl 点击剧透，显示该消息中的所有剧透；按住 Ctrl+Shift 点击，显示聊天中的所有剧透",
+        "settings": {}
+    },
+    "ReverseImageSearch": {
+        "name": "以图搜图",
+        "description": "为图片右键菜单添加以图搜图功能",
+        "settings": {}
+    },
+    "ReviewDB": {
+        "name": "ReviewDB 用户评价",
+        "description": "评价其他用户，在个人资料中添加评价功能",
+        "settings": {
+            "authorize": {},
+            "notifyReviews": {
+                "name": "新评价通知",
+                "description": "启动时通知新的评价"
+            },
+            "showWarning": {
+                "name": "显示礼貌提示",
+                "description": "在评价列表顶部显示保持礼貌的提示"
+            },
+            "hideTimestamps": {
+                "name": "隐藏时间戳",
+                "description": "隐藏评价上的时间戳"
+            },
+            "hideBlockedUsers": {
+                "name": "隐藏屏蔽用户",
+                "description": "隐藏已屏蔽用户的评价"
+            },
+            "buttons": {}
+        }
+    },
+    "RoleColorEverywhere": {
+        "name": "全局身份组颜色",
+        "description": "在所有支持的位置显示用户最高身份组的颜色",
+        "settings": {
+            "chatMentions": {
+                "name": "聊天提及",
+                "description": "在聊天提及中显示身份组颜色，包括消息输入框"
+            },
+            "memberList": {
+                "name": "成员列表",
+                "description": "在成员列表的身份组标题中显示身份组颜色"
+            },
+            "voiceUsers": {
+                "name": "语音用户列表",
+                "description": "在语音聊天用户列表中显示身份组颜色"
+            },
+            "reactorsList": {
+                "name": "反应用户列表",
+                "description": "在反应用户列表中显示身份组颜色"
+            },
+            "pollResults": {
+                "name": "投票结果",
+                "description": "在投票结果中显示身份组颜色"
+            },
+            "colorChatMessages": {
+                "name": "消息文字配色",
+                "description": "根据作者的身份组颜色为聊天消息文字着色"
+            },
+            "messageSaturation": {
+                "name": "消息颜色强度",
+                "description": "消息文字的着色强度"
+            }
+        }
+    },
+    "RoleManager": {
+        "name": "身份组管理器",
+        "description": "无需管理权限即可浏览服务器身份组，查看拥有各身份组的成员",
+        "settings": {
+            "useMembersSearchApi": {
+                "name": "使用成员搜索 API",
+                "description": "搜索成员时，查询 Discord 的服务器成员搜索 API，并与所选身份组的成员取交集"
+            },
+            "requestMissingMemberDetails": {
+                "name": "请求缺失的成员信息",
+                "description": "API 返回尚未缓存的用户 ID 时，通过 Discord 网关请求相应服务器成员信息"
+            }
+        }
+    },
+    "SecretRingToneEnabler": {
+        "name": "隐藏来电铃声",
+        "description": "始终播放 Discord 的隐藏版来电铃声，特殊铃声活动期间除外",
+        "settings": {
+            "onlySnow": {
+                "name": "仅播放 Snow Halation",
+                "description": "只播放 Snow Halation 主题铃声"
+            }
+        }
+    },
+    "SendTimestamps": {
+        "name": "发送时间戳",
+        "description": "通过输入框按钮和文本快捷方式轻松发送时间戳，详情请阅读扩展说明",
+        "settings": {
+            "replaceMessageContents": {
+                "name": "替换消息内容",
+                "description": "替换消息内容中的时间戳"
+            }
+        }
+    },
+    "ServerInfo": {
+        "name": "服务器信息",
+        "description": "查看服务器的详细信息",
+        "settings": {}
+    },
+    "ServerListAPI": {
+        "name": "服务器列表 API",
+        "description": "为修改服务器列表的插件提供所需的 API",
+        "settings": {}
+    },
+    "ServerListIndicators": {
+        "name": "服务器列表统计",
+        "description": "在服务器列表中显示在线好友数或服务器数量",
+        "settings": {
+            "mode": {
+                "name": "显示模式",
+                "description": "统计信息的显示模式",
+                "options": {
+                    "number:2": "仅在线好友数",
+                    "number:1": "仅服务器数量",
+                    "number:3": "服务器数量和在线好友数"
+                }
+            }
+        }
+    },
+    "Settings": {
+        "name": "设置",
+        "description": "添加设置界面和调试信息",
+        "settings": {
+            "settingsLocation": {
+                "name": "设置位置",
+                "description": "Vencord 设置分区的显示位置",
+                "options": {
+                    "string:top": "最顶部",
+                    "string:aboveNitro": "Nitro 分区上方",
+                    "string:belowNitro": "Nitro 分区下方",
+                    "string:aboveActivity": "活动设置上方",
+                    "string:belowActivity": "活动设置下方",
+                    "string:bottom": "最底部"
+                }
+            },
+            "includeVencordInfoWhenCopying": {
+                "name": "复制时包含 Vencord 信息",
+                "description": "点击设置页面左下角的版本信息时，同时复制 Vencord、Electron 和 Chromium 的版本信息"
+            }
+        }
+    },
+    "ShikiCodeblocks": {
+        "name": "Shiki 代码块",
+        "description": "借助 Shiki，在 Discord 中呈现类似 VS Code 的代码块",
+        "settings": {
+            "theme": {
+                "name": "默认主题",
+                "description": "默认代码高亮主题",
+                "options": {
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/dark-plus.json": "Dark Plus",
+                    "string:https://raw.githubusercontent.com/millsp/material-candy/master/material-candy.json": "Material Candy",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/andromeeda.json": "Andromeeda",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/aurora-x.json": "Aurora X",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/ayu-dark.json": "Ayu Dark",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/catppuccin-latte.json": "Catppuccin Latte",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/catppuccin-frappe.json": "Catppuccin Frappe",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/catppuccin-macchiato.json": "Catppuccin Macchiato",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/catppuccin-mocha.json": "Catppuccin Mocha",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/dracula-soft.json": "Dracula Soft",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/dracula.json": "Dracula",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/everforest-dark.json": "Everforest Dark",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/everforest-light.json": "Everforest Light",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/github-dark-default.json": "Github Dark Default",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/github-dark-dimmed.json": "Github Dark Dimmed",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/github-dark-high-contrast.json": "Github Dark High Contrast",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/github-dark.json": "Github Dark",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/github-light-default.json": "Github Light Default",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/github-light-high-contrast.json": "Github Light High Contrast",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/github-light.json": "Github Light",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/gruvbox-dark-hard.json": "Gruv Box Dark Hard",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/gruvbox-dark-medium.json": "Gruv Box Dark Medium",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/gruvbox-dark-soft.json": "Gruv Box Dark Soft",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/gruvbox-light-hard.json": "Gruv Box Light Hard",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/gruvbox-light-medium.json": "Gruv Box Light Medium",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/gruvbox-light-soft.json": "Gruv Box Light Soft",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/houston.json": "Houston",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/kanagawa-dragon.json": "Kanagawa Dragon",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/kanagawa-lotus.json": "Kanagawa Lotus",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/kanagawa-wave.json": "Kanagawa Wave",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/laserwave.json": "Laser Wave",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/light-plus.json": "Light Plus",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/material-theme-darker.json": "Material Darker",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/material-theme.json": "Material Default",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/material-theme-lighter.json": "Material Lighter",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/material-theme-ocean.json": "Material Ocean",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/material-theme-palenight.json": "Material Palenight",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/min-dark.json": "Min Dark",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/min-light.json": "Min Light",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/monokai.json": "Monokai",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/night-owl.json": "Night Owl",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/nord.json": "Nord",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/one-dark-pro.json": "One Dark Pro",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/one-light.json": "One Light",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/plastic.json": "Plastic",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/poimandres.json": "Poimandres",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/red.json": "Red",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/rose-pine-dawn.json": "Rose Pine Dawn",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/rose-pine-moon.json": "Rose Pine Moon",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/rose-pine.json": "Rose Pine",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/slack-dark.json": "Slack Dark",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/slack-ochin.json": "Slack Ochin",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/snazzy-light.json": "Snazzy Light",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/solarized-dark.json": "Solarized Dark",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/solarized-light.json": "Solarized Light",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/synthwave-84.json": "Synthwave84",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/tokyo-night.json": "Tokyo Night",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/vesper.json": "Vesper",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/vitesse-black.json": "Vitesse Black",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/vitesse-dark.json": "Vitesse Dark",
+                    "string:https://cdn.jsdelivr.net/gh/shikijs/textmate-grammars-themes@bc5436518111d87ea58eb56d97b3f9bec30e6b83/packages/tm-themes/themes/vitesse-light.json": "Vitesse Light"
+                }
+            },
+            "customTheme": {
+                "name": "自定义主题",
+                "description": "自定义 VS Code 主题的链接",
+                "placeholder": "https://raw.githubusercontent.com/millsp/material-candy/master/material-candy.json"
+            },
+            "tryDiscordHighlighter": {
+                "name": "使用 Discord 高亮器",
+                "description": "使用更轻量的 Discord 默认高亮器和主题",
+                "options": {
+                    "string:NEVER": "从不",
+                    "string:SECONDARY": "优先使用 Shiki 高亮器",
+                    "string:PRIMARY": "优先使用 Discord 高亮器",
+                    "string:ALWAYS": "始终"
+                }
+            },
+            "useDevIcon": {
+                "name": "语言图标",
+                "description": "代码块中的语言图标显示方式",
+                "options": {
+                    "string:DISABLED": "禁用",
+                    "string:GREYSCALE": "单色",
+                    "string:COLOR": "彩色"
+                }
+            },
+            "bgOpacity": {
+                "name": "背景不透明度",
+                "description": "代码块背景的不透明度"
+            }
+        }
+    },
+    "ShowAllMessageButtons": {
+        "name": "始终显示消息按钮",
+        "description": "始终显示所有消息按钮，无需按住 Shift",
+        "settings": {}
+    },
+    "ShowConnections": {
+        "name": "显示关联账户",
+        "description": "在用户个人资料弹出窗口中显示关联账户",
+        "settings": {
+            "iconSize": {
+                "name": "图标大小",
+                "description": "图标大小，单位为像素"
+            },
+            "iconSpacing": {
+                "name": "图标间距",
+                "description": "图标之间的间距",
+                "options": {
+                    "number:0": "紧凑",
+                    "number:1": "舒适",
+                    "number:2": "宽松"
+                }
+            }
+        }
+    },
+    "ShowHiddenChannels": {
+        "name": "显示隐藏频道",
+        "description": "显示你无权查看的频道",
+        "settings": {
+            "hideUnreads": {
+                "name": "隐藏未读标记",
+                "description": "隐藏未读标记"
+            },
+            "showMode": {
+                "name": "显示模式",
+                "description": "隐藏频道的显示方式",
+                "options": {
+                    "number:0": "普通样式，使用锁定图标",
+                    "number:1": "静音样式，右侧显示隐藏图标"
+                }
+            },
+            "defaultAllowedUsersAndRolesDropdownState": {
+                "name": "默认展开允许列表",
+                "description": "默认展开隐藏频道中允许访问的用户和身份组列表"
+            }
+        }
+    },
+    "ShowHiddenThings": {
+        "name": "显示隐藏内容",
+        "description": "无视权限限制，显示各种隐藏内容及仅管理员可见的信息",
+        "settings": {}
+    },
+    "ShowMeYourName": {
+        "name": "显示用户名",
+        "description": "在昵称旁显示用户名，或仅显示用户名",
+        "settings": {
+            "mode": {
+                "name": "名称显示方式",
+                "description": "用户名和昵称的显示方式",
+                "options": {
+                    "string:user-nick": "用户名在前，昵称在后",
+                    "string:nick-user": "昵称在前，用户名在后",
+                    "string:user": "仅用户名"
+                }
+            },
+            "friendNicknames": {
+                "name": "好友昵称优先级",
+                "description": "好友昵称与服务器昵称之间的优先顺序",
+                "options": {
+                    "string:dms": "仅在私信中显示好友昵称",
+                    "string:always": "优先显示好友昵称",
+                    "string:fallback": "优先显示服务器昵称"
+                }
+            },
+            "displayNames": {
+                "name": "使用显示名称",
+                "description": "使用显示名称代替用户名"
+            },
+            "inReplies": {
+                "name": "应用于回复预览",
+                "description": "也在回复预览中应用此功能"
+            }
+        }
+    },
+    "ShowTimeoutDuration": {
+        "name": "显示禁言剩余时间",
+        "description": "在禁言图标的提示中或图标旁显示用户的禁言剩余时间",
+        "settings": {
+            "displayStyle": {
+                "name": "显示位置",
+                "description": "禁言剩余时间的显示位置",
+                "options": {
+                    "string:tooltip": "在悬停提示中",
+                    "string:ssalggnikool": "在禁言图标旁"
+                }
+            }
+        }
+    },
+    "SilentMessageToggle": {
+        "name": "静默消息开关",
+        "description": "在聊天输入栏添加静默发送消息的开关",
+        "settings": {
+            "persistState": {
+                "name": "记住开关状态",
+                "description": "切换频道后保留静默消息开关的状态"
+            },
+            "autoDisable": {
+                "name": "发送后自动关闭",
+                "description": "发送一条静默消息后自动关闭开关"
+            }
+        }
+    },
+    "SilentTyping": {
+        "name": "隐身输入",
+        "description": "隐藏你的正在输入状态",
+        "settings": {
+            "showIcon": {
+                "name": "显示开关图标",
+                "description": "显示用于切换插件功能的图标"
+            },
+            "contextMenu": {
+                "name": "输入框右键菜单",
+                "description": "在聊天输入框右键菜单中添加功能开关"
+            },
+            "isEnabled": {
+                "name": "启用功能",
+                "description": "切换隐身输入功能"
+            }
+        }
+    },
+    "SortFriendRequests": {
+        "name": "好友请求排序",
+        "description": "按收到日期排序好友请求",
+        "settings": {
+            "showDates": {
+                "name": "显示日期",
+                "description": "在好友请求上显示日期"
+            }
+        }
+    },
+    "SpotifyControls": {
+        "name": "Spotify 播放控件",
+        "description": "在账户面板上方添加 Spotify 播放器",
+        "settings": {
+            "hoverControls": {
+                "name": "悬停时显示控件",
+                "description": "鼠标悬停时显示播放控件"
+            },
+            "useSpotifyUris": {
+                "name": "使用 Spotify URI",
+                "description": "使用 Spotify URI 打开内容。需要安装 Spotify，且部分平台可能不支持"
+            },
+            "previousButtonRestartsTrack": {
+                "name": "上一首按钮重新播放",
+                "description": "已播放超过 3 秒时，点击上一首按钮会从头播放当前歌曲"
+            }
+        }
+    },
+    "SpotifyCrack": {
+        "name": "Spotify 功能解锁",
+        "description": "免费一起听，阻止语音聊天时自动暂停，并在闲置时继续显示 Spotify 活动",
+        "settings": {
+            "noSpotifyAutoPause": {
+                "name": "禁用自动暂停",
+                "description": "禁用 Spotify 自动暂停"
+            },
+            "keepSpotifyActivityOnIdle": {
+                "name": "闲置时保留活动",
+                "description": "进入闲置状态时继续显示 Spotify 播放活动"
+            }
+        }
+    },
+    "SpotifyShareCommands": {
+        "name": "Spotify 分享命令",
+        "description": "通过斜杠命令分享当前 Spotify 歌曲、专辑或艺人（/track、/album、/artist）",
+        "settings": {}
+    },
+    "StartupTimings": {
+        "name": "启动耗时",
+        "description": "在设置菜单中添加启动耗时信息",
+        "settings": {}
+    },
+    "StickerPaste": {
+        "name": "贴纸插入输入框",
+        "description": "选择贴纸时先插入聊天输入框，供你确认后发送",
+        "settings": {}
+    },
+    "StreamerModeOnStream": {
+        "name": "直播时自动开启主播模式",
+        "description": "在 Discord 中开始直播时自动开启主播模式",
+        "settings": {}
+    },
+    "SuperReactionTweaks": {
+        "name": "超级反应调整",
+        "description": "自定义同时播放的超级反应数量上限，并默认使用超级反应",
+        "settings": {
+            "superReactByDefault": {
+                "name": "默认使用超级反应",
+                "description": "表情反应选择器默认使用超级反应"
+            },
+            "unlimitedSuperReactionPlaying": {
+                "name": "不限同时播放数量",
+                "description": "移除同时播放的超级反应数量限制"
+            },
+            "superReactionPlayingLimit": {
+                "name": "同时播放数量上限",
+                "description": "同时播放的超级反应数量上限，设为 0 可禁用超级反应动画"
+            }
+        }
+    },
+    "SupportHelper": {
+        "name": "支持助手",
+        "description": "帮助我们为你提供技术支持",
+        "settings": {}
+    },
+    "TextReplace": {
+        "name": "文本替换",
+        "description": "替换消息中的文本。可在 Vencord 服务器的 #textreplace-rules 频道中查找现成规则",
+        "settings": {
+            "replace": {},
+            "stringRules": {
+                "description": "使用字符串匹配替换文本的规则"
+            },
+            "regexRules": {
+                "description": "使用正则表达式替换文本的规则"
+            }
+        }
+    },
+    "ThemeAttributes": {
+        "name": "主题属性",
+        "description": "为界面中的各种元素添加用于主题定制的数据属性",
+        "settings": {}
+    },
+    "Translate": {
+        "name": "翻译",
+        "description": "使用 Google 翻译、DeepL 或 Kagi 翻译消息",
+        "settings": {
+            "receivedInput": {
+                "name": "接收消息源语言",
+                "description": "接收消息的原始语言"
+            },
+            "receivedOutput": {
+                "name": "接收消息目标语言",
+                "description": "接收消息翻译后的语言"
+            },
+            "sentInput": {
+                "name": "发送消息源语言",
+                "description": "你发送消息的原始语言"
+            },
+            "sentOutput": {
+                "name": "发送消息目标语言",
+                "description": "你发送消息翻译后的语言"
+            },
+            "service": {
+                "name": "翻译服务",
+                "description": "翻译服务提供商",
+                "options": {
+                    "string:google": "Google 翻译",
+                    "string:deepl": "DeepL 免费版 — 需要 API 密钥",
+                    "string:deepl-pro": "DeepL 专业版 — 需要 API 密钥",
+                    "string:kagi": "Kagi 翻译 — 需要 API 密钥"
+                }
+            },
+            "deeplApiKey": {
+                "name": "DeepL API 密钥",
+                "description": "你的 DeepL API 密钥，可在 deepl.com/your-account 获取"
+            },
+            "kagiSession": {
+                "name": "Kagi 会话令牌",
+                "description": "你的 Kagi 会话令牌，可在 kagi.com/settings?p=user_details 获取"
+            },
+            "autoTranslate": {
+                "name": "自动翻译",
+                "description": "发送前自动翻译你的消息。也可按住 Shift 点击或右键点击翻译按钮来切换"
+            },
+            "showAutoTranslateTooltip": {
+                "name": "显示自动翻译提示",
+                "description": "消息被自动翻译时，在聊天栏按钮上显示提示"
+            },
+            "manageTranslateSettings": {}
+        }
+    },
+    "TypingIndicator": {
+        "name": "频道输入状态",
+        "description": "当频道中有人正在输入时显示标记",
+        "settings": {
+            "includeCurrentChannel": {
+                "name": "包含当前频道",
+                "description": "在当前选中的频道显示正在输入标记"
+            },
+            "includeMutedChannels": {
+                "name": "包含静音频道",
+                "description": "在已静音的频道显示正在输入标记"
+            },
+            "includeIgnoredUsers": {
+                "name": "包含已忽略用户",
+                "description": "显示已忽略用户的正在输入状态"
+            },
+            "includeBlockedUsers": {
+                "name": "包含已屏蔽用户",
+                "description": "显示已屏蔽用户的正在输入状态"
+            },
+            "indicatorMode": {
+                "name": "标记样式",
+                "description": "正在输入标记的显示方式",
+                "options": {
+                    "number:3": "头像和动态圆点",
+                    "number:1": "动态圆点",
+                    "number:2": "头像"
+                }
+            }
+        }
+    },
+    "TypingTweaks": {
+        "name": "输入状态增强",
+        "description": "在正在输入提示中显示头像和身份组颜色",
+        "settings": {
+            "showAvatars": {
+                "name": "显示头像",
+                "description": "在正在输入提示中显示头像"
+            },
+            "showRoleColors": {
+                "name": "显示身份组颜色",
+                "description": "在正在输入提示中显示身份组颜色"
+            },
+            "alternativeFormatting": {
+                "name": "改进多人输入提示",
+                "description": "多人同时输入时显示更有用的提示"
+            }
+        }
+    },
+    "Unindent": {
+        "name": "移除代码块缩进",
+        "description": "移除代码块开头多余的缩进",
+        "settings": {}
+    },
+    "UnlockedAvatarZoom": {
+        "name": "解锁头像缩放",
+        "description": "更换头像时，允许在图片裁剪工具中进一步放大",
+        "settings": {
+            "zoomMultiplier": {
+                "name": "缩放倍数",
+                "description": "头像裁剪时的缩放倍数"
+            }
+        }
+    },
+    "UnsuppressEmbeds": {
+        "name": "恢复嵌入预览",
+        "description": "允许恢复消息中已隐藏的嵌入预览",
+        "settings": {}
+    },
+    "UserMessagesPronouns": {
+        "name": "消息人称代词",
+        "description": "在聊天消息中显示用户的人称代词",
+        "settings": {
+            "pronounsFormat": {
+                "name": "人称代词格式",
+                "description": "聊天中人称代词的显示格式",
+                "options": {
+                    "string:LOWERCASE": "小写",
+                    "string:CAPITALIZED": "首字母大写"
+                }
+            },
+            "showSelf": {
+                "name": "显示自己的代词",
+                "description": "是否显示自己的人称代词"
+            }
+        }
+    },
+    "UserSettingsAPI": {
+        "name": "用户设置 API",
+        "description": "修改 Discord 的 UserSettings，使其暴露所属分组和名称",
+        "settings": {}
+    },
+    "UserVoiceShow": {
+        "name": "用户语音频道标记",
+        "description": "显示用户所在语音频道的标记",
+        "settings": {
+            "showInUserProfileModal": {
+                "name": "个人资料中显示",
+                "description": "在个人资料的姓名旁显示用户所在的语音频道标记"
+            },
+            "showInMemberList": {
+                "name": "成员列表中显示",
+                "description": "在成员列表和私信列表中显示用户所在的语音频道标记"
+            },
+            "showInMessages": {
+                "name": "消息中显示",
+                "description": "在消息中显示用户所在的语音频道标记"
+            }
+        }
+    },
+    "USRBG": {
+        "name": "USRBG 用户横幅",
+        "description": "显示 USRBG 用户横幅，让任何人无需 Nitro 也能拥有个人横幅",
+        "settings": {
+            "nitroFirst": {
+                "name": "横幅优先级",
+                "description": "Nitro 和 USRBG 横幅均存在时使用的横幅",
+                "options": {
+                    "boolean:true": "Nitro 横幅",
+                    "boolean:false": "USRBG 横幅"
+                }
+            },
+            "voiceBackground": {
+                "name": "语音聊天背景",
+                "description": "使用 USRBG 横幅作为语音聊天背景"
+            }
+        }
+    },
+    "ValidReply": {
+        "name": "修复回复预览",
+        "description": "修复悬停查看回复时出现的“无法加载消息”问题",
+        "settings": {}
+    },
+    "ValidUser": {
+        "name": "修复未知用户提及",
+        "description": "修复未知用户的提及显示为“@unknown-user”的问题，悬停在提及上即可修复",
+        "settings": {}
+    },
+    "VcNarrator": {
+        "name": "语音频道播报",
+        "description": "通过语音播报用户加入、离开或切换语音频道的动态",
+        "settings": {
+            "voice": {},
+            "volume": {
+                "name": "播报音量",
+                "description": "语音播报的音量"
+            },
+            "rate": {
+                "name": "播报语速",
+                "description": "语音播报的速度"
+            },
+            "sayOwnName": {
+                "name": "播报自己的名字",
+                "description": "播报时读出自己的名字"
+            },
+            "latinOnly": {
+                "name": "仅保留拉丁字符",
+                "description": "播报前移除名字中的非拉丁字符"
+            },
+            "joinMessage": {
+                "name": "加入频道播报",
+                "description": "用户加入频道时的播报内容"
+            },
+            "leaveMessage": {
+                "name": "离开频道播报",
+                "description": "用户离开频道时的播报内容"
+            },
+            "moveMessage": {
+                "name": "切换频道播报",
+                "description": "用户切换频道时的播报内容"
+            },
+            "muteMessage": {
+                "name": "静音播报",
+                "description": "静音时的播报内容，目前仅适用于自己"
+            },
+            "unmuteMessage": {
+                "name": "取消静音播报",
+                "description": "取消静音时的播报内容，目前仅适用于自己"
+            },
+            "deafenMessage": {
+                "name": "拒听播报",
+                "description": "拒听时的播报内容，目前仅适用于自己"
+            },
+            "undeafenMessage": {
+                "name": "取消拒听播报",
+                "description": "取消拒听时的播报内容，目前仅适用于自己"
+            }
+        }
+    },
+    "VencordToolbox": {
+        "name": "Vencord 工具箱",
+        "description": "在标题栏添加包含 Vencord 快捷操作的工具箱按钮",
+        "settings": {
+            "showPluginMenu": {
+                "name": "显示插件菜单",
+                "description": "在工具箱中显示插件菜单"
+            }
+        }
+    },
+    "ViewIcons": {
+        "name": "查看头像与图标",
+        "description": "允许点击个人资料中的头像和横幅，并在用户、服务器及群组频道右键菜单中添加查看图标、横幅和头像装饰的选项",
+        "settings": {
+            "format": {
+                "name": "图片格式",
+                "description": "静态图片使用的格式，动画图片始终使用 .webp",
+                "options": {
+                    "string:webp": "webp",
+                    "string:png": "png",
+                    "string:jpg": "jpg"
+                }
+            },
+            "imgSize": {
+                "name": "图片大小",
+                "description": "查看图片时使用的大小",
+                "options": {
+                    "string:128": "128",
+                    "string:256": "256",
+                    "string:512": "512",
+                    "string:1024": "1024",
+                    "string:2048": "2048",
+                    "string:4096": "4096"
+                }
+            }
+        }
+    },
+    "ViewRaw": {
+        "name": "查看原始数据",
+        "description": "复制和查看消息、频道或服务器的原始内容与数据",
+        "settings": {
+            "clickMethod": {
+                "name": "查看方式",
+                "description": "用于查看消息原始内容和数据的鼠标操作",
+                "options": {
+                    "string:Left": "左键点击查看原始内容",
+                    "string:Right": "右键点击查看原始内容"
+                }
+            },
+            "messageContextMenu": {
+                "name": "消息右键菜单",
+                "description": "在消息右键菜单中显示入口"
+            },
+            "sortKeys": {
+                "name": "按字母排序字段",
+                "description": "按字母顺序排列原始数据的字段"
+            },
+            "stripSensitiveData": {
+                "name": "移除敏感数据",
+                "description": "移除原始数据中的邮箱、电话号码等敏感信息"
+            }
+        }
+    },
+    "VoiceChatDoubleClick": {
+        "name": "双击加入语音",
+        "description": "通过双击加入语音频道",
+        "settings": {}
+    },
+    "VoiceDownload": {
+        "name": "下载语音消息",
+        "description": "为语音消息添加下载按钮，会打开新的浏览器标签页",
+        "settings": {}
+    },
+    "VoiceMessages": {
+        "name": "发送语音消息",
+        "description": "像移动端一样发送语音消息：右键点击上传按钮，再点击“发送语音消息”",
+        "settings": {
+            "noiseSuppression": {
+                "name": "噪声抑制",
+                "description": "启用噪声抑制"
+            },
+            "echoCancellation": {
+                "name": "回声消除",
+                "description": "启用回声消除"
+            }
+        }
+    },
+    "VolumeBooster": {
+        "name": "音量增强",
+        "description": "允许将用户和直播音量调至默认最大值以上",
+        "settings": {
+            "multiplier": {
+                "name": "音量倍数",
+                "description": "音量放大倍数"
+            }
+        }
+    },
+    "WebContextMenus": {
+        "name": "网页端右键菜单",
+        "description": "恢复 Discord 网页端缺失的右键菜单：链接与图片的复制和打开，以及文本框的复制、剪切、粘贴和拼写检查",
+        "settings": {
+            "addBack": {
+                "name": "恢复 Discord 菜单",
+                "description": "为图片、链接和聊天输入栏恢复 Discord 右键菜单"
+            }
+        }
+    },
+    "WebKeybinds": {
+        "name": "网页端快捷键",
+        "description": "恢复 Discord 网页端缺失的快捷键，仅在 Vesktop 或 Legcord 中完整生效",
+        "settings": {
+            "showNavigationButtons": {
+                "name": "显示导航按钮",
+                "description": "在标题栏显示后退和前进按钮"
+            },
+            "overrideCommonKeybinds": {
+                "name": "覆盖常用浏览器快捷键",
+                "description": "允许 Discord 覆盖常用标签页快捷键（Ctrl+T、Ctrl+Shift+T、Ctrl+Tab、Ctrl+Shift+Tab、Ctrl+N）。仅适用于允许网页快捷键优先于浏览器快捷键的少数浏览器"
+            }
+        }
+    },
+    "WebPWA": {
+        "name": "网页渐进式应用",
+        "description": "允许将 Discord 安装为渐进式网页应用（PWA），启用通知角标、全局快捷键和 Discord 自定义标题栏",
+        "settings": {}
+    },
+    "WebRichPresence (arRPC)": {
+        "name": "网页端丰富状态（arRPC）",
+        "description": "通过 arRPC 为 Discord 网页端启用 RPC 的客户端插件（实验性功能）",
+        "settings": {}
+    },
+    "WebScreenShare": {
+        "name": "网页端屏幕共享",
+        "description": "添加屏幕共享选项菜单，可调整分辨率、帧率、编码提示和系统音频设置",
+        "settings": {
+            "resolution": {
+                "name": "分辨率",
+                "description": "屏幕共享分辨率",
+                "options": {
+                    "string:480": "480",
+                    "string:720": "720",
+                    "string:1080": "1080",
+                    "string:1440": "1440",
+                    "string:2160": "2160"
+                }
+            },
+            "frameRate": {
+                "name": "帧率",
+                "description": "屏幕共享帧率",
+                "options": {
+                    "string:15": "15",
+                    "string:30": "30",
+                    "string:60": "60",
+                    "string:120": "120"
+                }
+            },
+            "contentHint": {
+                "name": "内容类型提示",
+                "description": "屏幕共享的内容类型提示",
+                "options": {
+                    "string:motion": "动态画面",
+                    "string:detail": "清晰细节",
+                    "string:": "自定义"
+                }
+            },
+            "systemAudio": {
+                "name": "静音系统音频",
+                "description": "不在屏幕共享中包含系统音频"
+            }
+        }
+    },
+    "WebScreenShareFixes": {
+        "name": "修复网页端屏幕共享",
+        "description": "移除 Chromium 和 Vesktop 客户端的 2500 kbps 码率限制，并修复屏幕共享时 CPU 占用不断增长的问题",
+        "settings": {}
+    },
+    "WhoReacted": {
+        "name": "反应用户头像",
+        "description": "显示对消息添加反应的用户头像",
+        "settings": {
+            "clickableAvatars": {
+                "name": "可点击头像",
+                "description": "启用后，点击反应用户的头像会打开其个人资料"
+            }
+        }
+    },
+    "XSOverlay": {
+        "name": "XSOverlay 通知",
+        "description": "将 Discord 通知转发到 XSOverlay，方便在 VR 中查看",
+        "settings": {
+            "webSocketPort": {
+                "name": "WebSocket 端口",
+                "description": "WebSocket 连接端口"
+            },
+            "preferUDP": {
+                "name": "优先使用 UDP",
+                "description": "使用无法通过 WebSocket 连接的旧版 XSOverlay 时启用，网页端会忽略此设置"
+            },
+            "botNotifications": {
+                "name": "机器人通知",
+                "description": "允许机器人通知"
+            },
+            "serverNotifications": {
+                "name": "服务器通知",
+                "description": "允许服务器通知"
+            },
+            "dmNotifications": {
+                "name": "私信通知",
+                "description": "允许私信通知"
+            },
+            "groupDmNotifications": {
+                "name": "私信群组通知",
+                "description": "允许私信群组通知"
+            },
+            "callNotifications": {
+                "name": "来电通知",
+                "description": "允许来电通知"
+            },
+            "pingColor": {
+                "name": "用户提及颜色",
+                "description": "用户提及的显示颜色"
+            },
+            "channelPingColor": {
+                "name": "频道提及颜色",
+                "description": "频道提及的显示颜色"
+            },
+            "soundPath": {
+                "name": "通知声音",
+                "description": "通知声音类型（default/warning/error）"
+            },
+            "timeout": {
+                "name": "通知时长",
+                "description": "通知的显示时长，单位为秒"
+            },
+            "lengthBasedTimeout": {
+                "name": "按消息长度延长",
+                "description": "根据消息长度延长通知显示时间"
+            },
+            "opacity": {
+                "name": "通知不透明度",
+                "description": "通知的不透明度"
+            },
+            "volume": {
+                "name": "音量",
+                "description": "通知音量"
+            }
+        }
+    },
+    "YoutubeAdblock": {
+        "name": "YouTube 广告拦截",
+        "description": "通过 AdGuard 拦截 YouTube 嵌入播放器和 Watch Together 活动中的广告",
+        "settings": {}
+    }
+}

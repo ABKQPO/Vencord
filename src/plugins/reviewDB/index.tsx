@@ -24,6 +24,7 @@ import { OpenExternalIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
 import { Span } from "@components/Span";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import { classes } from "@utils/misc";
 import { useAwaiter } from "@utils/react";
 import definePlugin from "@utils/types";
@@ -47,7 +48,7 @@ const guildPopoutPatch: NavContextMenuPatchCallback = (children, { guild }: { gu
     if (!guild) return;
     children.push(
         <Menu.MenuItem
-            label="View Reviews"
+            label={tr("plugins.ReviewDB.viewReviews", "View Reviews")}
             id="vc-rdb-server-reviews"
             icon={OpenExternalIcon}
             leadingAccessory={{ type: "icon", icon: OpenExternalIcon }}
@@ -60,7 +61,7 @@ const userContextPatch: NavContextMenuPatchCallback = (children, { user }: { use
     if (!user) return;
     children.push(
         <Menu.MenuItem
-            label="View Reviews"
+            label={tr("plugins.ReviewDB.viewReviews", "View Reviews")}
             id="vc-rdb-user-reviews"
             icon={OpenExternalIcon}
             leadingAccessory={{ type: "icon", icon: OpenExternalIcon }}
@@ -125,15 +126,15 @@ export default definePlugin({
                     if (lastReviewId && lastReviewId < user.lastReviewID) {
                         s.lastReviewId = user.lastReviewID;
                         if (user.lastReviewID !== 0)
-                            showToast({ text: "You have new reviews on your profile!" });
+                            showToast({ text: tr("plugins.ReviewDB.youHaveNewReviewsOnYourProfile", "You have new reviews on your profile!") });
                     }
                 }
 
                 const { notification } = user;
                 if (notification) {
                     const props = notification.type === NotificationType.Ban ? {
-                        cancelText: "Appeal",
-                        confirmText: "Ok",
+                        cancelText: tr("plugins.ReviewDB.appeal", "Appeal"),
+                        confirmText: tr("plugins.ReviewDB.ok", "Ok"),
                         onCancel: async () =>
                             VencordNative.native.openExternal(
                                 "https://reviewdb.mantikafasi.dev/api/redirect?"
@@ -148,7 +149,7 @@ export default definePlugin({
                         <ConfirmModal
                             {...modalProps}
                             title={notification.title}
-                            confirmText={props.confirmText ?? "OK"}
+                            confirmText={props.confirmText ?? tr("plugins.ReviewDB.oK", "OK")}
                             cancelText={props.cancelText}
                             variant="primary"
                             onCancel={props.onCancel}
@@ -167,6 +168,7 @@ export default definePlugin({
     },
 
     renderProfileComponent: ErrorBoundary.wrap(({ user, isSideBar = false }: { user: User; isSideBar?: boolean; }) => {
+        useLocale();
         const [reviewData] = useAwaiter(() => getReviews(user.id, { limit: 4 }), { deps: [user.id], fallbackValue: null });
 
         // Discord are masters at using a crap ton of html elements and css classes to create a simple ui that could have
@@ -180,7 +182,7 @@ export default definePlugin({
                             onClick={() => !reviewData?.hasOptedOut && openReviewsModal(user.id, user.username, ReviewType.User)}
                         >
                             <div className={classes(ProfileCardOverlayClasses.overlay, ProfileCardContainerClasses.innerContainer, ProfileCardClasses.card)}>
-                                <Paragraph size={isSideBar ? "sm" : "xs"} weight="medium">User Reviews</Paragraph>
+                                <Paragraph size={isSideBar ? "sm" : "xs"} weight="medium">{tr("plugins.ReviewDB.userReviews", "User Reviews")}</Paragraph>
                                 {!!reviewData?.reviewCount
                                     ? (
                                         <div className={ProfileCardContainerClasses.icons}>
@@ -210,7 +212,7 @@ export default definePlugin({
                                                 })}
                                         </div>
                                     )
-                                    : <Paragraph size={isSideBar ? "sm" : "xs"}>{reviewData?.hasOptedOut ? "User opted out" : "No reviews yet"}</Paragraph>
+                                    : <Paragraph size={isSideBar ? "sm" : "xs"}>{reviewData?.hasOptedOut ? tr("plugins.ReviewDB.userOptedOut", "User opted out") : tr("plugins.ReviewDB.noReviewsYet", "No reviews yet")}</Paragraph>
                                 }
                             </div>
                         </Clickable>

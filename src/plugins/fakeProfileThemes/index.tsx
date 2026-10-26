@@ -25,6 +25,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { Devs } from "@utils/constants";
 import { copyWithToast, fetchUserProfile } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useAwaiter } from "@utils/react";
@@ -104,6 +105,7 @@ function SettingsAboutComponentWrapper() {
 }
 
 function SettingsAboutComponent() {
+    useLocale();
     const existingColors = decode(
         UserProfileStore.getUserProfile(UserStore.getCurrentUser().id)?.bio ?? ""
     ) ?? [0, 0];
@@ -112,22 +114,21 @@ function SettingsAboutComponent() {
 
     return (
         <section>
-            <Forms.FormTitle tag="h3">Usage</Forms.FormTitle>
+            <Forms.FormTitle tag="h3">{tr("plugins.FakeProfileThemes.usage", "Usage")}</Forms.FormTitle>
             <Forms.FormText>
-                After enabling this plugin, you will see custom colors in
-                the profiles of other people using compatible plugins.{" "}
+                {tr("plugins.FakeProfileThemes.afterEnablingThisPluginYouWillSeeCustomColorsInTheProfilesOfOtherPeopleUsingCompatiblePlugins", "After enabling this plugin, you will see custom colors in the profiles of other people using compatible plugins.")}{" "}
             </Forms.FormText>
             <Forms.FormText className={Margins.top8}>
-                <strong>To set your own profile theme colors:</strong>
+                <strong>{tr("plugins.FakeProfileThemes.toSetYourOwnProfileThemeColors", "To set your own profile theme colors:")}</strong>
                 <ul>
-                    <li>&mdash; use the color pickers below to choose your colors</li>
-                    <li>&mdash; click the "Copy 3y3" button</li>
-                    <li>&mdash; paste the invisible text anywhere in your bio</li>
+                    <li>{tr("plugins.FakeProfileThemes.useTheColorPickersBelowToChooseYourColors", "— use the color pickers below to choose your colors")}</li>
+                    <li>{tr("plugins.FakeProfileThemes.clickTheCopy3y3Button", "— click the \"Copy 3y3\" button")}</li>
+                    <li>{tr("plugins.FakeProfileThemes.pasteTheInvisibleTextAnywhereInYourBio", "— paste the invisible text anywhere in your bio")}</li>
                 </ul>
                 <Divider
                     className={classes(Margins.top8, Margins.bottom8)}
                 />
-                <Forms.FormTitle tag="h3">Color pickers</Forms.FormTitle>
+                <Forms.FormTitle tag="h3">{tr("plugins.FakeProfileThemes.colorPickers", "Color pickers")}</Forms.FormTitle>
                 <Flex gap="1em">
                     <ColorPicker
                         color={color1}
@@ -136,7 +137,7 @@ function SettingsAboutComponent() {
                                 variant={"text-xs/normal"}
                                 style={{ marginTop: "4px" }}
                             >
-                                Primary
+                                {tr("plugins.FakeProfileThemes.primary", "Primary")}
                             </Text>
                         }
                         onChange={(color: number) => {
@@ -150,7 +151,7 @@ function SettingsAboutComponent() {
                                 variant={"text-xs/normal"}
                                 style={{ marginTop: "4px" }}
                             >
-                                Accent
+                                {tr("plugins.FakeProfileThemes.accent", "Accent")}
                             </Text>
                         }
                         onChange={(color: number) => {
@@ -166,13 +167,13 @@ function SettingsAboutComponent() {
                         size={Button.Sizes.XLARGE}
                         style={{ marginBottom: "auto" }}
                     >
-                        Copy 3y3
+                        {tr("plugins.FakeProfileThemes.copy3y3", "Copy 3y3")}
                     </Button>
                 </Flex>
                 <Divider
                     className={classes(Margins.top8, Margins.bottom8)}
                 />
-                <Forms.FormTitle tag="h3">Preview</Forms.FormTitle>
+                <Forms.FormTitle tag="h3">{tr("plugins.FakeProfileThemes.preview", "Preview")}</Forms.FormTitle>
                 <div className="vc-fpt-preview">
                     <ProfileModal
                         user={UserStore.getCurrentUser()}
@@ -229,6 +230,7 @@ export default definePlugin({
         return user;
     },
     addCopy3y3Button: ErrorBoundary.wrap(function ({ primary, accent }: Colors) {
+    useLocale();
         return <Button
             onClick={() => {
                 const colorString = encode(primary, accent);
@@ -237,7 +239,7 @@ export default definePlugin({
             color={Button.Colors.PRIMARY}
             size={Button.Sizes.XLARGE}
             className={Margins.left16}
-        >Copy 3y3
+        >{tr("plugins.FakeProfileThemes.copy3y3", "Copy 3y3")}
         </Button >;
     }, { noop: true }),
 });

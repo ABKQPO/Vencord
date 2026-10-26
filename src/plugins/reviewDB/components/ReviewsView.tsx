@@ -21,6 +21,7 @@ import { Review, ReviewType } from "@plugins/reviewDB/entities";
 import { addReview, getReviews, REVIEWS_PER_PAGE, UserReviewsData } from "@plugins/reviewDB/reviewDbApi";
 import { settings } from "@plugins/reviewDB/settings";
 import { cl, showToast } from "@plugins/reviewDB/utils";
+import { tr, useLocale } from "@utils/localization";
 import { useAwaiter, useForceUpdater } from "@utils/react";
 import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { Forms, React, RelationshipStore, useRef, UserStore } from "@webpack/common";
@@ -59,6 +60,7 @@ export default function ReviewsView({
     hideOwnReview = false,
     type,
 }: Props) {
+    useLocale();
     const [signal, refetch] = useForceUpdater(true);
 
     const [reviewData] = useAwaiter(() => getReviews(discordId, { offset: (page - 1) * REVIEWS_PER_PAGE, limit: REVIEWS_PER_PAGE, fetchVotes: true }), {
@@ -100,6 +102,7 @@ export default function ReviewsView({
 }
 
 function ReviewList({ refetch, reviews, hideOwnReview, profileId, type }: { refetch(): void; reviews: Review[]; hideOwnReview: boolean; profileId: string; type: ReviewType; }) {
+    useLocale();
     const myId = UserStore.getCurrentUser().id;
 
     return (
@@ -116,7 +119,7 @@ function ReviewList({ refetch, reviews, hideOwnReview, profileId, type }: { refe
 
             {reviews?.length === 0 && (
                 <Forms.FormText className={cl("placeholder")}>
-                    Looks like nobody reviewed this {type === ReviewType.User ? "user" : "server"} yet. You could be the first!
+                    {type === ReviewType.User ? tr("plugins.ReviewDB.noUserReviews", "Looks like nobody reviewed this user yet. You could be the first!") : tr("plugins.ReviewDB.noServerReviews", "Looks like nobody reviewed this server yet. You could be the first!")}
                 </Forms.FormText>
             )}
         </div>
@@ -127,6 +130,7 @@ function ReviewList({ refetch, reviews, hideOwnReview, profileId, type }: { refe
 export function ReviewsInputComponent(
     { discordId, isAuthor, refetch, name, modalKey }: { discordId: string, name: string; isAuthor: boolean; refetch(): void; modalKey?: string; }
 ) {
+    useLocale();
     const { token } = Auth;
     const editorRef = useRef<any>(null);
     const inputType = ChatInputTypes.USER_PROFILE_REPLY;
@@ -138,7 +142,7 @@ export function ReviewsInputComponent(
         <>
             <div onClick={() => {
                 if (!token) {
-                    showToast({ text: "Opening authorization window..." });
+                    showToast({ text: tr("plugins.ReviewDB.openingAuthorizationWindow", "Opening authorization window...") });
                     authorize();
                 }
             }}>
@@ -147,10 +151,10 @@ export function ReviewsInputComponent(
                     channel={channel}
                     placeholder={
                         !token
-                            ? "You need to authorize to review users!"
+                            ? tr("plugins.ReviewDB.youNeedToAuthorizeToReviewUsers", "You need to authorize to review users!")
                             : isAuthor
-                                ? `Update review for @${name}`
-                                : `Review @${name}`
+                                ? tr("plugins.ReviewDB.updateReview", "Update review for @{name}", { name: name })
+                                : tr("plugins.ReviewDB.writeReview", "Review @{name}", { name: name })
                     }
                     type={inputType}
                     disableThemedBackground={true}

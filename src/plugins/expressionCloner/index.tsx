@@ -24,6 +24,7 @@ import { Flex } from "@components/Flex";
 import { PlusIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
 import { getGuildAcronym, hasGuildFeature } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
 import { Guild, GuildSticker, Message } from "@vencord/discord-types";
@@ -196,15 +197,15 @@ async function doClone(guildId: string, data: Sticker | Emoji) {
         else
             await cloneEmoji(guildId, data);
 
-        showToast({ text: `Successfully cloned ${data.name} to ${GuildStore.getGuild(guildId)?.name ?? "your server"}!`, variant: "success" });
+        showToast({ text: tr("plugins.ExpressionCloner.successfullyClonedNameToServer", "Successfully cloned {name} to {server}!", { name: data.name, server: GuildStore.getGuild(guildId)?.name ?? tr("plugins.ExpressionCloner.yourServer", "your server") }), variant: "success" });
     } catch (e: any) {
-        let message = "Something went wrong (check console!)";
+        let message = tr("plugins.ExpressionCloner.somethingWentWrongCheckConsole", "Something went wrong (check console!)");
         try {
             message = JSON.parse(e.text).message;
         } catch { }
 
         new Logger("ExpressionCloner").error("Failed to clone", data.name, "to", guildId, e);
-        showToast({ text: "Failed to clone: " + message, variant: "critical" });
+        showToast({ text: tr("plugins.ExpressionCloner.cloneFailed", "Failed to clone: {message}", { message }), variant: "critical" });
     }
 }
 
@@ -217,6 +218,7 @@ const getFontSize = (s: string) => {
 const nameValidator = /^\w+$/i;
 
 function CloneModal({ data }: { data: Sticker | Emoji; }) {
+    useLocale();
     const [isCloning, setIsCloning] = React.useState(false);
     const [name, setName] = React.useState(data.name);
 
@@ -226,7 +228,7 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
 
     return (
         <>
-            <Forms.FormTitle>Custom Name</Forms.FormTitle>
+            <Forms.FormTitle>{tr("plugins.ExpressionCloner.customName", "Custom Name")}</Forms.FormTitle>
             <CheckedTextInput
                 initialValue={name}
                 onChange={v => {
@@ -236,7 +238,7 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
                 validate={v =>
                     (data.t === "Emoji" && v.length > 2 && v.length < 32 && nameValidator.test(v))
                     || (data.t === "Sticker" && v.length > 2 && v.length < 30)
-                    || "Name must be between 2 and 32 characters and only contain alphanumeric characters"
+                    || tr("plugins.ExpressionCloner.nameMustBeBetween2And32CharactersAndOnlyContainAlphanumericCharacters", "Name must be between 2 and 32 characters and only contain alphanumeric characters")
                 }
             />
             <div style={{
@@ -254,7 +256,7 @@ function CloneModal({ data }: { data: Sticker | Emoji; }) {
                                 onMouseLeave={onMouseLeave}
                                 onMouseEnter={onMouseEnter}
                                 role="button"
-                                aria-label={"Clone to " + g.name}
+                                aria-label={tr("plugins.ExpressionCloner.cloneTo", "Clone to {name}", { name: g.name })}
                                 aria-disabled={isCloning}
                                 style={{
                                     borderRadius: "50%",
@@ -319,7 +321,7 @@ function buildMenuItem(type: "Emoji" | "Sticker", fetchData: () => Promisable<Om
         <Menu.MenuItem
             id="emote-cloner"
             key="emote-cloner"
-            label={`Clone ${type}`}
+            label={tr("plugins.ExpressionCloner.cloneType", "Clone {type}", { type: type === "Emoji" ? tr("plugins.ExpressionCloner.emoji", "Emoji") : tr("plugins.ExpressionCloner.sticker", "Sticker") })}
             leadingAccessory={{ type: "icon", icon: PlusIcon }}
             action={() =>
                 openModalLazy(async () => {
@@ -340,7 +342,7 @@ function buildMenuItem(type: "Emoji" | "Sticker", fetchData: () => Promisable<Om
                                         height={24}
                                         width={24}
                                     />
-                                    <BaseText tag="h3" size="md" weight="medium">Clone {data.name}</BaseText>
+                                    <BaseText tag="h3" size="md" weight="medium">{tr("plugins.ExpressionCloner.clone", "Clone")} {data.name}</BaseText>
                                 </Flex>
                             }
                         >

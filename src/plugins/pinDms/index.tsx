@@ -9,6 +9,7 @@ import "./styles.css";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { Channel } from "@vencord/discord-types";
@@ -258,6 +259,7 @@ export default definePlugin({
     },
 
     renderCategory: ErrorBoundary.wrap(({ section }: { section: number; }) => {
+        useLocale();
         const category = getCategoryByIndex(section - 1);
         if (!category) return null;
 
@@ -270,11 +272,11 @@ export default definePlugin({
                             navId="vc-pindms-header-menu"
                             onClose={() => FluxDispatcher.dispatch({ type: "CONTEXT_MENU_CLOSE" })}
                             color="danger"
-                            aria-label="Pin DMs Category Menu"
+                            aria-label={tr("plugins.PinDMs.pinDMsCategoryMenu", "Pin DMs Category Menu")}
                         >
                             <Menu.MenuItem
                                 id="vc-pindms-edit-category"
-                                label="Edit Category"
+                                label={tr("plugins.PinDMs.editCategory", "Edit Category")}
                                 action={() => openCategoryModal(category.id, null)}
                             />
 
@@ -284,14 +286,14 @@ export default definePlugin({
                                         {
                                             canMoveCategoryInDirection(category.id, -1) && <Menu.MenuItem
                                                 id="vc-pindms-move-category-up"
-                                                label="Move Up"
+                                                label={tr("plugins.PinDMs.moveUp", "Move Up")}
                                                 action={() => moveCategory(category.id, -1)}
                                             />
                                         }
                                         {
                                             canMoveCategoryInDirection(category.id, 1) && <Menu.MenuItem
                                                 id="vc-pindms-move-category-down"
-                                                label="Move Down"
+                                                label={tr("plugins.PinDMs.moveDown", "Move Down")}
                                                 action={() => moveCategory(category.id, 1)}
                                             />
                                         }
@@ -304,7 +306,7 @@ export default definePlugin({
                             <Menu.MenuItem
                                 id="vc-pindms-delete-category"
                                 color="danger"
-                                label="Delete Category"
+                                label={tr("plugins.PinDMs.deleteCategory", "Delete Category")}
                                 action={() => removeCategory(category.id)}
                             />
 
@@ -318,7 +320,7 @@ export default definePlugin({
                     style={{ color: `#${category.color.toString(16).padStart(6, "0")}` }}
                 >
                     <span className={headerClasses.headerText}>
-                        {category?.name ?? "uh oh"}
+                        {category?.name ?? tr("plugins.PinDMs.uhOh", "uh oh")}
                     </span>
                     <svg className="vc-pindms-collapse-icon" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M9.3 5.3a1 1 0 0 0 0 1.4l5.29 5.3-5.3 5.3a1 1 0 1 0 1.42 1.4l6-6a1 1 0 0 0 0-1.4l-6-6a1 1 0 0 0-1.42 0Z"></path>
@@ -330,6 +332,7 @@ export default definePlugin({
 
     renderChannel(sectionIndex: number, index: number, ChannelComponent: React.ComponentType<ChannelComponentProps>) {
         return ErrorBoundary.wrap(() => {
+        useLocale();
             const { channel, category } = this.getChannel(sectionIndex, index, this.instance.props.channels);
 
             if (!channel || !category) return null;

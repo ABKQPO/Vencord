@@ -20,6 +20,7 @@ import { DataStore } from "@api/index";
 import { showNotification } from "@api/Notifications";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { tr } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { maybePromptToUpdate } from "@utils/updater";
@@ -99,8 +100,8 @@ export default definePlugin({
                     try {
                         showNotification({
                             color: "#eed202",
-                            title: "Discord has crashed!",
-                            body: "Awn :( Discord has crashed two times rapidly, not attempting to recover.",
+                            title: tr("plugins.CrashHandler.discordHasCrashed", "Discord has crashed!"),
+                            body: tr("plugins.CrashHandler.awnDiscordHasCrashedTwoTimesRapidlyNotAttemptingToRecover", "Awn :( Discord has crashed two times rapidly, not attempting to recover."),
                             noPersist: true
                         });
                     } catch { }
@@ -116,7 +117,7 @@ export default definePlugin({
             try {
                 if (!hasCrashedOnce) {
                     hasCrashedOnce = true;
-                    maybePromptToUpdate("Uh oh, Discord has just crashed... but good news, there is a Vencord update available that might fix this issue! Would you like to update now?", true);
+                    maybePromptToUpdate(tr("plugins.CrashHandler.uhOhDiscordHasJustCrashedButGoodNewsThereIsAVencordUpdateAvailableThatMightFixThisIssueWouldYou", "Uh oh, Discord has just crashed... but good news, there is a Vencord update available that might fix this issue! Would you like to update now?"), true);
                 }
             } catch { }
 
@@ -134,8 +135,8 @@ export default definePlugin({
         try {
             showNotification({
                 color: "#eed202",
-                title: "Discord has crashed!",
-                body: "Attempting to recover...",
+                title: tr("plugins.CrashHandler.discordHasCrashed", "Discord has crashed!"),
+                body: tr("plugins.CrashHandler.attemptingToRecover", "Attempting to recover..."),
                 noPersist: true
             });
         } catch { }

@@ -18,38 +18,41 @@
 
 import { Divider } from "@components/Divider";
 import { FormSwitch } from "@components/FormSwitch";
+import { tr, useLocale } from "@utils/localization";
+import { getLocalizedSetting } from "@utils/localization/plugins";
 import { Margins } from "@utils/margins";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Forms, Modal,openModal, SearchableSelect, useMemo } from "@webpack/common";
 
 import { settings } from "./settings";
-import { getLanguages } from "./utils";
+import { getLanguageDisplayName, getLanguages } from "./utils";
 
 const LanguageSettingKeys = ["receivedInput", "receivedOutput", "sentInput", "sentOutput"] as const;
 
 function LanguageSelect({ settingsKey, includeAuto }: { settingsKey: typeof LanguageSettingKeys[number]; includeAuto: boolean; }) {
+    const locale = useLocale();
     const currentValue = settings.use([settingsKey])[settingsKey];
 
     const options = useMemo(
         () => {
-            const options = Object.entries(getLanguages()).map(([value, label]) => ({ value, label }));
+            const options = Object.entries(getLanguages()).map(([value, label]) => ({ value, label: getLanguageDisplayName(value, label) }));
             if (!includeAuto)
                 options.shift();
 
             return options;
-        }, []
+        }, [locale]
     );
 
     return (
         <section className={Margins.bottom16}>
             <Forms.FormTitle tag="h3">
-                {settings.def[settingsKey].description}
+                {getLocalizedSetting({ name: "Translate" }, settingsKey, settings.def[settingsKey]).description}
             </Forms.FormTitle>
 
             <SearchableSelect
                 options={options}
                 value={options.find(o => o.value === currentValue)?.value}
-                placeholder="Select a language"
+                placeholder={tr("plugins.Translate.selectALanguage", "Select a language")}
                 maxVisibleItems={5}
                 closeOnSelect={true}
                 onChange={v => settings.store[settingsKey] = v}
@@ -59,12 +62,13 @@ function LanguageSelect({ settingsKey, includeAuto }: { settingsKey: typeof Lang
 }
 
 function AutoTranslateToggle() {
+    useLocale();
     const value = settings.use(["autoTranslate"]).autoTranslate;
 
     return (
         <FormSwitch
-            title="Auto Translate"
-            description={settings.def.autoTranslate.description}
+            title={tr("plugins.Translate.autoTranslate", "Auto Translate")}
+            description={getLocalizedSetting({ name: "Translate" }, "autoTranslate", settings.def.autoTranslate).description}
             value={value}
             onChange={v => settings.store.autoTranslate = v}
             hideBorder
@@ -74,10 +78,11 @@ function AutoTranslateToggle() {
 
 
 function TranslateModal({ rootProps }: { rootProps: RenderModalProps; }) {
+    useLocale();
     return (
         <Modal
             {...rootProps}
-            title="Translate"
+            title={tr("plugins.Translate.translate", "Translate")}
         >
             {LanguageSettingKeys.map(s => (
                 <LanguageSelect

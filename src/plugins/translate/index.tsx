@@ -20,6 +20,7 @@ import "./styles.css";
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { Devs } from "@utils/constants";
+import { tr } from "@utils/localization";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { Menu } from "@webpack/common";
@@ -39,7 +40,7 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }: { m
     group.splice(group.findIndex(c => c?.props?.id === "copy-text") + 1, 0, (
         <Menu.MenuItem
             id="vc-trans"
-            label="Translate"
+            label={tr("plugins.Translate.translate", "Translate")}
             icon={TranslateIcon}
             leadingAccessory={{ type: "icon", icon: TranslateIcon }}
             action={async () => {
@@ -88,7 +89,7 @@ export default definePlugin({
             if (!content) return null;
 
             return {
-                label: "Translate",
+                label: tr("plugins.Translate.translate", "Translate"),
                 icon: TranslateIcon,
                 onClick: async () => {
                     const trans = await translate("received", content);

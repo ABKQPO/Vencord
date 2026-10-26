@@ -8,6 +8,8 @@ import { openNotificationLogModal } from "@api/Notifications/notificationLog";
 import { isPluginEnabled, isSettingDisabled, isSettingHidden, plugins } from "@api/PluginManager";
 import { Settings, useSettings } from "@api/Settings";
 import { openPluginModal, openSettingsTabModal, PluginsTab, ThemesTab } from "@components/settings";
+import { getLocale, tr, useLocale } from "@utils/localization";
+import { getLocalizedSetting, getPluginDisplayName } from "@utils/localization/plugins";
 import { useAwaiter } from "@utils/react";
 import { wordsFromCamel, wordsToTitle } from "@utils/text";
 import { OptionType, Plugin } from "@utils/types";
@@ -27,7 +29,7 @@ function buildPluginMenu() {
     return (
         <Menu.MenuItem
             id="plugins"
-            label="Plugins"
+            label={tr("plugins.VencordToolbox.plugins", "Plugins")}
             action={() => openSettingsTabModal(PluginsTab)}
         >
             {pluginEntries}
@@ -81,7 +83,8 @@ export function buildPluginMenuEntries(includeEmpty = false) {
 
                     let hasAnyOption = false;
 
-                    if (p.settings) for (const [key, option] of Object.entries(p.settings.def)) {
+                    if (p.settings) for (const [key, originalOption] of Object.entries(p.settings.def)) {
+                        const option = getLocalizedSetting(p, key, originalOption);
                         if (isSettingHidden(p.settings, option)) continue;
 
                         hasAnyOption = true;
@@ -91,7 +94,7 @@ export function buildPluginMenuEntries(includeEmpty = false) {
                         const baseProps = {
                             id: `${p.name}-${key}`,
                             key: key,
-                            label: wordsToTitle(wordsFromCamel(key)),
+                            label: ("displayName" in option ? option.displayName : undefined) ?? wordsToTitle(wordsFromCamel(key)),
                             disabled: isSettingDisabled(p.settings, option)
                         };
 
@@ -103,7 +106,7 @@ export function buildPluginMenuEntries(includeEmpty = false) {
                                         checked={s[key]}
                                         action={() => {
                                             s[key] = !s[key];
-                                            if (option.restartNeeded) showToast({ text: "Restart to apply the change" });
+                                            if (option.restartNeeded) showToast({ text: tr("plugins.VencordToolbox.restartToApplyTheChange", "Restart to apply the change") });
                                         }}
                                     />
                                 );
@@ -120,7 +123,7 @@ export function buildPluginMenuEntries(includeEmpty = false) {
                                                 checked={s[key] === opt.value}
                                                 action={() => {
                                                     s[key] = opt.value;
-                                                    if (option.restartNeeded) showToast({ text: "Restart to apply the change" });
+                                                    if (option.restartNeeded) showToast({ text: tr("plugins.VencordToolbox.restartToApplyTheChange", "Restart to apply the change") });
                                                 }}
                                             />
                                         ))}
@@ -171,7 +174,7 @@ export function buildPluginMenuEntries(includeEmpty = false) {
 
                                     <Menu.MenuItem
                                         id={`${p.name}-open`}
-                                        label={"Open Settings"}
+                                        label={tr("plugins.VencordToolbox.openSettings", "Open Settings")}
                                         action={() => openPluginModal(p)}
                                     />
                                 </>
@@ -188,7 +191,7 @@ export function buildThemeMenu() {
     return (
         <Menu.MenuItem
             id="themes"
-            label="Themes"
+            label={tr("plugins.VencordToolbox.themes", "Themes")}
             action={() => openSettingsTabModal(ThemesTab)}
         >
             {buildThemeMenuEntries()}
@@ -205,19 +208,19 @@ export function buildThemeMenuEntries() {
             <Menu.MenuCheckboxItem
                 id="toggle-quickcss"
                 checked={useQuickCss}
-                label={"Enable QuickCSS"}
+                label={tr("plugins.VencordToolbox.enableQuickCSS", "Enable QuickCSS")}
                 action={() => {
                     Settings.useQuickCss = !useQuickCss;
                 }}
             />
             <Menu.MenuItem
                 id="edit-quickcss"
-                label="Edit QuickCSS"
-                action={() => VencordNative.quickCss.openEditor()}
+                label={tr("plugins.VencordToolbox.editQuickCSS", "Edit QuickCSS")}
+                action={() => VencordNative.quickCss.openEditor(getLocale())}
             />
             <Menu.MenuItem
                 id="manage-themes"
-                label="Manage Themes"
+                label={tr("plugins.VencordToolbox.manageThemes", "Manage Themes")}
                 action={() => openSettingsTabModal(ThemesTab)}
             />
             {!!themes?.length && (
@@ -243,6 +246,14 @@ export function buildThemeMenuEntries() {
     );
 }
 
+function getToolboxActionLabel(pluginName: string, text: string) {
+    switch (pluginName + ":" + text) {
+        case "BadgeAPI:Refetch Badges": return tr("plugins.BadgeAPI.refetchBadges", "Refetch Badges");
+        case "DevCompanion:Reconnect": return tr("plugins.DevCompanion.reconnectToolbox", "Reconnect");
+        default: return text;
+    }
+}
+
 function buildCustomPluginEntries() {
     const pluginEntries = [] as { plugin: Plugin, node: ReactNode; }[];
 
@@ -257,7 +268,7 @@ function buildCustomPluginEntries() {
                         <Menu.MenuItem
                             id={key}
                             key={key}
-                            label={text}
+                            label={getToolboxActionLabel(plugin.name, text)}
                             action={action}
                         />
                     );
@@ -268,7 +279,7 @@ function buildCustomPluginEntries() {
             pluginEntries.push({
                 plugin,
                 node:
-                    <Menu.MenuGroup label={plugin.name} key={`${plugin.name}-group`}>
+                    <Menu.MenuGroup label={getPluginDisplayName(plugin)} key={`${plugin.name}-group`}>
                         {entries}
                     </Menu.MenuGroup>
             });
@@ -286,7 +297,7 @@ function buildCustomPluginEntries() {
         <Menu.MenuItem
             id={`${plugin.name}-menu`}
             key={`${plugin.name}-menu`}
-            label={plugin.name}
+            label={getPluginDisplayName(plugin)}
             action={() => openPluginModal(plugin)}
         >
             {node}
@@ -297,6 +308,7 @@ function buildCustomPluginEntries() {
 }
 
 export function renderPopout(onClose: () => void) {
+    useLocale();
     return (
         <Menu.Menu
             navId="vc-toolbox"
@@ -304,7 +316,7 @@ export function renderPopout(onClose: () => void) {
         >
             <Menu.MenuItem
                 id="notifications"
-                label="Open Notification Log"
+                label={tr("plugins.VencordToolbox.openNotificationLog", "Open Notification Log")}
                 action={openNotificationLogModal}
             />
 

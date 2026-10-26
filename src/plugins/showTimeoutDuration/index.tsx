@@ -11,6 +11,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { Devs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { canonicalizeMatch } from "@utils/patches";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
@@ -86,6 +87,7 @@ export default definePlugin({
     ],
 
     TooltipWrapper: ErrorBoundary.wrap(({ message, children, text }: { message: Message; children: ReactNode; text: ReactNode; }) => {
+        useLocale();
         if (settings.store.displayStyle === DisplayStyle.Tooltip)
             return <TooltipContainer text={renderTimeout(message, false)}>{children}</TooltipContainer>;
 
@@ -93,7 +95,7 @@ export default definePlugin({
             <div className="vc-std-wrapper">
                 <TooltipContainer text={text}>{children}</TooltipContainer>
                 <Text variant="text-md/normal" color="status-danger">
-                    {renderTimeout(message, true)} timeout remaining
+                    {renderTimeout(message, true)} {tr("plugins.ShowTimeoutDuration.timeoutRemaining", "timeout remaining")}
                 </Text>
             </div>
         );

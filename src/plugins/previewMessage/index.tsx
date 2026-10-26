@@ -20,6 +20,7 @@ import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { generateId, sendBotMessage } from "@api/Commands";
 import { EyeIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { IconComponent, StartAt } from "@utils/types";
 import { CloudUpload, MessageAttachment } from "@vencord/discord-types";
 import { DraftStore, DraftType, UploadAttachmentStore, UserStore, useStateFromStores } from "@webpack/common";
@@ -75,6 +76,7 @@ const getAttachments = async (channelId: string) =>
 
 
 const PreviewIcon: IconComponent = ({ height = 20, width = 20, className }) => {
+    useLocale();
     return (
         <EyeIcon
             width={width}
@@ -86,6 +88,7 @@ const PreviewIcon: IconComponent = ({ height = 20, width = 20, className }) => {
 };
 
 const PreviewButton: ChatBarButtonFactory = ({ isAnyChat, isEmpty, type: { attachments }, channel: { id: channelId } }) => {
+    useLocale();
     const draft = useStateFromStores([DraftStore], () => getDraft(channelId));
 
     if (!isAnyChat) return null;
@@ -97,7 +100,7 @@ const PreviewButton: ChatBarButtonFactory = ({ isAnyChat, isEmpty, type: { attac
 
     return (
         <ChatBarButton
-            tooltip="Preview Message"
+            tooltip={tr("plugins.PreviewMessage.previewMessage", "Preview Message")}
             onClick={async () => {
                 const attachments = hasAttachments ? await getAttachments(channelId) : undefined;
                 const message = sendBotMessage(

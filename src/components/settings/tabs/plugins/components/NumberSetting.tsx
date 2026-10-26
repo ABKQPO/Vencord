@@ -17,6 +17,7 @@
 */
 
 import { isSettingDisabled } from "@api/PluginManager";
+import { tr, useLocale } from "@utils/localization";
 import { OptionType, PluginSettingBigIntDef, PluginSettingNumberDef } from "@utils/types";
 import { React, TextInput, useState } from "@webpack/common";
 
@@ -25,18 +26,19 @@ import { resolveError, SettingProps, SettingsSection } from "./Common";
 const MAX_SAFE_NUMBER = BigInt(Number.MAX_SAFE_INTEGER);
 
 export function NumberSetting({ setting, pluginSettings, definedSettings, id, onChange }: SettingProps<PluginSettingNumberDef | PluginSettingBigIntDef>) {
+    useLocale();
     function serialize(value: any) {
         if (setting.type === OptionType.BIGINT) return BigInt(value);
         return Number(value);
     }
 
     const [state, setState] = useState<any>(`${pluginSettings[id] ?? setting.default ?? 0}`);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<boolean | string>(true);
 
     function handleChange(newValue: any) {
         const isValid = setting.isValid?.call(definedSettings, newValue) ?? true;
 
-        setError(resolveError(isValid));
+        setError(isValid);
 
         if (isValid === true) {
             onChange(serialize(newValue));
@@ -50,11 +52,11 @@ export function NumberSetting({ setting, pluginSettings, definedSettings, id, on
     }
 
     return (
-        <SettingsSection name={setting.displayName} id={id} description={setting.description} error={error}>
+        <SettingsSection name={setting.displayName} id={id} description={setting.description} error={resolveError(error)}>
             <TextInput
                 type="number"
                 pattern="-?[0-9]+"
-                placeholder={setting.placeholder ?? "Enter a number"}
+                placeholder={setting.placeholder ?? tr("loader.8bc1221bdfa4", "Enter a number")}
                 value={state}
                 onChange={handleChange}
                 disabled={isSettingDisabled(definedSettings, setting)}

@@ -20,6 +20,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { HeadingTertiary } from "@components/Heading";
 import { cl, getGuildPermissionSpecMap, getSortedRolesForMember, sortUserRoles } from "@plugins/permissionsViewer/utils";
 import { getIntlMessage } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { classes } from "@utils/misc";
 import type { Guild, GuildMember, RoleOrUserPermission } from "@vencord/discord-types";
 import { PermissionOverwriteType } from "@vencord/discord-types/enums";
@@ -47,6 +48,7 @@ interface FakeRoleProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 function FakeRole({ text, color, ...props }: FakeRoleProps) {
+    useLocale();
     return (
         <div {...props} className={classes(RoleClasses.role)}>
             <div className={RoleClasses.roleRemoveButton}>
@@ -73,18 +75,20 @@ interface GrantedByTooltipProps {
 }
 
 function GrantedByTooltip({ roleName, roleColor }: GrantedByTooltipProps) {
+    useLocale();
     return (
         <>
-            <Text variant="text-sm/medium">Granted By</Text>
+            <Text variant="text-sm/medium">{tr("plugins.PermissionsViewer.grantedBy", "Granted By")}</Text>
             <FakeRole text={roleName} color={roleColor} />
         </>
     );
 }
 
 function UserPermissionsComponent({ guild, guildMember, closePopout }: { guild: Guild; guildMember: GuildMember; closePopout: () => void; }) {
+    const locale = useLocale();
     const { permissionsSortOrder } = settings.use(["permissionsSortOrder"]);
 
-    const guildPermissionSpecMap = useMemo(() => getGuildPermissionSpecMap(guild), [guild.id]);
+    const guildPermissionSpecMap = useMemo(() => getGuildPermissionSpecMap(guild), [guild.id, locale]);
 
     const [rolePermissions, userPermissions] = useMemo(() => {
         const userPermissions: UserPermissions = [];
@@ -102,10 +106,10 @@ function UserPermissionsComponent({ guild, guildMember, closePopout }: { guild: 
                 permissions: Object.values(PermissionsBits).reduce((prev, curr) => prev | curr, 0n)
             });
 
-            const OWNER = getIntlMessage("GUILD_OWNER") ?? "Server Owner";
+            const OWNER = getIntlMessage("GUILD_OWNER") ?? tr("plugins.PermissionsViewer.serverOwner", "Server Owner");
             userPermissions.push({
                 permission: OWNER,
-                roleName: "Owner",
+                roleName: tr("plugins.PermissionsViewer.ownerMessage", "Owner"),
                 roleColor: "var(--primary-300)",
                 rolePosition: Infinity
             });
@@ -131,13 +135,13 @@ function UserPermissionsComponent({ guild, guildMember, closePopout }: { guild: 
         userPermissions.sort((a, b) => b.rolePosition - a.rolePosition);
 
         return [rolePermissions, userPermissions];
-    }, [permissionsSortOrder]);
+    }, [permissionsSortOrder, locale]);
 
     return <div>
         <div className={cl("user-header-container")}>
-            <HeadingTertiary>Permissions</HeadingTertiary>
+            <HeadingTertiary>{tr("plugins.PermissionsViewer.permissions", "Permissions")}</HeadingTertiary>
             <div className={cl("user-header-btns")}>
-                <Tooltip text={`Sorting by ${permissionsSortOrder === PermissionsSortOrder.HighestRole ? "Highest Role" : "Lowest Role"}`}>
+                <Tooltip text={tr("plugins.PermissionsViewer.sortingByRole", "Sorting by {order}", { order: permissionsSortOrder === PermissionsSortOrder.HighestRole ? tr("plugins.PermissionsViewer.highestRole", "Highest Role") : tr("plugins.PermissionsViewer.lowestRole", "Lowest Role") })}>
                     {tooltipProps => (
                         <div
                             {...tooltipProps}
@@ -159,7 +163,7 @@ function UserPermissionsComponent({ guild, guildMember, closePopout }: { guild: 
                         </div>
                     )}
                 </Tooltip>
-                <Tooltip text="Role Details">
+                <Tooltip text={tr("plugins.PermissionsViewer.roleDetails", "Role Details")}>
                     {tooltipProps => (
                         <div
                             {...tooltipProps}

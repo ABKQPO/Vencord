@@ -19,6 +19,7 @@
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { getIntlMessage, hasGuildFeature } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin from "@utils/types";
 import { Constants, GuildStore, PermissionStore, RestAPI } from "@webpack/common";
 
@@ -66,13 +67,14 @@ export default definePlugin({
     ],
 
     renderInvitesLabel: ErrorBoundary.wrap(({ guildId, setChecked }) => {
+        useLocale();
         return (
             <div>
                 {getIntlMessage("GUILD_INVITE_DISABLE_ACTION_SHEET_DESCRIPTION")}
                 {showDisableInvites(guildId) && <a role="button" onClick={() => {
                     setChecked(true);
                     disableInvites(guildId);
-                }}> Pause Indefinitely.</a>}
+                }}>  {tr("plugins.PauseInvitesForever.pauseIndefinitely", "Pause Indefinitely.")}</a>}
             </div>
         );
     }, { noop: true })

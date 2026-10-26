@@ -17,6 +17,7 @@
 */
 
 import { classNameFactory } from "@utils/css";
+import { getLocale,tr } from "@utils/localization";
 import { onlyOnce } from "@utils/onlyOnce";
 import { PluginNative } from "@utils/types";
 import { showToast } from "@webpack/common";
@@ -66,6 +67,15 @@ export const getLanguages = () => {
     }
 };
 
+export function getLanguageDisplayName(code: string, fallback: string) {
+    if (!code || code === "auto") return tr("plugins.Translate.detectLanguage", "Detect Language");
+    try {
+        return new Intl.DisplayNames([getLocale()], { type: "language" }).of(code.replaceAll("_", "-")) ?? fallback;
+    } catch {
+        return fallback;
+    }
+}
+
 export async function translate(kind: "received" | "sent", text: string): Promise<TranslationValue> {
     const translate = IS_WEB ? googleTranslate : (() => {
         switch (settings.store.service) {
@@ -87,7 +97,7 @@ export async function translate(kind: "received" | "sent", text: string): Promis
     } catch (e) {
         const userMessage = typeof e === "string"
             ? e
-            : "Something went wrong. If this issue persists, please check the console or ask for help in the support server.";
+            : tr("plugins.Translate.somethingWentWrongIfThisIssuePersistsPleaseCheckTheConsoleOrAskForHelpInTheSupportServer", "Something went wrong. If this issue persists, please check the console or ask for help in the support server.");
 
         showToast({ text: userMessage, variant: "critical" });
 
@@ -131,12 +141,12 @@ function fallbackToGoogle(text: string, sourceLang: string, targetLang: string):
 }
 
 const showDeeplApiQuotaToast = onlyOnce(
-    () => showToast({ text: "Deepl API quota exceeded. Falling back to Google Translate", variant: "critical" })
+    () => showToast({ text: tr("plugins.Translate.deeplAPIQuotaExceededFallingBackToGoogleTranslate", "Deepl API quota exceeded. Falling back to Google Translate"), variant: "critical" })
 );
 
 async function deeplTranslate(text: string, sourceLang: string, targetLang: string): Promise<TranslationValue> {
     if (!settings.store.deeplApiKey) {
-        showToast({ text: "DeepL API key is not set. Resetting to Google", variant: "critical" });
+        showToast({ text: tr("plugins.Translate.deepLAPIKeyIsNotSetResettingToGoogle", "DeepL API key is not set. Resetting to Google"), variant: "critical" });
 
         settings.store.service = "google";
         resetLanguageDefaults();
@@ -159,9 +169,9 @@ async function deeplTranslate(text: string, sourceLang: string, targetLang: stri
         case 200:
             break;
         case -1:
-            throw "Failed to connect to DeepL API: " + data;
+            throw tr("plugins.Translate.failedToConnectToDeepLAPI", "Failed to connect to DeepL API: ") + data;
         case 403:
-            throw "Invalid DeepL API key or version";
+            throw tr("plugins.Translate.invalidDeepLAPIKeyOrVersion", "Invalid DeepL API key or version");
         case 456:
             showDeeplApiQuotaToast();
             return fallbackToGoogle(text, sourceLang, targetLang);
@@ -187,7 +197,7 @@ async function kagiTranslate(text: string, sourceLang: string, targetLang: strin
         case 200:
             break;
         case 401:
-            throw "Invalid or expired Kagi session token";
+            throw tr("plugins.Translate.invalidOrExpiredKagiSessionToken", "Invalid or expired Kagi session token");
         default:
             throw new Error(`Failed to translate "${text}" (${sourceLang} -> ${targetLang})\n${status} ${data}`);
     }

@@ -11,6 +11,7 @@ import { useCurrentUserDecorationsStore } from "@plugins/decor/lib/stores/Curren
 import { cl, DecorationModalClasses, requireAvatarDecorationModal, requireCreateStickerModal } from "@plugins/decor/ui";
 import { AvatarDecorationModalPreview } from "@plugins/decor/ui/components";
 import { openInviteModal } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { Margins } from "@utils/margins";
 import { RenderModalProps } from "@vencord/discord-types";
 import { filters, findComponentByCodeLazy, mapMangledModuleLazy } from "@webpack";
@@ -42,6 +43,7 @@ function useObjectURL(object: Blob | MediaSource | null) {
 }
 
 function CreateDecorationModal(props: RenderModalProps) {
+    useLocale();
     const [name, setName] = useState("");
     const [file, setFile] = useState<File | null>(null);
     const [submitting, setSubmitting] = useState(false);
@@ -60,15 +62,15 @@ function CreateDecorationModal(props: RenderModalProps) {
     return <Modal
         {...props}
         size="lg"
-        title="Create Decoration"
+        title={tr("plugins.Decor.createDecoration", "Create Decoration")}
         actions={[
             {
-                text: "Cancel",
+                text: tr("plugins.Decor.cancel", "Cancel"),
                 variant: "secondary",
                 onClick: props.onClose
             },
             {
-                text: "Submit for Review",
+                text: tr("plugins.Decor.submitForReview", "Submit for Review"),
                 variant: "primary",
                 onClick: () => {
                     setSubmitting(true);
@@ -82,37 +84,37 @@ function CreateDecorationModal(props: RenderModalProps) {
         <div className={cl("create-decoration-modal-content", DecorationModalClasses.modal)}>
             <ErrorBoundary>
                 <HelpMessage messageType={HelpMessageTypes.WARNING}>
-                    Make sure your decoration does not violate <Link
+                    {tr("plugins.Decor.makeSureYourDecorationDoesNotViolate", "Make sure your decoration does not violate")} <Link
                         href="https://github.com/decor-discord/.github/blob/main/GUIDELINES.md"
                     >
-                        the guidelines
-                    </Link> before submitting it.
+                        {tr("plugins.Decor.theGuidelines", "the guidelines")}
+                    </Link> {tr("plugins.Decor.beforeSubmittingIt", "before submitting it.")}
                 </HelpMessage>
                 <div className={cl("create-decoration-modal-form-preview-container")}>
                     <div className={cl("create-decoration-modal-form")}>
                         {error !== null && <Text color="text-danger" variant="text-xs/normal">{error.message}</Text>}
                         <section>
-                            <Forms.FormTitle tag="h5">File</Forms.FormTitle>
+                            <Forms.FormTitle tag="h5">{tr("plugins.Decor.file", "File")}</Forms.FormTitle>
                             <FileUpload
                                 filename={file?.name}
-                                placeholder="Choose a file"
-                                buttonText="Browse"
-                                filters={[{ name: "Decoration file", extensions: ["png", "apng"] }]}
+                                placeholder={tr("plugins.Decor.chooseAFile", "Choose a file")}
+                                buttonText={tr("plugins.Decor.browse", "Browse")}
+                                filters={[{ name: tr("plugins.Decor.decorationFile", "Decoration file"), extensions: ["png", "apng"] }]}
                                 onFileSelect={setFile}
                             />
                             <Forms.FormText className={Margins.top8}>
-                                File should be APNG or PNG.
+                                {tr("plugins.Decor.fileShouldBeAPNGOrPNG", "File should be APNG or PNG.")}
                             </Forms.FormText>
                         </section>
                         <section>
-                            <Forms.FormTitle tag="h5">Name</Forms.FormTitle>
+                            <Forms.FormTitle tag="h5">{tr("plugins.Decor.name", "Name")}</Forms.FormTitle>
                             <TextInput
-                                placeholder="Companion Cube"
+                                placeholder={tr("plugins.Decor.companionCube", "Companion Cube")}
                                 value={name}
                                 onChange={setName}
                             />
                             <Forms.FormText className={Margins.top8}>
-                                This name will be used when referring to this decoration.
+                                {tr("plugins.Decor.thisNameWillBeUsedWhenReferringToThisDecoration", "This name will be used when referring to this decoration.")}
                             </Forms.FormText>
                         </section>
                     </div>
@@ -124,7 +126,7 @@ function CreateDecorationModal(props: RenderModalProps) {
                     </div>
                 </div>
                 <HelpMessage messageType={HelpMessageTypes.INFO} className={Margins.bottom8}>
-                    To receive updates on your decoration's review, join <Link
+                    {tr("plugins.Decor.toReceiveUpdatesOnYourDecorationSReviewJoin", "To receive updates on your decoration's review, join")} <Link
                         href={`https://discord.gg/${INVITE_KEY}`}
                         onClick={async e => {
                             e.preventDefault();
@@ -141,8 +143,8 @@ function CreateDecorationModal(props: RenderModalProps) {
                             }
                         }}
                     >
-                        Decor's Discord server
-                    </Link> and allow direct messages.
+                        {tr("plugins.Decor.decorSDiscordServer", "Decor's Discord server")}
+                    </Link> {tr("plugins.Decor.andAllowDirectMessages", "and allow direct messages.")}
                 </HelpMessage>
             </ErrorBoundary>
         </div>

@@ -18,6 +18,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
+import { tr } from "@utils/localization";
 import { parseUrl } from "@utils/misc";
 import { wordsFromPascal, wordsToTitle } from "@utils/text";
 import { OptionType } from "@utils/types";
@@ -114,9 +115,9 @@ export const settings = definePluginSettings({
         isValid(value) {
             if (!value) return true;
             const url = parseUrl(value);
-            if (!url) return "Must be a valid URL";
+            if (!url) return tr("plugins.ShikiCodeblocks.validUrl", "Must be a valid URL");
 
-            if (!url.pathname.endsWith(".json")) return "Must be a json file";
+            if (!url.pathname.endsWith(".json")) return tr("plugins.ShikiCodeblocks.jsonFile", "Must be a json file");
 
             return true;
         },

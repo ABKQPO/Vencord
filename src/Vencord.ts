@@ -20,6 +20,8 @@
 import "~plugins";
 import "./fixWeirdAppRegionBug.css";
 
+import { getLocale, subscribeLocale, tr } from "@utils/localization";
+
 import nativeTitleBarStyles from "./nativeTitleBar.css?managed";
 
 export * as Api from "./api";
@@ -59,9 +61,8 @@ async function syncSettings() {
     ) {
         // show a notification letting them know and tell them how to fix it
         showNotification({
-            title: "Cloud Integrations",
-            body: "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will " +
-                "need to re-authenticate to continue using them. Click here to go to the settings page to do so!",
+            title: tr("loader.runtime.1cfae478bac5", "Cloud Integrations"),
+            body: tr("cloud.reauthorize", "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will need to re-authenticate to continue using them. Click here to go to the settings page to do so!"),
             color: "var(--yellow-360)",
             onClick: () => SettingsRouter.openUserSettings("vencord_cloud_panel"),
             noPersist: true
@@ -82,8 +83,8 @@ async function syncSettings() {
             // there was an error to notify the user, but besides that we only want to show one notification instead of all
             // of the possible ones it has (such as when your settings are newer).
             showNotification({
-                title: "Cloud Settings",
-                body: "Your settings have been updated! Click here to restart to fully apply changes!",
+                title: tr("loader.runtime.0b35e178d912", "Cloud Settings"),
+                body: tr("loader.runtime.d428ba62bec5", "Your settings have been updated! Click here to restart to fully apply changes!"),
                 color: "var(--green-360)",
                 onClick: relaunch
             });
@@ -126,8 +127,8 @@ async function runUpdateCheck() {
             await update();
             if (Settings.autoUpdateNotification) {
                 notify({
-                    title: "Vencord has been updated!",
-                    body: "Click here to restart",
+                    title: tr("loader.runtime.bb542cd64d0c", "Vencord has been updated!"),
+                    body: tr("loader.runtime.54667723fdab", "Click here to restart"),
                     onClick: relaunch
                 });
             }
@@ -135,8 +136,8 @@ async function runUpdateCheck() {
         }
 
         notify({
-            title: "A Vencord update is available!",
-            body: "Click here to view the update",
+            title: tr("loader.runtime.bf7590831c8d", "A Vencord update is available!"),
+            body: tr("loader.runtime.86e5034db3d1", "Click here to view the update"),
             onClick: () => openSettingsTabModal(UpdaterTab!)
         });
     } catch (err) {
@@ -146,6 +147,7 @@ async function runUpdateCheck() {
 
 async function init() {
     await onceReady;
+    subscribeLocale(() => VencordNative.quickCss.setEditorLocale(getLocale()));
     startAllPlugins(StartAt.WebpackReady);
 
     syncSettings();

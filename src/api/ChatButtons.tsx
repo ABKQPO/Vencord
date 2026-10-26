@@ -7,6 +7,7 @@
 import "./ChatButton.css";
 
 import ErrorBoundary from "@components/ErrorBoundary";
+import { tr } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
 import { IconComponent } from "@utils/types";
@@ -172,7 +173,7 @@ addContextMenuPatch("textarea-context", (children, args) => {
     if (idx === -1) return;
 
     group.splice(idx, 0,
-        <Menu.MenuItem id="vc-chat-buttons" key="vencord-chat-buttons" label="Vencord Buttons">
+        <Menu.MenuItem id="vc-chat-buttons" key="vencord-chat-buttons" label={tr("loader.78ebb1e57341", "Vencord Buttons")}>
             {buttons.map(([id]) => (
                 <Menu.MenuCheckboxItem
                     label={id}

@@ -19,6 +19,7 @@
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 import { CloudUpload } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
@@ -96,6 +97,7 @@ export default definePlugin({
     ],
 
     AnonymiseUploadButton: ErrorBoundary.wrap(({ upload }: { upload: CloudUpload; }) => {
+    useLocale();
         const [anonymise, setAnonymise] = useState(upload[ANONYMISE_UPLOAD_SYMBOL] ?? settings.store.anonymiseByDefault);
 
         function onToggleAnonymise() {
@@ -105,7 +107,7 @@ export default definePlugin({
 
         return (
             <ActionBarIcon
-                tooltip={anonymise ? "Using anonymous file name" : "Using normal file name"}
+                tooltip={anonymise ? tr("plugins.AnonymiseFileNames.usingAnonymousFileName", "Using anonymous file name") : tr("plugins.AnonymiseFileNames.usingNormalFileName", "Using normal file name")}
                 onClick={onToggleAnonymise}
             >
                 {anonymise

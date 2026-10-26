@@ -20,6 +20,7 @@ import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { addMessagePreSendListener, MessageSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { IconComponent, OptionType } from "@utils/types";
 import { React, useEffect, useState } from "@webpack/common";
 
@@ -42,6 +43,7 @@ const settings = definePluginSettings({
 });
 
 function SilentMessageDisabledIcon() {
+    useLocale();
     return (
         <SilentMessageIcon>
             <mask id="vc-silent-msg-mask">
@@ -54,6 +56,7 @@ function SilentMessageDisabledIcon() {
 }
 
 const SilentMessageIcon: IconComponent = ({ height = 20, width = 20, className, children }) => {
+    useLocale();
     return (
         <svg
             width={width}
@@ -69,6 +72,7 @@ const SilentMessageIcon: IconComponent = ({ height = 20, width = 20, className, 
 };
 
 const SilentMessageToggle: ChatBarButtonFactory = ({ isMainChat }) => {
+    useLocale();
     const [enabled, setEnabled] = useState(lastState);
 
     function setEnabledValue(value: boolean) {
@@ -92,7 +96,7 @@ const SilentMessageToggle: ChatBarButtonFactory = ({ isMainChat }) => {
 
     return (
         <ChatBarButton
-            tooltip={enabled ? "Disable Silent Message" : "Enable Silent Message"}
+            tooltip={enabled ? tr("plugins.SilentMessageToggle.disableSilentMessage", "Disable Silent Message") : tr("plugins.SilentMessageToggle.enableSilentMessage", "Enable Silent Message")}
             onClick={() => setEnabledValue(!enabled)}
         >
             {enabled ? <SilentMessageIcon /> : <SilentMessageDisabledIcon />}

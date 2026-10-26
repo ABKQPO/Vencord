@@ -7,6 +7,7 @@
 import { DEFAULT_COLOR, SWATCHES } from "@plugins/pinDms/constants";
 import { categoryLen, createCategory, getCategory } from "@plugins/pinDms/data";
 import { classNameFactory } from "@utils/css";
+import { tr, useLocale } from "@utils/localization";
 import { RenderModalProps } from "@vencord/discord-types";
 import { extractAndLoadChunksLazy, findComponentByCodeLazy } from "@webpack";
 import { ColorPicker, Forms, Modal, openModalLazy, TextInput, useMemo, useState } from "@webpack/common";
@@ -53,6 +54,7 @@ function useCategory(categoryId: string | null, initalChannelId: string | null) 
 }
 
 export function NewCategoryModal({ categoryId, modalProps, initialChannelId }: Props) {
+    useLocale();
     const category = useCategory(categoryId, initialChannelId);
     if (!category) return null;
 
@@ -73,9 +75,9 @@ export function NewCategoryModal({ categoryId, modalProps, initialChannelId }: P
     return (
         <Modal
             {...modalProps}
-            title={`${categoryId ? "Edit" : "New"} Category`}
+            title={categoryId ? tr("plugins.PinDMs.editCategoryTitle", "Edit Category") : tr("plugins.PinDMs.newCategoryTitle", "New Category")}
             actions={[{
-                text: categoryId ? "Save" : "Create",
+                text: categoryId ? tr("plugins.PinDMs.save", "Save") : tr("plugins.PinDMs.create", "Create"),
                 variant: "primary",
                 onClick: onSave,
                 disabled: !name
@@ -89,14 +91,14 @@ export function NewCategoryModal({ categoryId, modalProps, initialChannelId }: P
                 }}
             >
                 <section>
-                    <Forms.FormTitle>Name</Forms.FormTitle>
+                    <Forms.FormTitle>{tr("plugins.PinDMs.name", "Name")}</Forms.FormTitle>
                     <TextInput
                         value={name}
                         onChange={e => setName(e)}
                     />
                 </section>
                 <section>
-                    <Forms.FormTitle>Color</Forms.FormTitle>
+                    <Forms.FormTitle>{tr("plugins.PinDMs.color", "Color")}</Forms.FormTitle>
                     <ColorPickerWithSwatches
                         className={cl("color-picker")}
                         key={category.id}

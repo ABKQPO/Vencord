@@ -20,6 +20,7 @@ import { definePluginSettings } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 
 import hoverOnlyStyle from "./hoverOnly.css?managed";
@@ -97,13 +98,14 @@ export default definePlugin({
     start: () => toggleHoverControls(settings.store.hoverControls),
 
     PanelWrapper({ VencordOriginal, ...props }) {
+    useLocale();
         return (
             <>
                 <ErrorBoundary
                     fallback={() => (
                         <div className="vc-spotify-fallback">
-                            <p>Failed to render Spotify Modal :(</p>
-                            <p >Check the console for errors</p>
+                            <p>{tr("plugins.SpotifyControls.failedToRenderSpotifyModal", "Failed to render Spotify Modal :(")}</p>
+                            <p >{tr("plugins.SpotifyControls.checkTheConsoleForErrors", "Check the console for errors")}</p>
                         </div>
                     )}
                 >

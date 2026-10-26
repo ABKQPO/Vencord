@@ -22,6 +22,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { getLocale } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 import { FluxStore } from "@vencord/discord-types";
 import { findStoreLazy } from "@webpack";
@@ -55,8 +56,8 @@ export const settings = definePluginSettings({
     }
 });
 
-const sharedIntlNumberFormat = new Intl.NumberFormat();
-export const numberFormat = (value: number) => sharedIntlNumberFormat.format(value);
+
+export const numberFormat = (value: number) => new Intl.NumberFormat(getLocale()).format(value);
 export const cl = classNameFactory("vc-membercount-");
 
 export default definePlugin({

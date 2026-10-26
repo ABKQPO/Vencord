@@ -7,11 +7,13 @@
 import { Button } from "@components/Button";
 import { SessionInfo } from "@plugins/betterSessions/types";
 import { cl } from "@plugins/betterSessions/utils";
+import { tr, useLocale } from "@utils/localization";
 import { openModal } from "@webpack/common";
 
 import { RenameModal } from "./RenameModal";
 
 export function RenameButton({ session, state }: { session: SessionInfo["session"], state: [string, React.Dispatch<React.SetStateAction<string>>]; }) {
+    useLocale();
     return (
         <Button
             variant="secondary"
@@ -27,19 +29,20 @@ export function RenameButton({ session, state }: { session: SessionInfo["session
                 ))
             }
         >
-            Rename
+            {tr("plugins.BetterSessions.rename", "Rename")}
         </Button>
     );
 }
 
 export function NewButton() {
+    useLocale();
     return (
         <Button
             variant="dangerPrimary"
             size="min"
             className={cl("new-btn")}
         >
-            NEW
+            {tr("plugins.BetterSessions.nEW", "NEW")}
         </Button>
     );
 }

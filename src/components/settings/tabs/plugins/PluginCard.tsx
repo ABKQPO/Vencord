@@ -9,6 +9,8 @@ import { hasAnyVisibleSettings, isPluginEnabled, pluginRequiresRestart, startDep
 import { Settings } from "@api/Settings";
 import { CogWheel, InfoIcon } from "@components/Icons";
 import { AddonCard } from "@components/settings/AddonCard";
+import { tr, useLocale } from "@utils/localization";
+import { getPluginDescription, getPluginDisplayName } from "@utils/localization/plugins";
 import { Plugin } from "@utils/types";
 import { React, showToast } from "@webpack/common";
 
@@ -23,6 +25,7 @@ interface PluginCardProps extends React.HTMLProps<HTMLDivElement> {
 }
 
 export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, onMouseLeave, isNew }: PluginCardProps) {
+    useLocale();
     const settings = Settings.plugins[plugin.name];
 
     const isEnabled = () => isPluginEnabled(plugin.name);
@@ -36,7 +39,7 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
 
             if (failures.length) {
                 logger.error(`Failed to start dependencies for ${plugin.name}: ${failures.join(", ")}`);
-                showNotice("Failed to start dependencies: " + failures.join(", "), "Close", () => null);
+                showNotice(tr("plugins.dependencies.failed", "Failed to start dependencies: {plugins}", { plugins: failures.join(", ") }), tr("common.close", "Close"), () => null);
                 return;
             }
 
@@ -66,7 +69,9 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
         if (!result) {
             settings.enabled = false;
 
-            const msg = `Error while ${wasEnabled ? "stopping" : "starting"} plugin ${plugin.name}`;
+            const msg = wasEnabled
+                ? tr("plugins.stop.failed", "Error while stopping plugin {plugin}", { plugin: getPluginDisplayName(plugin) })
+                : tr("plugins.start.failed", "Error while starting plugin {plugin}", { plugin: getPluginDisplayName(plugin) });
             showToast({ text: msg, variant: "critical", position: "bottom" });
 
             return;
@@ -77,8 +82,8 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
 
     return (
         <AddonCard
-            name={plugin.name}
-            description={plugin.description}
+            name={getPluginDisplayName(plugin)}
+            description={getPluginDescription(plugin)}
             isNew={isNew}
             enabled={isEnabled()}
             setEnabled={toggleEnabled}
@@ -87,7 +92,7 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
             onMouseLeave={onMouseLeave}
             infoButton={
                 <button
-                    role="switch"
+                    aria-label={tr("plugins.info", "View {plugin} information and settings", { plugin: getPluginDisplayName(plugin) })}
                     onClick={() => openPluginModal(plugin, onRestartNeeded)}
                     className={cl("info-button")}
                 >

@@ -23,6 +23,7 @@ import { buildExtraRoleContextMenuItems } from "@plugins/betterRoleContext";
 import { cl, getGuildPermissionSpecMap, loadGetGuildPermissionSpecMap } from "@plugins/permissionsViewer/utils";
 import { copyToClipboard } from "@utils/clipboard";
 import { getIntlMessage, getUniqueUsername } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { Guild, RenderModalProps, Role, RoleOrUserPermission, UnicodeEmoji, User } from "@vencord/discord-types";
 import { PermissionOverwriteType } from "@vencord/discord-types/enums";
 import { findByCodeLazy } from "@webpack";
@@ -43,7 +44,8 @@ function getRoleIconSrc(role: Role) {
 }
 
 function RolesAndUsersPermissionsComponent({ permissions, guild, modalProps, header }: { permissions: Array<RoleOrUserPermission>; guild: Guild; modalProps: RenderModalProps; header: string; }) {
-    const guildPermissionSpecMap = useMemo(() => getGuildPermissionSpecMap(guild), [guild.id]);
+    const locale = useLocale();
+    const guildPermissionSpecMap = useMemo(() => getGuildPermissionSpecMap(guild), [guild.id, locale]);
 
     useStateFromStores(
         [GuildMemberStore],
@@ -77,11 +79,11 @@ function RolesAndUsersPermissionsComponent({ permissions, guild, modalProps, hea
         <Modal
             {...modalProps}
             size="xl"
-            title={`${header} Permissions`}
+            title={tr("plugins.PermissionsViewer.permissionsTitle", "{name} Permissions", { name: header })}
         >
             {!selectedItem && (
                 <div className={cl("modal-no-perms")}>
-                    <Text variant="heading-lg/normal">No permissions to display!</Text>
+                    <Text variant="heading-lg/normal">{tr("plugins.PermissionsViewer.noPermissionsToDisplay", "No permissions to display!")}</Text>
                 </div>
             )}
 
@@ -142,12 +144,13 @@ function RolesAndUsersPermissionsComponent({ permissions, guild, modalProps, hea
                                         <Text variant="text-md/normal" className={cl("modal-list-item-text")}>
                                             {
                                                 permission.type === PermissionOverwriteType.ROLE
-                                                    ? role?.name ?? "Unknown Role"
+                                                    ? role?.name ?? tr("plugins.PermissionsViewer.unknownRole", "Unknown Role")
                                                     : permission.type === PermissionOverwriteType.MEMBER
-                                                        ? (user != null && getUniqueUsername(user)) ?? "Unknown User"
+                                                        ? (user != null && getUniqueUsername(user)) ?? tr("plugins.PermissionsViewer.unknownUser", "Unknown User")
                                                         : (
                                                             <Flex gap="0.2em">
-                                                                @owner
+
+                                                                {tr("plugins.PermissionsViewer.owner", "@owner")}
                                                                 <OwnerCrownIcon height={18} width={18} aria-hidden="true" />
                                                             </Flex>
                                                         )
@@ -206,6 +209,7 @@ function RolesAndUsersPermissionsComponent({ permissions, guild, modalProps, hea
 }
 
 function ViewAsRoleIcon() {
+    useLocale();
     return (
         <svg width="18" height="18" viewBox="0 0 24 24">
             <path fill="currentColor" d="M20.7 12.7a1 1 0 0 0 0-1.4l-5-5a1 1 0 1 0-1.4 1.4l3.29 3.3H4a1 1 0 1 0 0 2h13.59l-3.3 3.3a1 1 0 0 0 1.42 1.4l5-5Z" />
@@ -214,6 +218,7 @@ function ViewAsRoleIcon() {
 }
 
 function RoleContextMenu({ guild, roleId, onClose }: { guild: Guild; roleId: string; onClose: () => void; }) {
+    useLocale();
     const popoutRef = useRef(null);
     const role = GuildRoleStore.getRole(guild.id, roleId);
     const { before, after } = buildExtraRoleContextMenuItems(role, guild, popoutRef);
@@ -222,7 +227,7 @@ function RoleContextMenu({ guild, roleId, onClose }: { guild: Guild; roleId: str
         <Menu.Menu
             navId={cl("role-context-menu")}
             onClose={ContextMenuApi.closeContextMenu}
-            aria-label="Role Options"
+            aria-label={tr("plugins.PermissionsViewer.roleOptions", "Role Options")}
         >
             {before}
 
@@ -262,11 +267,12 @@ function RoleContextMenu({ guild, roleId, onClose }: { guild: Guild; roleId: str
 }
 
 function UserContextMenu({ userId }: { userId: string; }) {
+    useLocale();
     return (
         <Menu.Menu
             navId={cl("user-context-menu")}
             onClose={ContextMenuApi.closeContextMenu}
-            aria-label="User Options"
+            aria-label={tr("plugins.PermissionsViewer.userOptions", "User Options")}
         >
             <Menu.MenuItem
                 id={cl("copy-user-id")}

@@ -10,6 +10,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { CopyIcon, NoEntrySignIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin from "@utils/types";
 import { Tooltip, useState } from "@webpack/common";
 
@@ -43,10 +44,11 @@ export default definePlugin({
     ],
 
     addCopyButton: ErrorBoundary.wrap(({ fileContents, bytesLeft }: { fileContents: string, bytesLeft: number; }) => {
+    useLocale();
         const [recentlyCopied, setRecentlyCopied] = useState(false);
 
         return (
-            <Tooltip text={recentlyCopied ? "Copied!" : bytesLeft > 0 ? "File too large to copy" : "Copy File Contents"}>
+            <Tooltip text={recentlyCopied ? tr("plugins.CopyFileContents.copied", "Copied!") : bytesLeft > 0 ? tr("plugins.CopyFileContents.fileTooLargeToCopy", "File too large to copy") : tr("plugins.CopyFileContents.copyFileContents", "Copy File Contents")}>
                 {tooltipProps => (
                     <div
                         {...tooltipProps}

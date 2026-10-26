@@ -1,0 +1,16 @@
+{
+    "native.csp.message": "{caller} 希望允许连接到 {domain}",
+    "native.csp.trustWarning": "除非你认识并完全信任 {domain}，否则请取消此请求！\n\n你必须完全关闭并重新启动 {client}，更改才会生效。",
+    "native.csp.contentWarning": "将允许从 {domain} 加载以下类型的内容：\n{types}\n\n{warning}",
+    "native.csp.images": "图片",
+    "native.csp.styles": "CSS 与主题",
+    "native.csp.fonts": "字体",
+    "native.csp.title": "Vencord 主机权限",
+    "native.csp.cancel": "取消",
+    "native.csp.allow": "允许",
+    "native.csp.trustCheckbox": "我完全信任 {domain}，并理解允许连接到它所带来的风险。",
+    "native.quickCss.title": "Vencord QuickCSS 编辑器",
+    "native.quickCss.editorLabel": "QuickCSS 编辑器",
+    "native.quickCss.userscriptPrompt": "用户脚本不支持 QuickCSS。你可以改用 Stylus 扩展。\n\n要打开 Stylus 的扩展商店页面吗？",
+    "native.quickCss.popupFailed": "无法打开 QuickCSS 弹出窗口。请确保已允许弹出窗口！"
+}

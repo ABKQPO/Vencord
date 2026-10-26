@@ -18,6 +18,7 @@
 
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
+import { tr, useLocale } from "@utils/localization";
 import { findByPropsLazy } from "@webpack";
 import { Forms, React } from "@webpack/common";
 
@@ -55,6 +56,7 @@ interface TimerItemProps extends Log {
 }
 
 function TimerItem({ emoji, prefix, log, delta, instance }: TimerItemProps) {
+    useLocale();
     return (
         <React.Fragment>
             <span>{instance.sinceStart.toFixed(3)}s</span>
@@ -72,6 +74,7 @@ interface TimingSectionProps {
 }
 
 function TimingSection({ title, logs, traceEnd }: TimingSectionProps) {
+    useLocale();
     const startTime = logs.find(l => l.timestamp)?.timestamp ?? 0;
 
     let lastTimestamp = startTime;
@@ -93,14 +96,15 @@ function TimingSection({ title, logs, traceEnd }: TimingSectionProps) {
             <code>
                 {traceEnd && (
                     <div style={{ color: "var(--text-strong)", marginBottom: 5, userSelect: "text" }}>
-                        Trace ended at: {(new Date(traceEnd)).toTimeString()}
+
+                        {tr("plugins.StartupTimings.traceEndedAt", "Trace ended at:")} {(new Date(traceEnd)).toTimeString()}
                     </div>
                 )}
                 <div style={{ color: "var(--text-strong)", display: "grid", gridTemplateColumns: "repeat(3, auto) 1fr", gap: "2px 10px", userSelect: "text" }}>
-                    <span>Start</span>
-                    <span>Interval</span>
-                    <span>Delta</span>
-                    <span style={{ marginBottom: 5 }}>Event</span>
+                    <span>{tr("plugins.StartupTimings.start", "Start")}</span>
+                    <span>{tr("plugins.StartupTimings.interval", "Interval")}</span>
+                    <span>{tr("plugins.StartupTimings.delta", "Delta")}</span>
+                    <span style={{ marginBottom: 5 }}>{tr("plugins.StartupTimings.event", "Event")}</span>
                     {AppStartPerformance.logs.map((log, i) => (
                         <TimerItem key={i} {...log} instance={timings[i]} />
                     ))}
@@ -115,11 +119,12 @@ interface ServerTraceProps {
 }
 
 function ServerTrace({ trace }: ServerTraceProps) {
+    useLocale();
     const lines = trace.split("\n");
 
     return (
         <section>
-            <Forms.FormTitle tag="h3">Server Trace</Forms.FormTitle>
+            <Forms.FormTitle tag="h3">{tr("plugins.StartupTimings.serverTrace", "Server Trace")}</Forms.FormTitle>
             <code>
                 <Flex flexDirection="column" gap="5px" style={{ color: "var(--text-strong)", userSelect: "text" }}>
                     {lines.map((line, idx) => (
@@ -132,14 +137,15 @@ function ServerTrace({ trace }: ServerTraceProps) {
 }
 
 function StartupTimingPage() {
-    if (!AppStartPerformance?.logs) return <div>Loading...</div>;
+    useLocale();
+    if (!AppStartPerformance?.logs) return <div>{tr("plugins.StartupTimings.loading", "Loading...")}</div>;
 
     const serverTrace = AppStartPerformance.logGroups.find(g => g.serverTrace)?.serverTrace;
 
     return (
         <React.Fragment>
             <TimingSection
-                title="Startup Timings"
+                title={tr("plugins.StartupTimings.startupTimings", "Startup Timings")}
                 logs={AppStartPerformance.logs}
                 traceEnd={AppStartPerformance.endTime_}
             />

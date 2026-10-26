@@ -20,6 +20,7 @@ import { Auth } from "@plugins/reviewDB/auth";
 import { ReviewType } from "@plugins/reviewDB/entities";
 import { REVIEWS_PER_PAGE, UserReviewsData } from "@plugins/reviewDB/reviewDbApi";
 import { cl } from "@plugins/reviewDB/utils";
+import { tr, useLocale } from "@utils/localization";
 import { useForceUpdater } from "@utils/react";
 import * as t from "@vencord/discord-types";
 import { DefaultExtractAndLoadChunksRegex, extractAndLoadChunksLazy, findComponentByCodeLazy } from "@webpack";
@@ -34,6 +35,7 @@ const Paginator = findComponentByCodeLazy<ComponentProps<t.Paginator>>('rel:"pre
 const requirePaginator = extractAndLoadChunksLazy(['name:"SearchResults"'], new RegExp(`name:"StageChannelCall",renderLoader:.+?(?:${DefaultExtractAndLoadChunksRegex.source}).{0,30}?name:"SearchResults"`));
 
 function ReviewsModal({ modalProps, modalKey, discordId, name, type }: { modalProps: t.RenderModalProps; modalKey: string, discordId: string; name: string; type: ReviewType; }) {
+        useLocale();
     const [data, setData] = useState<UserReviewsData>();
     const [signal, refetch] = useForceUpdater(true);
     const [page, setPage] = useState(1);
@@ -49,8 +51,8 @@ function ReviewsModal({ modalProps, modalKey, discordId, name, type }: { modalPr
             size="lg"
             title={
                 <Text variant="heading-lg/semibold" className={cl("modal-header")}>
-                    {name}'s Reviews
-                    {!!reviewCount && <span> ({reviewCount} Reviews)</span>}
+                    {tr("plugins.ReviewDB.reviewsTitle", "{name}'s Reviews", { name })}
+                    {!!reviewCount && <span> {tr("plugins.ReviewDB.reviewCount", "({count} Reviews)", { count: reviewCount })}</span>}
                 </Text>
             }
             preview={

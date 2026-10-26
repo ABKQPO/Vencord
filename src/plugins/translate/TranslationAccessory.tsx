@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { tr, useLocale } from "@utils/localization";
 import { Message } from "@vencord/discord-types";
 import { Parser, useEffect, useState } from "@webpack/common";
 
@@ -38,17 +39,20 @@ export function handleTranslate(messageId: string, data: TranslationValue) {
 }
 
 function Dismiss({ onDismiss }: { onDismiss: () => void; }) {
+    useLocale();
     return (
         <button
             onClick={onDismiss}
             className={cl("dismiss")}
         >
-            Dismiss
+
+            {tr("plugins.Translate.dismiss", "Dismiss")}
         </button>
     );
 }
 
 export function TranslationAccessory({ message }: { message: Message; }) {
+    useLocale();
     const [translation, setTranslation] = useState<TranslationValue>();
 
     useEffect(() => {
@@ -71,7 +75,7 @@ export function TranslationAccessory({ message }: { message: Message; }) {
             <TranslateIcon width={16} height={16} className={cl("accessory-icon")} />
             {Parser.parse(translation.text)}
             <br />
-            (translated from {translation.sourceLanguage} - <Dismiss onDismiss={() => setTranslation(undefined)} />)
+            {tr("plugins.Translate.translatedFrom", "(translated from {language})", { language: translation.sourceLanguage })} - <Dismiss onDismiss={() => setTranslation(undefined)} />
         </span>
     );
 }

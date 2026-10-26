@@ -17,6 +17,7 @@
 */
 
 import { LazyComponent, LazyComponentWrapper } from "@utils/lazyReact";
+import { subscribeLocale, tr } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import type { React } from "@webpack/common";
@@ -32,7 +33,7 @@ interface Props<T = any> {
     /** called when an error occurs. The props property is only available if using .wrap */
     onError?(data: { error: Error, errorInfo: React.ErrorInfo, props: T; }): void;
     /** Custom error message */
-    message?: string;
+    message?: string | (() => string);
 
     /** The props passed to the wrapped component. Only used by wrap */
     wrappedProps?: T;
@@ -50,6 +51,7 @@ const ErrorBoundary = LazyComponent(() => {
     // This component is used in a lot of files which end up importing other Webpack commons and causing circular imports.
     // For this reason, use a non import access here.
     return class ErrorBoundary extends Vencord.Webpack.Common.React.PureComponent<React.PropsWithChildren<Props>> {
+        private unsubscribeLocale?: () => void;
         state = {
             error: NO_ERROR as any,
             stack: "",
@@ -72,13 +74,22 @@ const ErrorBoundary = LazyComponent(() => {
         }
 
         componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+            this.unsubscribeLocale ??= subscribeLocale(() => this.forceUpdate());
             this.props.onError?.({ error, errorInfo, props: this.props.wrappedProps });
-            logger.error(`${this.props.message || "A component threw an Error"}\n`, error, errorInfo.componentStack);
+            logger.error(`${this.getMessage() || "A component threw an Error"}\n`, error, errorInfo.componentStack);
         }
 
         get isNoop() {
             if (IS_DEV) return false;
             return this.props.noop;
+        }
+
+        componentWillUnmount() {
+            this.unsubscribeLocale?.();
+        }
+
+        getMessage() {
+            return typeof this.props.message === "function" ? this.props.message() : this.props.message;
         }
 
         render() {
@@ -96,11 +107,11 @@ const ErrorBoundary = LazyComponent(() => {
                     </this.props.fallback>
                 );
 
-            const msg = this.props.message || "An error occurred while rendering this Component. More info can be found below and in your console.";
+            const msg = this.getMessage() || tr("loader.runtime.438c9d63ab80", "An error occurred while rendering this Component. More info can be found below and in your console.");
 
             return (
                 <ErrorCard style={{ overflow: "hidden" }}>
-                    <h1>Oh no!</h1>
+                    <h1>{tr("loader.241a3380b797", "Oh no!")}</h1>
                     <p>{msg}</p>
                     <code>
                         {this.state.message}

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Vencord, a modification for Discord's desktop app
  * Copyright (c) 2022 Vendicated and contributors
  *
@@ -26,6 +26,8 @@ import * as DataStore from "@api/DataStore";
 import type { Settings } from "@api/Settings";
 import { getThemeInfo } from "@main/themes";
 import { debounce } from "@shared/debounce";
+import { nativeMessage } from "@shared/nativeLocalization";
+import { Locale, normalizeLocale } from "@utils/localization/core";
 import { localStorage } from "@utils/localStorage";
 import { getStylusWebStoreUrl } from "@utils/web";
 import { EXTENSION_BASE_URL, metaReady, RENDERER_CSS_URL } from "@utils/web-metadata";
@@ -38,6 +40,47 @@ const NOOP_ASYNC = async () => { };
 const setCssDebounced = debounce((css: string) => VencordNative.quickCss.set(css));
 
 const themeStore = DataStore.createStore("VencordThemes", "VencordThemeData");
+
+let quickCssWindow: Window | null = null;
+let quickCssLocale: Locale = "en-US";
+let quickCssUpdate = Promise.resolve();
+
+function initializeQuickCssWindow(win: Window, locale: Locale, state?: { css: string; viewState: unknown; }) {
+    (win as any).disposeQuickCss?.();
+    (win as any).quickCssOriginalWorker ??= (win as any).Worker;
+    (win as any).Worker = (win as any).quickCssOriginalWorker;
+    Object.assign(win, {
+        baseUrl: EXTENSION_BASE_URL,
+        setCss: setCssDebounced,
+        getCurrentCss: () => state ? Promise.resolve(state.css) : VencordNative.quickCss.get(),
+        getTheme: VencordNative.quickCss.getEditorTheme,
+        quickCssLocale: locale,
+        quickCssTitle: nativeMessage(locale, "native.quickCss.title"),
+        quickCssEditorLabel: nativeMessage(locale, "native.quickCss.editorLabel"),
+        quickCssViewState: state?.viewState,
+        quickCssGeneration: ((win as any).quickCssGeneration ?? 0) + 1,
+        getQuickCssState: undefined,
+        disposeQuickCss: undefined
+    });
+    win.document.open();
+    win.document.write(monacoHtmlLocal);
+    win.document.close();
+}
+
+function updateQuickCssLocale(requestedLocale: string) {
+    quickCssUpdate = quickCssUpdate.catch(() => { }).then(async () => {
+        const locale = normalizeLocale(requestedLocale);
+        const win = quickCssWindow;
+        if (!win || win.closed || quickCssLocale === locale) return;
+
+        const state = await (win as any).getQuickCssState?.();
+        if (win.closed || win !== quickCssWindow) return;
+        if (state) await VencordNative.quickCss.set(state.css);
+        quickCssLocale = locale;
+        initializeQuickCssWindow(win, locale, state);
+    });
+    return quickCssUpdate;
+}
 
 // probably should make this less cursed at some point
 window.VencordNative = {
@@ -88,28 +131,33 @@ window.VencordNative = {
         },
         addThemeChangeListener: NOOP,
         openFile: NOOP_ASYNC,
-        async openEditor() {
+        setEditorLocale: updateQuickCssLocale,
+        async openEditor(requestedLocale?: string) {
+            const locale = normalizeLocale(requestedLocale);
             if (IS_USERSCRIPT) {
-                const shouldOpenWebStore = confirm("QuickCSS is not supported on the Userscript. You can instead use the Stylus extension.\n\nDo you want to open the Stylus web store page?");
+                const shouldOpenWebStore = confirm(nativeMessage(locale, "native.quickCss.userscriptPrompt"));
                 if (shouldOpenWebStore) {
                     window.open(getStylusWebStoreUrl(), "_blank");
                 }
                 return;
             }
 
-            const features = `popup,width=${Math.min(window.innerWidth, 1000)},height=${Math.min(window.innerHeight, 1000)}`;
-            const win = open("about:blank", "VencordQuickCss", features);
-            if (!win) {
-                alert("Failed to open QuickCSS popup. Make sure to allow popups!");
+            if (quickCssWindow && !quickCssWindow.closed) {
+                await updateQuickCssLocale(locale);
+                quickCssWindow.focus();
                 return;
             }
 
-            win.baseUrl = EXTENSION_BASE_URL;
-            win.setCss = setCssDebounced;
-            win.getCurrentCss = () => VencordNative.quickCss.get();
-            win.getTheme = this.getEditorTheme;
+            const features = `popup,width=${Math.min(window.innerWidth, 1000)},height=${Math.min(window.innerHeight, 1000)}`;
+            const win = open("about:blank", "VencordQuickCss", features);
+            if (!win) {
+                alert(nativeMessage(locale, "native.quickCss.popupFailed"));
+                return;
+            }
 
-            win.document.write(monacoHtmlLocal);
+            quickCssWindow = win;
+            quickCssLocale = locale;
+            initializeQuickCssWindow(win, locale);
         },
         getEditorTheme: () => {
             const { getTheme, Theme } = require("@utils/discord");
@@ -136,3 +184,4 @@ window.VencordNative = {
     pluginHelpers: {} as any,
     csp: {} as any,
 };
+

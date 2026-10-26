@@ -22,6 +22,7 @@ import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { openUserProfile } from "@utils/discord";
 import { isNonNullish } from "@utils/guards";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, User } from "@vencord/discord-types";
@@ -50,6 +51,7 @@ const settings = definePluginSettings({
 });
 
 export const buildSeveralUsers = ErrorBoundary.wrap(function buildSeveralUsers({ users, count, guildId }: { users: User[], count: number; guildId: string; }) {
+    useLocale();
     return (
         <>
             {users.slice(0, count).map(user => (
@@ -58,7 +60,7 @@ export const buildSeveralUsers = ErrorBoundary.wrap(function buildSeveralUsers({
                     {", "}
                 </React.Fragment>
             ))}
-            and {count} others are typing...
+            {tr("plugins.TypingTweaks.othersTyping", "and {count} others are typing...", { count })}
         </>
     );
 }, { noop: true });
@@ -69,6 +71,7 @@ interface TypingUserProps {
 }
 
 const TypingUser = ErrorBoundary.wrap(function TypingUser({ user, guildId }: TypingUserProps) {
+        useLocale();
     return (
         <strong
             className={cl("user")}
@@ -157,6 +160,7 @@ export default definePlugin({
     buildSeveralUsers,
 
     renderTypingUsers: ErrorBoundary.wrap(({ guildId, users, children }: PropsWithChildren<{ guildId: string, users: User[]; }>) => {
+        useLocale();
         try {
             if (!Array.isArray(children)) {
                 return children;

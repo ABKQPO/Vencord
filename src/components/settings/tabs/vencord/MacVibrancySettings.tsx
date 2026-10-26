@@ -7,72 +7,74 @@
 import { useSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { IS_MAC } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import { Margins } from "@utils/margins";
 import { identity } from "@utils/misc";
 import { Forms, Select } from "@webpack/common";
 
 export function MacOSVibrancySettings() {
+    useLocale();
     const settings = useSettings(["macosVibrancyStyle"]);
 
     if (!IS_MAC || IS_WEB) return null;
 
     return (
         <ErrorBoundary noop>
-            <Forms.FormTitle tag="h5">MacOS Window vibrancy style (requires restart)</Forms.FormTitle>
+            <Forms.FormTitle tag="h5">{tr("loader.settings.macos.window.vibrancy.style.requires.restart", "MacOS Window vibrancy style (requires restart)")}</Forms.FormTitle>
             <Select
                 className={Margins.bottom20}
-                placeholder="Window vibrancy style"
+                placeholder={tr("loader.settings.window.vibrancy.style", "Window vibrancy style")}
                 options={[
                     // Sorted from most opaque to most transparent
                     {
-                        label: "No vibrancy", value: undefined
+                        label: tr("loader.settings.no.vibrancy", "No vibrancy"), value: undefined
                     },
                     {
-                        label: "Under Page (window tinting)",
+                        label: tr("loader.settings.under.page.window.tinting", "Under Page (window tinting)"),
                         value: "under-page"
                     },
                     {
-                        label: "Content",
+                        label: tr("loader.settings.content", "Content"),
                         value: "content"
                     },
                     {
-                        label: "Window",
+                        label: tr("loader.settings.window", "Window"),
                         value: "window"
                     },
                     {
-                        label: "Selection",
+                        label: tr("loader.settings.selection", "Selection"),
                         value: "selection"
                     },
                     {
-                        label: "Titlebar",
+                        label: tr("loader.settings.titlebar", "Titlebar"),
                         value: "titlebar"
                     },
                     {
-                        label: "Header",
+                        label: tr("loader.settings.header", "Header"),
                         value: "header"
                     },
                     {
-                        label: "Sidebar",
+                        label: tr("loader.settings.sidebar", "Sidebar"),
                         value: "sidebar"
                     },
                     {
-                        label: "Tooltip",
+                        label: tr("loader.settings.tooltip", "Tooltip"),
                         value: "tooltip"
                     },
                     {
-                        label: "Menu",
+                        label: tr("loader.settings.menu", "Menu"),
                         value: "menu"
                     },
                     {
-                        label: "Popover",
+                        label: tr("loader.settings.popover", "Popover"),
                         value: "popover"
                     },
                     {
-                        label: "Fullscreen UI (transparent but slightly muted)",
+                        label: tr("loader.settings.fullscreen.ui.transparent.but.slightly.muted", "Fullscreen UI (transparent but slightly muted)"),
                         value: "fullscreen-ui"
                     },
                     {
-                        label: "HUD (Most transparent)",
+                        label: tr("loader.settings.hud.most.transparent", "HUD (Most transparent)"),
                         value: "hud"
                     },
                 ]}

@@ -18,6 +18,7 @@
 
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { TooltipContainer } from "@components/TooltipContainer";
+import { tr, useLocale } from "@utils/localization";
 import { classes } from "@utils/misc";
 import { IconComponent } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
@@ -28,6 +29,7 @@ import { openTranslateModal } from "./TranslateModal";
 import { cl } from "./utils";
 
 export const TranslateIcon: IconComponent = ({ height = 20, width = 20, className }) => {
+    useLocale();
     return (
         <svg
             viewBox="0 96 960 960"
@@ -43,16 +45,17 @@ export const TranslateIcon: IconComponent = ({ height = 20, width = 20, classNam
 export let setShouldShowTranslateEnabledTooltip: undefined | ((show: boolean) => void);
 
 function AutoTranslateConfirmModal(props: RenderModalProps) {
+    useLocale();
     const s = settings.use(["dismissedAutoTranslateAlert"]);
 
     return (
         <ConfirmModal
             {...props}
-            title="Vencord Auto-Translate Enabled"
-            subtitle="You just enabled Auto Translate! Any message will automatically be translated before being sent."
-            confirmText="Disable Auto-Translate"
+            title={tr("plugins.Translate.vencordAutoTranslateEnabled", "Vencord Auto-Translate Enabled")}
+            subtitle={tr("plugins.Translate.youJustEnabledAutoTranslateAnyMessageWillAutomaticallyBeTranslatedBeforeBeingSent", "You just enabled Auto Translate! Any message will automatically be translated before being sent.")}
+            confirmText={tr("plugins.Translate.disableAutoTranslate", "Disable Auto-Translate")}
             onConfirm={() => settings.store.autoTranslate = false}
-            cancelText="Got it"
+            cancelText={tr("plugins.Translate.gotIt", "Got it")}
             variant="primary"
             checkboxProps={{
                 checked: s.dismissedAutoTranslateAlert === true,
@@ -63,6 +66,7 @@ function AutoTranslateConfirmModal(props: RenderModalProps) {
 }
 
 export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
+    useLocale();
     const { autoTranslate } = settings.use(["autoTranslate"]);
 
     const [shouldShowTranslateEnabledTooltip, setter] = useState(false);
@@ -82,7 +86,7 @@ export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
 
     const button = (
         <ChatBarButton
-            tooltip="Open Translate Modal"
+            tooltip={tr("plugins.Translate.openTranslateModal", "Open Translate Modal")}
             onClick={e => {
                 if (e.shiftKey) return toggle();
                 else openTranslateModal();
@@ -98,7 +102,7 @@ export const TranslateChatBarIcon: ChatBarButtonFactory = ({ isMainChat }) => {
 
     if (shouldShowTranslateEnabledTooltip && settings.store.showAutoTranslateTooltip)
         return (
-            <TooltipContainer text="Auto Translate Enabled" forceOpen>
+            <TooltipContainer text={tr("plugins.Translate.autoTranslateEnabled", "Auto Translate Enabled")} forceOpen>
                 {button}
             </TooltipContainer>
         );

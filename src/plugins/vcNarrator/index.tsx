@@ -18,9 +18,9 @@
 
 import { ErrorCard } from "@components/ErrorCard";
 import { Devs, IS_LINUX } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
-import { wordsToTitle } from "@utils/text";
 import definePlugin, { ReporterTestable } from "@utils/types";
 import { AuthenticationStore, Button, ChannelStore, Forms, GuildMemberStore, SelectedChannelStore, SelectedGuildStore, useMemo, UserStore, VoiceStateStore } from "@webpack/common";
 import { ReactElement } from "react";
@@ -140,6 +140,19 @@ function updateStatuses(type: string, { deaf, mute, selfDeaf, selfMute, userId, 
 }
 */
 
+function getSampleLabel(type: string) {
+    const labels: Record<string, string> = {
+        join: tr("narrator.sample.join", "Join"),
+        leave: tr("narrator.sample.leave", "Leave"),
+        move: tr("narrator.sample.move", "Move"),
+        mute: tr("narrator.sample.mute", "Mute"),
+        unmute: tr("narrator.sample.unmute", "Unmute"),
+        deafen: tr("narrator.sample.deafen", "Deafen"),
+        undeafen: tr("narrator.sample.undeafen", "Undeafen")
+    };
+    return labels[type] ?? type;
+}
+
 function playSample(type: string) {
     const currentUser = UserStore.getCurrentUser();
     const myGuildId = SelectedGuildStore.getGuildId();
@@ -216,7 +229,7 @@ export default definePlugin({
     start() {
         if (typeof speechSynthesis === "undefined" || speechSynthesis.getVoices().length === 0) {
             new Logger("VcNarrator").warn(
-                "SpeechSynthesis not supported or no Narrator voices found. Thus, this plugin will not work. Check my Settings for more info"
+                tr("plugins.VcNarrator.speechSynthesisNotSupportedOrNoNarratorVoicesFoundThusThisPluginWillNotWorkCheckMySettingsForMoreInfo", "SpeechSynthesis not supported or no Narrator voices found. Thus, this plugin will not work. Check my Settings for more info")
             );
             return;
         }
@@ -224,6 +237,7 @@ export default definePlugin({
     },
 
     settingsAboutComponent() {
+    useLocale();
         const [hasVoices, hasEnglishVoices] = useMemo(() => {
             const voices = speechSynthesis.getVoices();
             return [voices.length !== 0, voices.some(v => v.lang.startsWith("en"))];
@@ -236,27 +250,30 @@ export default definePlugin({
 
         let errorComponent: ReactElement<any> | null = null;
         if (!hasVoices) {
-            let error = "No narrator voices found. ";
+            let error = tr("plugins.VcNarrator.noNarratorVoicesFound", "No narrator voices found. ");
             error += IS_LINUX
-                ? "Install speech-dispatcher or espeak and run Discord with the --enable-speech-dispatcher flag"
-                : "Try installing some in the Narrator settings of your Operating System";
+                ? tr("plugins.VcNarrator.installSpeechDispatcherOrEspeakAndRunDiscordWithTheEnableSpeechDispatcherFlag", "Install speech-dispatcher or espeak and run Discord with the --enable-speech-dispatcher flag")
+                : tr("plugins.VcNarrator.tryInstallingSomeInTheNarratorSettingsOfYourOperatingSystem", "Try installing some in the Narrator settings of your Operating System");
             errorComponent = <ErrorCard>{error}</ErrorCard>;
         } else if (!hasEnglishVoices) {
-            errorComponent = <ErrorCard>You don't have any English voices installed, so the narrator might sound weird</ErrorCard>;
+            errorComponent = <ErrorCard>{tr("plugins.VcNarrator.youDonTHaveAnyEnglishVoicesInstalledSoTheNarratorMightSoundWeird", "You don't have any English voices installed, so the narrator might sound weird")}</ErrorCard>;
         }
 
         return (
             <section>
                 <Forms.FormText>
-                    You can customise the spoken messages below. You can disable specific messages by setting them to nothing
+
+                    {tr("plugins.VcNarrator.youCanCustomiseTheSpokenMessagesBelowYouCanDisableSpecificMessagesBySettingThemToNothing", "You can customise the spoken messages below. You can disable specific messages by setting them to nothing")}
                 </Forms.FormText>
                 <Forms.FormText>
-                    The special placeholders <code>{"{{USER}}"}</code>, <code>{"{{DISPLAY_NAME}}"}</code>, <code>{"{{NICKNAME}}"}</code> and <code>{"{{CHANNEL}}"}</code>{" "}
-                    will be replaced with the user's name (nothing if it's yourself), the user's display name, the user's nickname on current server and the channel's name respectively
+
+                    {tr("plugins.VcNarrator.theSpecialPlaceholders", "The special placeholders")} <code>{"{{USER}}"}</code>, <code>{"{{DISPLAY_NAME}}"}</code>, <code>{"{{NICKNAME}}"}</code>  {tr("plugins.VcNarrator.and", "and")} <code>{"{{CHANNEL}}"}</code>{" "}
+
+                    {tr("plugins.VcNarrator.willBeReplacedWithTheUserSNameNothingIfItSYourselfTheUserSDisplayNameTheUserSNicknameOnCurrentServerAndTheChan", "will be replaced with the user's name (nothing if it's yourself), the user's display name, the user's nickname on current server and the channel's name respectively")}
                 </Forms.FormText>
                 {hasEnglishVoices && (
                     <>
-                        <Forms.FormTitle className={Margins.top20} tag="h3">Play Example Sounds</Forms.FormTitle>
+                        <Forms.FormTitle className={Margins.top20} tag="h3">{tr("plugins.VcNarrator.playExampleSounds", "Play Example Sounds")}</Forms.FormTitle>
                         <div
                             style={{
                                 display: "grid",
@@ -267,7 +284,7 @@ export default definePlugin({
                         >
                             {types.map(t => (
                                 <Button key={t} onClick={() => playSample(t)}>
-                                    {wordsToTitle([t])}
+                                    {getSampleLabel(t)}
                                 </Button>
                             ))}
                         </div>

@@ -15,6 +15,8 @@ import { PlaceholderIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
 import { Switch } from "@components/Switch";
 import { classNameFactory } from "@utils/css";
+import { tr, useLocale } from "@utils/localization";
+import { getPluginDisplayName } from "@utils/localization/plugins";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { IconComponent } from "@utils/types";
@@ -25,15 +27,16 @@ import { Clickable, Modal, openModal } from "@webpack/common";
 const cl = classNameFactory("vc-plugin-ui-elements-");
 
 export function UIElementsButton() {
+    useLocale();
     return (
         <Clickable onClick={() => openModal(modalProps => <UIElementsModal {...modalProps} />)}>
             <Card className={cl("button")} defaultPadding>
                 <div className={cl("button-description")}>
                     <Paragraph size="md" weight="semibold">
-                        Manage plugin UI elements
+                        {tr("loader.753f7f7e7920", "Manage plugin UI elements")}
                     </Paragraph>
                     <Paragraph size="xs">
-                        Allows you to hide buttons you don't like
+                        {tr("loader.bc8c23bd38ec", "Allows you to hide buttons you don't like")}
                     </Paragraph>
                 </div>
                 <svg
@@ -54,6 +57,7 @@ function Section(props: {
     settings: SettingsPluginUiElements;
     buttonMap: Map<string, { icon: IconComponent; }>;
 }) {
+    useLocale();
     const { buttonMap, description, title, settings } = props;
 
     const switches = Array.from(buttonMap, ([name, { icon }]) => {
@@ -61,7 +65,7 @@ function Section(props: {
         return (
             <Paragraph size="md" weight="semibold" key={name} className={cl("switches-row")}>
                 <Icon height={20} width={20} />
-                {name}
+                {getPluginDisplayName({ name })}
                 <Switch
                     checked={settings[name]?.enabled ?? true}
                     onChange={v => {
@@ -81,7 +85,7 @@ function Section(props: {
             <div className={cl("switches")}>
                 {switches.length === 0 && (
                     <Paragraph weight="medium" className={cl("switches-row")} style={{ color: "var(--text-muted)" }}>
-                        Buttons of enabled plugins will appear here.
+                        {tr("loader.b5196bb4f64d", "Buttons of enabled plugins will appear here.")}
                     </Paragraph>
                 )}
                 {switches}
@@ -91,20 +95,21 @@ function Section(props: {
 }
 
 function UIElementsModal(props: RenderModalProps) {
+    useLocale();
     const { uiElements } = useSettings(["uiElements.*"]);
 
     return (
-        <Modal {...props} size="md" title="Manage plugin UI elements">
+        <Modal {...props} size="md" title={tr("loader.753f7f7e7920", "Manage plugin UI elements")}>
             <div className={cl("modal-content")}>
                 <Section
-                    title="Chatbar Buttons"
-                    description="These are the buttons on the right side of the chat input bar"
+                    title={tr("loader.a01775e04e80", "Chatbar Buttons")}
+                    description={tr("loader.18b1e9ac61ee", "These are the buttons on the right side of the chat input bar")}
                     buttonMap={ChatBarButtonMap}
                     settings={uiElements.chatBarButtons}
                 />
                 <Section
-                    title="Message Popover Buttons"
-                    description="These are the floating buttons on the right when you hover over a message"
+                    title={tr("loader.fbe72dd8364e", "Message Popover Buttons")}
+                    description={tr("loader.c1c0726b4628", "These are the floating buttons on the right when you hover over a message")}
                     buttonMap={MessagePopoverButtonMap}
                     settings={uiElements.messagePopoverButtons}
                 />

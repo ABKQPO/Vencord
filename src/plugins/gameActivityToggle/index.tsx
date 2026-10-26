@@ -22,6 +22,7 @@ import { getUserSettingLazy } from "@api/UserSettings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import VencordToolboxPlugin from "@plugins/vencordToolbox";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 import { FluxStore } from "@vencord/discord-types";
 import { findByPropsLazy, findComponentByCodeLazy, findStoreLazy } from "@webpack";
@@ -96,6 +97,7 @@ function Icon() {
 }
 
 function GameActivityToggleButton(props: { nameplate?: any; }) {
+    useLocale();
     const { location } = settings.use(["location"]);
     const showCurrentGame = ShowCurrentGame.useSetting();
 
@@ -109,7 +111,7 @@ function GameActivityToggleButton(props: { nameplate?: any; }) {
     if (location !== "PANEL" && isPluginEnabled(VencordToolboxPlugin.name)) return null;
 
     const buttonProps = {
-        tooltipText: showCurrentGame ? "Disable Game Activity" : "Enable Game Activity",
+        tooltipText: showCurrentGame ? tr("plugins.GameActivityToggle.disableGameActivity", "Disable Game Activity") : tr("plugins.GameActivityToggle.enableGameActivity", "Enable Game Activity"),
         icon: Icon,
         role: "switch",
         ariaChecked: !showCurrentGame,
@@ -133,7 +135,7 @@ function GameActivityToggleButton(props: { nameplate?: any; }) {
                 <Menu.Menu navId="vc-gameActivityToggle-menu" onClose={closePopout}>
                     <Menu.MenuCheckboxItem
                         id="vc-toggle-spotify"
-                        label="Share Spotify Activity"
+                        label={tr("plugins.GameActivityToggle.shareSpotifyActivity", "Share Spotify Activity")}
                         checked={shareSpotifyActivity}
                         action={async () => {
                             ConnectedAccountActions.setShowActivity(spotifyAccount.type, spotifyAccount.id, !shareSpotifyActivity);
@@ -175,6 +177,7 @@ export default definePlugin({
     ],
 
     toolboxActions() {
+        useLocale();
         const { location } = settings.use(["location"]);
         const showCurrentGame = ShowCurrentGame.useSetting();
 
@@ -183,7 +186,7 @@ export default definePlugin({
         return (
             <Menu.MenuCheckboxItem
                 id="game-activity-toggle-toolbox"
-                label="Enable Game Activity"
+                label={tr("plugins.GameActivityToggle.enableGameActivity", "Enable Game Activity")}
                 checked={showCurrentGame}
                 action={() => ShowCurrentGame.updateSetting(old => !old)}
             />

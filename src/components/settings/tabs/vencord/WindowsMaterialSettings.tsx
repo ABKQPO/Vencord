@@ -10,38 +10,39 @@ import { Heading } from "@components/Heading";
 import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
 import { IS_WINDOWS } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import { Select } from "@webpack/common";
 
 export function WindowsMaterialSettings() {
+    useLocale();
     const settings = useSettings(["windowsMaterial"]);
 
     if (!IS_WINDOWS || IS_WEB || !VencordNative.native.supportsWindowsMaterial()) return null;
 
     return (
         <ErrorBoundary noop>
-            <Heading tag="h5">Background Material</Heading>
+            <Heading tag="h5">{tr("loader.settings.background.material", "Background Material")}</Heading>
             <Paragraph className={Margins.bottom8}>
-                Windows transparent background effects. You need a theme that supports transparency or this will do nothing. A restart is required after changing this setting.
-            </Paragraph>
+                {tr("loader.settings.windows.transparent.background.effects.you.need.a.theme.that.supports.transparency.or.this.will", "Windows transparent background effects. You need a theme that supports transparency or this will do nothing. A restart is required after changing this setting.")}</Paragraph>
 
             <Select
-                placeholder="None"
+                placeholder={tr("loader.settings.none", "None")}
                 options={[
                     {
-                        label: "None",
+                        label: tr("loader.settings.none", "None"),
                         value: "none",
                         default: true
                     },
                     {
-                        label: "Mica (incorporates system theme + desktop wallpaper to paint the background)",
+                        label: tr("loader.settings.mica.incorporates.system.theme.desktop.wallpaper.to.paint.the.background", "Mica (incorporates system theme + desktop wallpaper to paint the background)"),
                         value: "mica"
                     },
                     {
-                        label: "Tabbed (variant of Mica with stronger background tinting)",
+                        label: tr("loader.settings.tabbed.variant.of.mica.with.stronger.background.tinting", "Tabbed (variant of Mica with stronger background tinting)"),
                         value: "tabbed"
                     },
                     {
-                        label: "Acrylic (blurs the window behind Vesktop for a translucent background)",
+                        label: tr("loader.settings.acrylic.blurs.the.window.behind.vesktop.for.a.translucent.background", "Acrylic (blurs the window behind Vesktop for a translucent background)"),
                         value: "acrylic"
                     }
                 ]}

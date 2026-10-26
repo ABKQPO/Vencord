@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { tr, useLocale } from "@utils/localization";
 import { Forms, SearchableSelect, useMemo, useState } from "@webpack/common";
 
 import { getCurrentVoice, settings } from "./settings";
@@ -25,6 +26,7 @@ interface PickerProps {
 }
 
 function SimplePicker({ voice, voices }: PickerProps) {
+    useLocale();
     const options = voices.map(voice => ({
         label: voice.name,
         value: voice.voiceURI,
@@ -33,7 +35,7 @@ function SimplePicker({ voice, voices }: PickerProps) {
 
     return (
         <SearchableSelect
-            placeholder="Select a voice"
+            placeholder={tr("plugins.VcNarrator.selectAVoice", "Select a voice")}
             maxVisibleItems={5}
             options={options}
             value={options.find(o => o.value === voice)?.value}
@@ -43,9 +45,11 @@ function SimplePicker({ voice, voices }: PickerProps) {
     );
 }
 
-const languageNames = new Intl.DisplayNames(["en"], { type: "language" });
+
 
 function ComplexPicker({ voice, voices }: PickerProps) {
+    const locale = useLocale();
+    const languageNames = new Intl.DisplayNames([locale], { type: "language" });
     const groupedVoices = useMemo(() => groupBy(voices, voice => voice.lang), [voices]);
 
     const languageNameMapping = useMemo(() => {
@@ -61,7 +65,7 @@ function ComplexPicker({ voice, voices }: PickerProps) {
         }
 
         return list;
-    }, [groupedVoices]);
+    }, [groupedVoices, locale]);
 
     const [selectedLanguage, setSelectedLanguage] = useState(() => getCurrentVoice()?.lang ?? languageNameMapping[0].name);
 
@@ -83,16 +87,16 @@ function ComplexPicker({ voice, voices }: PickerProps) {
 
     return (
         <>
-            <Forms.FormTitle>Language</Forms.FormTitle>
+            <Forms.FormTitle>{tr("plugins.VcNarrator.language", "Language")}</Forms.FormTitle>
             <SearchableSelect
-                placeholder="Select a language"
+                placeholder={tr("plugins.VcNarrator.selectALanguage", "Select a language")}
                 options={languageOptions}
                 value={languageOptions.find(l => l.value === selectedLanguage)?.value}
                 onChange={v => setSelectedLanguage(v)}
                 maxVisibleItems={5}
                 closeOnSelect
             />
-            <Forms.FormTitle>Voice</Forms.FormTitle>
+            <Forms.FormTitle>{tr("plugins.VcNarrator.voice", "Voice")}</Forms.FormTitle>
             <SimplePicker
                 voice={voice}
                 voices={voicesForLanguage}
@@ -103,11 +107,12 @@ function ComplexPicker({ voice, voices }: PickerProps) {
 
 
 function VoiceSetting() {
+    useLocale();
     const voices = useMemo(() => window.speechSynthesis?.getVoices() ?? [], []);
     const { voice } = settings.use(["voice"]);
 
     if (!voices.length)
-        return <Forms.FormText>No voices found.</Forms.FormText>;
+        return <Forms.FormText>{tr("plugins.VcNarrator.noVoicesFound", "No voices found.")}</Forms.FormText>;
 
     // espeak on Linux has a ridiculous amount of voices (26k for me).
     // If there are more than 20 voices, we split it up into two pickers, one for language, then one with only the voices for that language.
@@ -117,9 +122,10 @@ function VoiceSetting() {
 }
 
 export function VoiceSettingSection() {
+    useLocale();
     return (
         <section>
-            <Forms.FormTitle>Voice</Forms.FormTitle>
+            <Forms.FormTitle>{tr("plugins.VcNarrator.voice", "Voice")}</Forms.FormTitle>
             <VoiceSetting />
         </section>
     );

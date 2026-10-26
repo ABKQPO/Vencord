@@ -18,6 +18,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { tr } from "@utils/localization";
 import definePlugin, { OptionType, PluginNative, SettingsDefinition } from "@utils/types";
 import { showToast } from "@webpack/common";
 import type { MouseEvent } from "react";
@@ -135,7 +136,7 @@ export default definePlugin({
             }
 
             if (rule.match.test(url)) {
-                showToast({ text: "Opened link in native app", variant: "success" });
+                showToast({ text: tr("plugins.OpenInApp.openedLinkInNativeApp", "Opened link in native app"), variant: "success" });
 
                 const newUrl = url.replace(rule.match, rule.replace);
                 VencordNative.native.openExternal(newUrl);

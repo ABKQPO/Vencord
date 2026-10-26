@@ -20,6 +20,7 @@ import * as DataStore from "@api/DataStore";
 import { Settings } from "@api/Settings";
 import { openNotificationSettingsModal } from "@components/settings/tabs/vencord/NotificationSettings";
 import { classNameFactory } from "@utils/css";
+import { tr, useLocale } from "@utils/localization";
 import { useAwaiter } from "@utils/react";
 import { RenderModalProps } from "@vencord/discord-types";
 import { ConfirmModal, Forms, ListScrollerThin, Modal, openModal, React, Timestamp, useEffect, useReducer, useState } from "@webpack/common";
@@ -134,12 +135,13 @@ function NotificationEntry({ data }: { data: PersistentNotificationData; }) {
 }
 
 export function NotificationLog({ log, pending }: { log: PersistentNotificationData[], pending: boolean; }) {
+    useLocale();
     if (!log.length && !pending)
         return (
             <div>
                 <div className={cl("empty")} />
                 <Forms.FormText style={{ textAlign: "center" }}>
-                    No notifications yet
+                    {tr("loader.37ecf3603dbf", "No notifications yet")}
                 </Forms.FormText>
             </div>
         );
@@ -157,30 +159,33 @@ export function NotificationLog({ log, pending }: { log: PersistentNotificationD
 }
 
 function LogModal(props: RenderModalProps) {
+    useLocale();
     const [log, pending] = useLogs();
 
     return (
         <Modal
             {...props}
             size="xl"
-            title="Notification Log"
+            title={tr("loader.4ad8715b5400", "Notification Log")}
             actions={[
                 {
-                    text: "Notification Settings",
+                    text: tr("loader.07a063cab7ec", "Notification Settings"),
                     variant: "primary",
                     onClick: openNotificationSettingsModal
                 },
                 {
-                    text: "Clear Notification Log",
+                    text: tr("loader.379e7ab46c93", "Clear Notification Log"),
                     variant: "critical-primary",
                     disabled: !log.length,
                     onClick() {
                         openModal(props =>
                             <ConfirmModal
                                 {...props}
-                                title="Are you sure?"
-                                subtitle={`This will permanently remove ${log.length} notification${log.length === 1 ? "" : "s"}. This action cannot be undone.`}
-                                confirmText="Do it!"
+                                title={tr("loader.f0762c4f3bfc", "Are you sure?")}
+                                subtitle={log.length === 1
+                                    ? tr("notifications.delete.one", "This will permanently remove {count} notification. This action cannot be undone.", { count: log.length })
+                                    : tr("notifications.delete.other", "This will permanently remove {count} notifications. This action cannot be undone.", { count: log.length })}
+                                confirmText={tr("loader.5128d4e4a722", "Do it!")}
                                 onConfirm={async () => {
                                     await DataStore.set(KEY, []);
                                     signals.forEach(x => x());

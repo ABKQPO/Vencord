@@ -21,6 +21,7 @@ import "./styles.css";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { Popout, useRef, useState } from "@webpack/common";
@@ -39,6 +40,7 @@ export const settings = definePluginSettings({
 });
 
 function Icon({ isShown }: { isShown: boolean; }) {
+    useLocale();
     return (
         <svg viewBox="0 0 27 27" width={18} height={18} className="vc-toolbox-icon">
             {isShown
@@ -50,6 +52,7 @@ function Icon({ isShown }: { isShown: boolean; }) {
 }
 
 function VencordPopoutButton() {
+    useLocale();
     const buttonRef = useRef(null);
     const [show, setShow] = useState(false);
 
@@ -68,7 +71,7 @@ function VencordPopoutButton() {
                     ref={buttonRef}
                     className="vc-toolbox-btn"
                     onClick={() => setShow(v => !v)}
-                    tooltip={isShown ? null : "Vencord Toolbox"}
+                    tooltip={isShown ? null : tr("plugins.VencordToolbox.vencordToolbox", "Vencord Toolbox")}
                     icon={() => <Icon isShown={isShown} />}
                     selected={isShown}
                 />
@@ -96,6 +99,7 @@ export default definePlugin({
     ],
 
     TrailingWrapper({ children }: PropsWithChildren) {
+    useLocale();
         return (
             <>
                 {children}

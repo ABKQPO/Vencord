@@ -19,6 +19,7 @@
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { getLocale, tr, useLocale } from "@utils/localization";
 import { useTimer } from "@utils/react";
 import { formatDuration } from "@utils/text";
 import definePlugin, { OptionType } from "@utils/types";
@@ -68,11 +69,16 @@ export default definePlugin({
     ],
 
     renderTimer: ErrorBoundary.wrap(({ channelId }: { channelId: string; }) => {
+        useLocale();
         const time = useTimer({ deps: [channelId] });
 
+        const duration = formatDuration(time, settings.store.format === "human");
+        const display = getLocale() === "zh-CN"
+            ? duration.replaceAll("d", tr("plugins.CallTimer.daySuffix", "d")).replaceAll("h", tr("plugins.CallTimer.hourSuffix", "h")).replaceAll("m", tr("plugins.CallTimer.minuteSuffix", "m")).replaceAll("s", tr("plugins.CallTimer.secondSuffix", "s"))
+            : duration;
         return (
             <p style={{ margin: 0, fontFamily: "var(--font-code)" }}>
-                {formatDuration(time, settings.store.format === "human")}
+                {display}
             </p>
         );
     }, { noop: true }),

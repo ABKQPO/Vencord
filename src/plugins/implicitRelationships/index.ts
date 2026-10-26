@@ -18,6 +18,7 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
+import { tr } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { Constants, FluxDispatcher, GuildStore, RelationshipStore, SnowflakeUtils, UserAffinitiesStore, UserStore } from "@webpack/common";
@@ -46,7 +47,7 @@ export default definePlugin({
             find: "#{intl::FRIENDS_ALL_HEADER}",
             replacement: {
                 match: /toString\(\)\}\);case (\i\.\i)\.PENDING/,
-                replace: 'toString()});case $1.IMPLICIT:return "Implicit — "+arguments[1];case $1.BLOCKED'
+                replace: "toString()});case $1.IMPLICIT:return $self.implicitHeader(arguments[1]);case $1.BLOCKED"
             },
         },
         // No friends page
@@ -62,7 +63,7 @@ export default definePlugin({
             find: "#{intl::FRIENDS_SECTION_ONLINE}),className:",
             replacement: {
                 match: /,{id:(\i\.\i)\.PENDING,show:.+?className:(\i\.\i)(?=\},\{id:)/,
-                replace: (rest, relationShipTypes, className) => `,{id:${relationShipTypes}.IMPLICIT,show:true,className:${className},content:"Implicit"}${rest}`
+                replace: (rest, relationShipTypes, className) => `,{id:${relationShipTypes}.IMPLICIT,show:true,className:${className},content:$self.implicitLabel()}${rest}`
             }
         },
         // Sections content
@@ -115,6 +116,14 @@ export default definePlugin({
             },
         }
     ],
+
+    implicitLabel() {
+        return tr("plugins.ImplicitRelationships.label", "Implicit");
+    },
+
+    implicitHeader(count: number) {
+        return tr("plugins.ImplicitRelationships.header", "Implicit — {count}", { count });
+    },
 
     wrapSort(comparator: Function, row: any) {
         return row.type === 5

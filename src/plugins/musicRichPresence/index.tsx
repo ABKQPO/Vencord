@@ -23,6 +23,7 @@ import { Heading } from "@components/Heading";
 import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
+import { getLocale, tr, useLocale } from "@utils/localization";
 import { promptToRestart } from "@utils/promptToRestart";
 import { useAwaiter, useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
@@ -237,6 +238,7 @@ export const settings = definePluginSettings({
 const hasInvalidCustomInstance = () => settings.store.scrobblerBackend === "listenbrainz-compatible" && (!settings.store.instanceAPIBaseUrl || !settings.store.instanceBaseURL);
 
 function CustomInstanceAboutComponent() {
+    useLocale();
     const { instanceAPIBaseUrl, instanceBaseURL } = settings.store;
 
     const [signal, forceUpdate] = useForceUpdater(true);
@@ -249,30 +251,30 @@ function CustomInstanceAboutComponent() {
     if (!instanceAPIBaseUrl || !instanceBaseURL)
         return (
             <Card variant="danger">
-                <Heading tag="h5">Invalid ListenBrainz compatible instance</Heading>
-                <Paragraph>Provide both the <b>API Base URL</b> and the <b>Instance Base URL</b> for your custom ListenBrainz instance or switch back to ListenBrainz/Last.FM</Paragraph>
+                <Heading tag="h5">{tr("plugins.MusicRichPresence.invalidListenBrainzCompatibleInstance", "Invalid ListenBrainz compatible instance")}</Heading>
+                <Paragraph>{tr("plugins.MusicRichPresence.provideBothThe", "Provide both the")} <b>{tr("plugins.MusicRichPresence.aPIBaseURL", "API Base URL")}</b> {tr("plugins.MusicRichPresence.andThe", "and the")} <b>{tr("plugins.MusicRichPresence.instanceBaseURL", "Instance Base URL")}</b> {tr("plugins.MusicRichPresence.forYourCustomListenBrainzInstanceOrSwitchBackToListenBrainzLastFM", "for your custom ListenBrainz instance or switch back to ListenBrainz/Last.FM")}</Paragraph>
             </Card>
         );
 
     if (!cspAllowed)
         return (
             <Card variant="warning">
-                <Heading tag="h5">Allow Vencord to connect to ListenBrainz instance</Heading>
-                <Paragraph>To use your custom ListenBrainz instance, you must first allow Vencord to connect to it.</Paragraph>
+                <Heading tag="h5">{tr("plugins.MusicRichPresence.allowVencordToConnectToListenBrainzInstance", "Allow Vencord to connect to ListenBrainz instance")}</Heading>
+                <Paragraph>{tr("plugins.MusicRichPresence.toUseYourCustomListenBrainzInstanceYouMustFirstAllowVencordToConnectToIt", "To use your custom ListenBrainz instance, you must first allow Vencord to connect to it.")}</Paragraph>
                 <Button
                     size="small"
                     className={Margins.top8}
                     variant="secondary"
                     onClick={async () => {
                         for (const host of [instanceAPIBaseUrl, instanceBaseURL]) {
-                            const res = await VencordNative.csp.requestAddOverride(host, ["connect-src"], "MusicRichPresence");
+                            const res = await VencordNative.csp.requestAddOverride(host, ["connect-src"], "MusicRichPresence", getLocale());
                             if (!res) return;
                         }
                         forceUpdate();
                         promptToRestart("relaunch");
                     }}
                 >
-                    Allow Instance
+                    {tr("plugins.MusicRichPresence.allowInstance", "Allow Instance")}
                 </Button>
             </Card>
         );
@@ -292,13 +294,14 @@ export default definePlugin({
     settings,
 
     settingsAboutComponent() {
+    useLocale();
         if (settings.store.scrobblerBackend === "lastfm")
             return (
                 <Card>
                     <Heading tag="h2">Last.FM</Heading>
-                    <Heading tag="h5">How to create an API key</Heading>
-                    <Paragraph>Set <strong>Application name</strong> and <strong>Application description</strong> to anything and leave the rest blank.</Paragraph>
-                    <LinkButton size="small" href="https://www.last.fm/api/account/create" className={Margins.top8}>Create API Key</LinkButton>
+                    <Heading tag="h5">{tr("plugins.MusicRichPresence.howToCreateAnAPIKey", "How to create an API key")}</Heading>
+                    <Paragraph>{tr("plugins.MusicRichPresence.set", "Set")} <strong>{tr("plugins.MusicRichPresence.applicationName", "Application name")}</strong> {tr("plugins.MusicRichPresence.and", "and")} <strong>{tr("plugins.MusicRichPresence.applicationDescription", "Application description")}</strong> {tr("plugins.MusicRichPresence.toAnythingAndLeaveTheRestBlank", "to anything and leave the rest blank.")}</Paragraph>
+                    <LinkButton size="small" href="https://www.last.fm/api/account/create" className={Margins.top8}>{tr("plugins.MusicRichPresence.createAPIKey", "Create API Key")}</LinkButton>
                 </Card>
             );
 
@@ -372,7 +375,7 @@ export default definePlugin({
 
         if (settings.store.shareUsername) {
             buttons.push({
-                label: `${scrobbler.name} Profile`,
+                label: tr("plugins.MusicRichPresence.nameProfile", "{name} Profile", { name: scrobbler.name }),
                 url: scrobbler.getUserURL(settings.store.username!)
             });
         }

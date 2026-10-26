@@ -17,6 +17,7 @@
 */
 
 import { DeleteIcon } from "@components/Icons";
+import { tr, useLocale } from "@utils/localization";
 import { classes } from "@utils/misc";
 import { findCssClassesLazy } from "@webpack";
 import { Tooltip } from "@webpack/common";
@@ -24,8 +25,9 @@ import { Tooltip } from "@webpack/common";
 const iconClasses = findCssClassesLazy("button", "wrapper", "disabled", "separator", "dangerous");
 
 export function DeleteButton({ onClick }: { onClick(): void; }) {
+    useLocale();
     return (
-        <Tooltip text="Delete Review">
+        <Tooltip text={tr("plugins.ReviewDB.deleteReview", "Delete Review")}>
             {props => (
                 <div
                     {...props}
@@ -41,8 +43,9 @@ export function DeleteButton({ onClick }: { onClick(): void; }) {
 }
 
 export function ReportButton({ onClick }: { onClick(): void; }) {
+    useLocale();
     return (
-        <Tooltip text="Report Review">
+        <Tooltip text={tr("plugins.ReviewDB.reportReview", "Report Review")}>
             {props => (
                 <div
                     {...props}
@@ -63,8 +66,9 @@ export function ReportButton({ onClick }: { onClick(): void; }) {
 }
 
 export function BlockButton({ onClick, isBlocked }: { onClick(): void; isBlocked: boolean; }) {
+    useLocale();
     return (
-        <Tooltip text={`${isBlocked ? "Unblock" : "Block"} user`}>
+        <Tooltip text={isBlocked ? tr("plugins.ReviewDB.unblockUser", "Unblock user") : tr("plugins.ReviewDB.blockUser", "Block user")}>
             {props => (
                 <div
                     {...props}

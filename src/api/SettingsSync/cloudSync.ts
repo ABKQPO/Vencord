@@ -6,6 +6,7 @@
 
 import { showNotification } from "@api/Notifications";
 import { PlainSettings, Settings } from "@api/Settings";
+import { tr } from "@utils/localization";
 import { localStorage } from "@utils/localStorage";
 import { Logger } from "@utils/Logger";
 import { relaunch } from "@utils/native";
@@ -48,8 +49,8 @@ export async function putCloudSettings(manual?: boolean) {
         if (!res.ok) {
             logger.error(`Failed to sync up, API returned ${res.status}`);
             showNotification({
-                title: "Cloud Settings",
-                body: `Could not synchronize settings to cloud (API returned ${res.status}).`,
+                title: tr("loader.runtime.0b35e178d912", "Cloud Settings"),
+                body: tr("loader.runtime.c513f5769564", "Could not synchronize settings to cloud (API returned {value0}).", { value0: res.status }),
                 color: "var(--red-360)"
             });
             return;
@@ -63,8 +64,8 @@ export async function putCloudSettings(manual?: boolean) {
 
         if (manual) {
             showNotification({
-                title: "Cloud Settings",
-                body: "Synchronized settings to the cloud!",
+                title: tr("loader.runtime.0b35e178d912", "Cloud Settings"),
+                body: tr("loader.runtime.3042dcbbdb50", "Synchronized settings to the cloud!"),
                 noPersist: true,
             });
         }
@@ -73,8 +74,8 @@ export async function putCloudSettings(manual?: boolean) {
     } catch (e: any) {
         logger.error("Failed to sync up", e);
         showNotification({
-            title: "Cloud Settings",
-            body: `Could not synchronize settings to the cloud (${e.toString()}).`,
+            title: tr("loader.runtime.0b35e178d912", "Cloud Settings"),
+            body: tr("loader.runtime.97f51bf6d4da", "Could not synchronize settings to the cloud ({value0}).", { value0: e.toString() }),
             color: "var(--red-360)"
         });
     }
@@ -97,8 +98,8 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
             logger.info("No settings on the cloud");
             if (shouldNotify)
                 showNotification({
-                    title: "Cloud Settings",
-                    body: "There are no settings in the cloud.",
+                    title: tr("loader.runtime.0b35e178d912", "Cloud Settings"),
+                    body: tr("loader.runtime.36b4fde9ec3b", "There are no settings in the cloud."),
                     noPersist: true
                 });
             return false;
@@ -108,8 +109,8 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
             logger.info("Settings up to date");
             if (shouldNotify)
                 showNotification({
-                    title: "Cloud Settings",
-                    body: "Your settings are up to date.",
+                    title: tr("loader.runtime.0b35e178d912", "Cloud Settings"),
+                    body: tr("loader.runtime.b6f339789f2a", "Your settings are up to date."),
                     noPersist: true
                 });
             return false;
@@ -118,8 +119,8 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
         if (!res.ok) {
             logger.error(`Failed to sync down, API returned ${res.status}`);
             showNotification({
-                title: "Cloud Settings",
-                body: `Could not synchronize settings from the cloud (API returned ${res.status}).`,
+                title: tr("loader.runtime.0b35e178d912", "Cloud Settings"),
+                body: tr("loader.runtime.db56e2af5633", "Could not synchronize settings from the cloud (API returned {value0}).", { value0: res.status }),
                 color: "var(--red-360)"
             });
             return false;
@@ -132,8 +133,8 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
         if (!force && written < localWritten) {
             if (shouldNotify)
                 showNotification({
-                    title: "Cloud Settings",
-                    body: "Your local settings are newer than the cloud ones.",
+                    title: tr("loader.runtime.0b35e178d912", "Cloud Settings"),
+                    body: tr("loader.runtime.c5bcba1aaa84", "Your local settings are newer than the cloud ones."),
                     noPersist: true,
                 });
             return;
@@ -151,8 +152,8 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
         logger.info("Settings loaded from cloud successfully");
         if (shouldNotify)
             showNotification({
-                title: "Cloud Settings",
-                body: "Your settings have been updated! Click here to restart to fully apply changes!",
+                title: tr("loader.runtime.0b35e178d912", "Cloud Settings"),
+                body: tr("loader.runtime.d428ba62bec5", "Your settings have been updated! Click here to restart to fully apply changes!"),
                 color: "var(--green-360)",
                 onClick: IS_WEB ? () => location.reload() : relaunch,
                 noPersist: true
@@ -164,8 +165,8 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
     } catch (e: any) {
         logger.error("Failed to sync down", e);
         showNotification({
-            title: "Cloud Settings",
-            body: `Could not synchronize settings from the cloud (${e.toString()}).`,
+            title: tr("loader.runtime.0b35e178d912", "Cloud Settings"),
+            body: tr("loader.runtime.1a43cc29918a", "Could not synchronize settings from the cloud ({value0}).", { value0: e.toString() }),
             color: "var(--red-360)"
         });
 
@@ -185,8 +186,8 @@ export async function deleteCloudSettings() {
         if (!res.ok) {
             logger.error(`Failed to delete, API returned ${res.status}`);
             showNotification({
-                title: "Cloud Settings",
-                body: `Could not delete settings (API returned ${res.status}).`,
+                title: tr("loader.runtime.0b35e178d912", "Cloud Settings"),
+                body: tr("loader.runtime.0db5ba64b7b5", "Could not delete settings (API returned {value0}).", { value0: res.status }),
                 color: "var(--red-360)"
             });
             return;
@@ -194,15 +195,15 @@ export async function deleteCloudSettings() {
 
         logger.info("Settings deleted from cloud successfully");
         showNotification({
-            title: "Cloud Settings",
-            body: "Settings deleted from cloud!",
+            title: tr("loader.runtime.0b35e178d912", "Cloud Settings"),
+            body: tr("loader.runtime.7dd52e9ce6b3", "Settings deleted from cloud!"),
             color: "var(--green-360)"
         });
     } catch (e: any) {
         logger.error("Failed to delete", e);
         showNotification({
-            title: "Cloud Settings",
-            body: `Could not delete settings (${e.toString()}).`,
+            title: tr("loader.runtime.0b35e178d912", "Cloud Settings"),
+            body: tr("loader.runtime.8f7cd4117fe7", "Could not delete settings ({value0}).", { value0: e.toString() }),
             color: "var(--red-360)"
         });
     }
@@ -219,8 +220,8 @@ export async function eraseAllCloudData() {
     if (!res.ok) {
         logger.error(`Failed to erase data, API returned ${res.status}`);
         showNotification({
-            title: "Cloud Integrations",
-            body: `Could not erase all data (API returned ${res.status}), please contact support.`,
+            title: tr("loader.runtime.1cfae478bac5", "Cloud Integrations"),
+            body: tr("loader.runtime.031d6cf57c9f", "Could not erase all data (API returned {value0}), please contact support.", { value0: res.status }),
             color: "var(--red-360)"
         });
         return;
@@ -230,8 +231,8 @@ export async function eraseAllCloudData() {
     await deauthorizeCloud();
 
     showNotification({
-        title: "Cloud Integrations",
-        body: "Successfully erased all data.",
+        title: tr("loader.runtime.1cfae478bac5", "Cloud Integrations"),
+        body: tr("loader.runtime.e19617f5d6e5", "Successfully erased all data."),
         color: "var(--green-360)"
     });
 }

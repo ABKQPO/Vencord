@@ -27,12 +27,14 @@ import { Margins } from "@components/margins";
 import { Devs } from "@utils/constants";
 import { copyWithToast, getCurrentGuild, getIntlMessage } from "@utils/discord";
 import { isTruthy } from "@utils/guards";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { IconComponent, OptionType } from "@utils/types";
-import { Message } from "@vencord/discord-types";
+import { Message, RenderModalProps } from "@vencord/discord-types";
 import { GuildRoleStore, Menu, Modal, openModal, UserProfileStore } from "@webpack/common";
 import { MouseEventHandler } from "react";
 
 const CopyRawIcon: IconComponent = ({ height = 20, width = 20, className }) => {
+    useLocale();
     return (
         <svg
             viewBox="0 0 20 20"
@@ -49,6 +51,17 @@ const CopyRawIcon: IconComponent = ({ height = 20, width = 20, className }) => {
 };
 
 // We can't use structuredClone because some objects may contain methods, which cause a DataCloneError.
+function getDataTypeLabel(type: string) {
+    switch (type) {
+        case "Message": return tr("plugins.ViewRaw.dataTypeMessage", "Message");
+        case "User": return tr("plugins.ViewRaw.dataTypeUser", "User");
+        case "Guild": return tr("plugins.ViewRaw.dataTypeGuild", "Guild");
+        case "Channel": return tr("plugins.ViewRaw.dataTypeChannel", "Channel");
+        case "Role": return tr("plugins.ViewRaw.dataTypeRole", "Role");
+        default: return type;
+    }
+}
+
 function cloneObject<T>(obj: T): T {
     return JSON.parse(JSON.stringify(obj));
 }
@@ -99,37 +112,41 @@ function cleanMessage(msg: Message) {
 
 function openViewRawModal(data: object, type: string, msgContent?: string) {
     const json = JSON.stringify(sortObject(data), null, 4);
+    openModal(props => <ViewRawModal {...props} json={json} type={type} msgContent={msgContent} />);
+}
 
-    openModal(props => (
+function ViewRawModal({ json, type, msgContent, ...props }: RenderModalProps & { json: string; type: string; msgContent?: string; }) {
+    useLocale();
+    return (
         <ErrorBoundary>
             <Modal
                 {...props}
-                title={`Raw ${type} Data`}
+                title={tr("plugins.ViewRaw.rawDataTitle", "Raw {type} Data", { type: getDataTypeLabel(type) })}
                 size="xl"
                 actions={[
                     {
-                        text: `Copy ${type} Data`,
+                        text: tr("plugins.ViewRaw.copyData", "Copy {type} Data", { type: getDataTypeLabel(type) }),
                         variant: "secondary",
-                        onClick: () => copyWithToast(json, `${type} data copied to clipboard!`)
+                        onClick: () => copyWithToast(json, tr("plugins.ViewRaw.dataCopied", "{type} data copied to clipboard!", { type: getDataTypeLabel(type) }))
                     },
                     msgContent && {
-                        text: "Copy Raw Content",
+                        text: tr("plugins.ViewRaw.copyRawContent", "Copy Raw Content"),
                         variant: "secondary",
-                        onClick: () => copyWithToast(msgContent, "Content copied to clipboard!")
+                        onClick: () => copyWithToast(msgContent, tr("plugins.ViewRaw.contentCopiedToClipboard", "Content copied to clipboard!"))
                     }
                 ].filter(isTruthy)}
             >
                 {!!msgContent && (
                     <>
-                        <HeadingSecondary>Message Content</HeadingSecondary>
+                        <HeadingSecondary>{tr("plugins.ViewRaw.messageContent", "Message Content")}</HeadingSecondary>
                         <CodeBlock className="vc-viewRaw-codeBlock" content={msgContent} lang="" />
-                        <HeadingSecondary className={Margins.top16}>Message Data</HeadingSecondary>
+                        <HeadingSecondary className={Margins.top16}>{tr("plugins.ViewRaw.messageData", "Message Data")}</HeadingSecondary>
                     </>
                 )}
                 <CodeBlock className="vc-viewRaw-codeBlock" content={json} lang="json" />
             </Modal>
         </ErrorBoundary >
-    ));
+    );
 }
 
 const openViewRawModalMessage = (msg: Message) => openViewRawModal(cleanMessage(msg), "Message", msg.content);
@@ -161,6 +178,7 @@ const settings = definePluginSettings({
 });
 
 function MakeContextCallback(name: "Guild" | "Role" | "User" | "Channel" | "Message" | "Profile", getData?: (props: any) => any): NavContextMenuPatchCallback {
+
     return (children, props) => {
         const value = getData ? getData(props) : props[name.toLowerCase()];
         if (!value) return;
@@ -181,7 +199,7 @@ function MakeContextCallback(name: "Guild" | "Role" | "User" | "Channel" | "Mess
         (devContainer ?? children).splice(-1, 0,
             <Menu.MenuItem
                 id={id}
-                label="View Raw"
+                label={tr("plugins.ViewRaw.viewRaw", "View Raw")}
                 action={action}
                 icon={CopyRawIcon}
                 leadingAccessory={{ type: "icon", icon: CopyRawIcon }}
@@ -200,7 +218,7 @@ const devContextCallback: NavContextMenuPatchCallback = (children, { id }: { id:
     children.push(
         <Menu.MenuItem
             id={"vc-view-role-raw"}
-            label="View Raw"
+            label={tr("plugins.ViewRaw.viewRaw", "View Raw")}
             action={() => openViewRawModal(role, "Role")}
             icon={CopyRawIcon}
             leadingAccessory={{ type: "icon", icon: CopyRawIcon }}
@@ -251,8 +269,8 @@ export default definePlugin({
             };
 
             const label = settings.store.clickMethod === "Right"
-                ? "Copy Raw (Left Click) / View Raw (Right Click)"
-                : "View Raw (Left Click) / Copy Raw (Right Click)";
+                ? tr("plugins.ViewRaw.copyRawLeftClickViewRawRightClick", "Copy Raw (Left Click) / View Raw (Right Click)")
+                : tr("plugins.ViewRaw.viewRawLeftClickCopyRawRightClick", "View Raw (Left Click) / Copy Raw (Right Click)");
 
             return {
                 label,

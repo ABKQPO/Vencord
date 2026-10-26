@@ -23,6 +23,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { getTheme, insertTextIntoChatInputBox, Theme } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { Margins } from "@utils/margins";
 import definePlugin, { IconComponent, OptionType } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
@@ -54,6 +55,7 @@ type Format = typeof Formats[number];
 const cl = classNameFactory("vc-st-");
 
 function PickerModal(props: RenderModalProps) {
+    useLocale();
     const [value, setValue] = useState<string>();
     const [format, setFormat] = useState<Format>("");
     const time = Math.round((new Date(value!).getTime() || Date.now()) / 1000);
@@ -68,9 +70,9 @@ function PickerModal(props: RenderModalProps) {
     return (
         <Modal
             {...props}
-            title="Timestamp Picker"
+            title={tr("plugins.SendTimestamps.timestampPicker", "Timestamp Picker")}
             actions={[{
-                text: "Insert",
+                text: tr("plugins.SendTimestamps.insert", "Insert"),
                 variant: "primary",
                 onClick() {
                     insertTextIntoChatInputBox(formatted + " ");
@@ -88,7 +90,7 @@ function PickerModal(props: RenderModalProps) {
                 }}
             />
 
-            <Forms.FormTitle>Timestamp Format</Forms.FormTitle>
+            <Forms.FormTitle>{tr("plugins.SendTimestamps.timestampFormat", "Timestamp Format")}</Forms.FormTitle>
             <div className={cl("format-select")}>
                 <Select
                     options={
@@ -109,7 +111,7 @@ function PickerModal(props: RenderModalProps) {
                 />
             </div>
 
-            <Forms.FormTitle className={Margins.bottom8}>Preview</Forms.FormTitle>
+            <Forms.FormTitle className={Margins.bottom8}>{tr("plugins.SendTimestamps.preview", "Preview")}</Forms.FormTitle>
             <Forms.FormText className={cl("preview-text")}>
                 {rendered} ({formatted})
             </Forms.FormText>
@@ -118,6 +120,7 @@ function PickerModal(props: RenderModalProps) {
 }
 
 const SendTimestampIcon: IconComponent = ({ height = 20, width = 20, className }) => {
+    useLocale();
     return (
         <svg
             aria-hidden="true"
@@ -137,11 +140,12 @@ const SendTimestampIcon: IconComponent = ({ height = 20, width = 20, className }
 };
 
 const SendTimestampButton: ChatBarButtonFactory = ({ isAnyChat }) => {
+    useLocale();
     if (!isAnyChat) return null;
 
     return (
         <ChatBarButton
-            tooltip="Insert Timestamp"
+            tooltip={tr("plugins.SendTimestamps.insertTimestamp", "Insert Timestamp")}
             onClick={() => openModal(props => <PickerModal {...props} />)}
             buttonProps={{ "aria-haspopup": "dialog" }}
         >
@@ -169,6 +173,7 @@ export default definePlugin({
     },
 
     settingsAboutComponent() {
+    useLocale();
         const samples = [
             "12:00",
             "3:51",
@@ -181,14 +186,16 @@ export default definePlugin({
         return (
             <>
                 <Forms.FormText>
-                    To quickly send time only timestamps, include timestamps formatted as `HH:MM` (including the backticks!) in your message
+
+                    {tr("plugins.SendTimestamps.toQuicklySendTimeOnlyTimestampsIncludeTimestampsFormattedAsHHMMIncludingTheBackticksInYourMessage", "To quickly send time only timestamps, include timestamps formatted as `HH:MM` (including the backticks!) in your message")}
                 </Forms.FormText>
                 <Forms.FormText>
-                    See below for examples.
-                    If you need anything more specific, use the Date button in the chat bar!
+
+                    {tr("plugins.SendTimestamps.seeBelowForExamplesIfYouNeedAnythingMoreSpecificUseTheDateButtonInTheChatBar", "See below for examples. If you need anything more specific, use the Date button in the chat bar!")}
                 </Forms.FormText>
                 <Forms.FormText>
-                    Examples:
+
+                    {tr("plugins.SendTimestamps.examples", "Examples:")}
                     <ul>
                         {samples.map(s => (
                             <li key={s}>

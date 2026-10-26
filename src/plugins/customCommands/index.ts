@@ -22,6 +22,7 @@ import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, 
 import { migratePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
+import { tr } from "@utils/localization";
 import definePlugin from "@utils/types";
 import { FluxDispatcher, MessageActions, PendingReplyStore } from "@webpack/common";
 
@@ -62,7 +63,7 @@ export function registerTagCommand(tag: Tag) {
             })),
             {
                 name: "ephemeral",
-                description: "Whether the response should only be visible to you",
+                get description() { return tr("plugins.CustomCommands.whetherTheResponseShouldOnlyBeVisibleToYou", "Whether the response should only be visible to you"); },
                 type: ApplicationCommandOptionType.BOOLEAN,
                 required: false
             }
@@ -107,28 +108,28 @@ export default definePlugin({
     commands: [
         {
             name: "tags",
-            description: "Manage all custom commands",
+            get description() { return tr("plugins.CustomCommands.manageAllCustomCommands", "Manage all custom commands"); },
             inputType: ApplicationCommandInputType.BUILT_IN,
             options: [
                 {
                     name: "create",
-                    description: "Create a new tag",
+                    get description() { return tr("plugins.CustomCommands.createANewTag", "Create a new tag"); },
                     type: ApplicationCommandOptionType.SUB_COMMAND,
                 },
                 {
                     name: "list",
-                    description: "List all your tags",
+                    get description() { return tr("plugins.CustomCommands.listAllYourTags", "List all your tags"); },
                     type: ApplicationCommandOptionType.SUB_COMMAND,
                     options: []
                 },
                 {
                     name: "delete",
-                    description: "Remove a tag by name",
+                    get description() { return tr("plugins.CustomCommands.removeATagByName", "Remove a tag by name"); },
                     type: ApplicationCommandOptionType.SUB_COMMAND,
                     options: [
                         {
                             name: "tag-name",
-                            description: "The name of the tag",
+                            get description() { return tr("plugins.CustomCommands.theNameOfTheTag", "The name of the tag"); },
                             type: ApplicationCommandOptionType.STRING,
                             required: true
                         }
@@ -148,13 +149,13 @@ export default definePlugin({
 
                         if (!getTag(name))
                             return sendBotMessage(ctx.channel.id, {
-                                content: `A Tag with the name **${name}** does not exist!`
+                                content: tr("plugins.CustomCommands.tagMissing", "A Tag with the name **{name}** does not exist!", { name })
                             });
 
                         removeTag(name);
 
                         sendBotMessage(ctx.channel.id, {
-                            content: `Successfully deleted the tag **${name}**!`
+                            content: tr("plugins.CustomCommands.tagDeleted", "Successfully deleted the tag **{name}**!", { name })
                         });
 
                         break;
@@ -166,7 +167,7 @@ export default definePlugin({
                             .join("\n");
 
                         sendBotMessage(ctx.channel.id, {
-                            content: content || "Woops! There are no tags yet, use `/tags create` to create one!",
+                            content: content || tr("plugins.CustomCommands.noTags", "Woops! There are no tags yet, use `/tags create` to create one!"),
                         });
 
                         break;

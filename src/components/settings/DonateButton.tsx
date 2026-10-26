@@ -17,6 +17,7 @@
 */
 
 import { Heart } from "@components/Heart";
+import { tr, useLocale } from "@utils/localization";
 import { ButtonProps } from "@vencord/discord-types";
 import { Button } from "@webpack/common";
 
@@ -25,6 +26,7 @@ export default function DonateButton({
     color = Button.Colors.TRANSPARENT,
     ...props
 }: Partial<ButtonProps>) {
+    useLocale();
     return (
         <Button
             {...props}
@@ -34,7 +36,7 @@ export default function DonateButton({
             className="vc-donate-button"
         >
             <Heart />
-            Donate
+            {tr("loader.c91ee0f2799d", "Donate")}
         </Button>
     );
 }

@@ -19,6 +19,7 @@
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { Devs } from "@utils/constants";
 import { makeLazy } from "@utils/lazy";
+import { tr } from "@utils/localization";
 import definePlugin from "@utils/types";
 import { CommandArgument, CommandContext } from "@vencord/discord-types";
 import { DraftType, UploadAttachmentStore, UploadHandler, UploadManager, UserUtils } from "@webpack/common";
@@ -46,7 +47,7 @@ function loadImage(source: File | string) {
                 URL.revokeObjectURL(url);
             resolve(img);
         };
-        img.onerror = _event => reject(Error(`An error occurred while loading ${url}. Check the console for more info.`));
+        img.onerror = _event => reject(Error(tr("plugins.petpet.imageLoadFailed", "An error occurred while loading {url}. Check the console for more info.", { url })));
         img.crossOrigin = "Anonymous";
         img.src = url;
     });
@@ -60,7 +61,7 @@ async function resolveImage(options: CommandArgument[], ctx: CommandContext, noS
                 if (upload) {
                     if (!upload.isImage) {
                         UploadManager.clearAll(ctx.channel.id, DraftType.SlashCommand);
-                        throw "Upload is not an image";
+                        throw tr("plugins.petpet.uploadIsNotAnImage", "Upload is not an image");
                     }
                     return upload.item.file;
                 }
@@ -74,7 +75,7 @@ async function resolveImage(options: CommandArgument[], ctx: CommandContext, noS
                 } catch (err) {
                     console.error("[petpet] Failed to fetch user\n", err);
                     UploadManager.clearAll(ctx.channel.id, DraftType.SlashCommand);
-                    throw "Failed to fetch user. Check the console for more info.";
+                    throw tr("plugins.petpet.failedToFetchUserCheckTheConsoleForMoreInfo", "Failed to fetch user. Check the console for more info.");
                 }
         }
     }
@@ -153,7 +154,7 @@ export default definePlugin({
                 const noServerPfp = findOption(opts, "no-server-pfp", false);
                 try {
                     var url = await resolveImage(opts, cmdCtx, noServerPfp);
-                    if (!url) throw "No Image specified!";
+                    if (!url) throw tr("plugins.petpet.noImageSpecified", "No Image specified!");
                 } catch (err) {
                     UploadManager.clearAll(cmdCtx.channel.id, DraftType.SlashCommand);
                     sendBotMessage(cmdCtx.channel.id, {
@@ -166,7 +167,7 @@ export default definePlugin({
 
                 const delay = findOption(opts, "delay", DEFAULT_DELAY);
                 // Frame delays < 20ms don't function correctly on chromium and firefox
-                if (delay < 20) return sendBotMessage(cmdCtx.channel.id, { content: "Delay must be at least 20." });
+                if (delay < 20) return sendBotMessage(cmdCtx.channel.id, { content: tr("plugins.petpet.delayMustBeAtLeast20", "Delay must be at least 20.") });
 
                 const resolution = findOption(opts, "resolution", DEFAULT_RESOLUTION);
 

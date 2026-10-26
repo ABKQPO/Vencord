@@ -21,6 +21,7 @@ import { definePluginSettings } from "@api/Settings";
 import { ApngBlendOp, ApngDisposeOp, parseAPNG } from "@utils/apng";
 import { Devs } from "@utils/constants";
 import { getCurrentGuild } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Emoji, Message, RenderModalProps, Sticker } from "@vencord/discord-types";
@@ -169,14 +170,15 @@ function getWordBoundary(origStr: string, offset: number) {
 }
 
 function CannotEmbedNoticeModal({ modalProps, resolve }: { modalProps: RenderModalProps; resolve: (value: boolean) => void; }) {
+    useLocale();
     const s = settings.use(["disableEmbedPermissionCheck"]);
     return (
         <ConfirmModal
             {...modalProps}
-            title="Hold on!"
-            subtitle="You are trying to send/edit a message that contains a FakeNitro emoji or sticker, however you do not have permissions to embed links in the current channel. Are you sure you want to send this message? Your FakeNitro items will appear as a link only."
-            confirmText="Send Anyway"
-            cancelText="Cancel"
+            title={tr("plugins.FakeNitro.holdOn", "Hold on!")}
+            subtitle={tr("plugins.FakeNitro.youAreTryingToSendEditAMessageThatContainsAFakeNitroEmojiOrStickerHoweverYouDoNotHavePermission", "You are trying to send/edit a message that contains a FakeNitro emoji or sticker, however you do not have permissions to embed links in the current channel. Are you sure you want to send this message? Your FakeNitro items will appear as a link only.")}
+            confirmText={tr("plugins.FakeNitro.sendAnyway", "Send Anyway")}
+            cancelText={tr("plugins.FakeNitro.cancel", "Cancel")}
             onConfirm={() => resolve(true)}
             onCloseCallback={() => setImmediate(() => resolve(false))}
             checkboxProps={{
@@ -676,12 +678,12 @@ export default definePlugin({
 
         switch (type) {
             case FakeNoticeType.Sticker: {
-                node.push(" This is a FakeNitro sticker and renders like a real sticker only for you. Appears as a link to non-plugin users.");
+                node.push(tr("plugins.FakeNitro.thisIsAFakeNitroStickerAndRendersLikeARealStickerOnlyForYouAppearsAsALinkToNonPluginUsers", " This is a FakeNitro sticker and renders like a real sticker only for you. Appears as a link to non-plugin users."));
 
                 return node;
             }
             case FakeNoticeType.Emoji: {
-                node.push(" This is a FakeNitro emoji and renders like a real emoji only for you. Appears as a link to non-plugin users.");
+                node.push(tr("plugins.FakeNitro.thisIsAFakeNitroEmojiAndRendersLikeARealEmojiOnlyForYouAppearsAsALinkToNonPluginUsers", " This is a FakeNitro emoji and renders like a real emoji only for you. Appears as a link to non-plugin users."));
 
                 return node;
             }
@@ -800,21 +802,23 @@ export default definePlugin({
 
                 if (sticker.format_type === StickerFormatType.APNG) {
                     if (!hasAttachmentPerms(channelId)) {
-                        openModal(props => (
+                        openModal(props => {
+    useLocale();
+    return (
                             <ConfirmModal
                                 {...props}
-                                title="Hold on!"
-                                confirmText="OK"
+                                title={tr("plugins.FakeNitro.holdOn", "Hold on!")}
+                                confirmText={tr("plugins.FakeNitro.oK", "OK")}
                                 variant="primary"
                             >
                                 <div>
                                     <Forms.FormText>
-                                        You cannot send this message because it contains an animated FakeNitro sticker,
-                                        and you do not have permissions to attach files in the current channel. Please remove the sticker to proceed.
+                                        {tr("plugins.FakeNitro.youCannotSendThisMessageBecauseItContainsAnAnimatedFakeNitroStickerAndYouDoNotHavePermissionsTo", "You cannot send this message because it contains an animated FakeNitro sticker, and you do not have permissions to attach files in the current channel. Please remove the sticker to proceed.")}
                                     </Forms.FormText>
                                 </div>
                             </ConfirmModal>
-                        ));
+                        );
+});
                     } else {
                         this.sendAnimatedSticker(link, sticker.id, channelId);
                     }

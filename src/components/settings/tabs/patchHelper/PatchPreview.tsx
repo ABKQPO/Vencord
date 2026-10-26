@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { tr, useLocale } from "@utils/localization";
 import { Margins } from "@utils/margins";
 import { canonicalizeMatch, canonicalizeReplace } from "@utils/patches";
 import { makeCodeblock } from "@utils/text";
@@ -41,6 +42,7 @@ function makeDiff(original: string, patched: string, match: RegExpMatchArray | n
 }
 
 function Match({ matchResult }: { matchResult: RegExpMatchArray | null; }) {
+    useLocale();
     if (!matchResult)
         return null;
 
@@ -48,12 +50,12 @@ function Match({ matchResult }: { matchResult: RegExpMatchArray | null; }) {
         ? makeCodeblock(matchResult[0], "js")
         : "";
     const groups = matchResult.length > 1
-        ? makeCodeblock(matchResult.slice(1).map((g, i) => `Group ${i + 1}: ${g}`).join("\n"), "yml")
+        ? makeCodeblock(matchResult.slice(1).map((g, i) => tr("loader.settings.patch.group", "Group {number}: {value}", { number: i + 1, value: g })).join("\n"), "yml")
         : "";
 
     return (
         <>
-            <Forms.FormTitle>Match</Forms.FormTitle>
+            <Forms.FormTitle>{tr("loader.settings.match", "Match")}</Forms.FormTitle>
             <div style={{ userSelect: "text" }}>{Parser.parse(fullMatch)}</div>
             <div style={{ userSelect: "text" }}>{Parser.parse(groups)}</div>
         </>
@@ -61,6 +63,7 @@ function Match({ matchResult }: { matchResult: RegExpMatchArray | null; }) {
 }
 
 function Diff({ diff }: { diff: Change[] | null; }) {
+    useLocale();
     if (!diff?.length)
         return null;
 
@@ -83,13 +86,14 @@ function Diff({ diff }: { diff: Change[] | null; }) {
 
     return (
         <>
-            <Forms.FormTitle>Diff</Forms.FormTitle>
+            <Forms.FormTitle>{tr("loader.settings.diff", "Diff")}</Forms.FormTitle>
             {diffLines}
         </>
     );
 }
 
 export function PatchPreview({ module, match, replacement, setReplacementError }: PatchPreviewProps) {
+    useLocale();
     const [id, fact] = module;
     const [compileResult, setCompileResult] = useState<[boolean, string]>();
 
@@ -118,7 +122,7 @@ export function PatchPreview({ module, match, replacement, setReplacementError }
 
     return (
         <>
-            <Forms.FormTitle style={{ userSelect: "text" }}>Module {id}</Forms.FormTitle>
+            <Forms.FormTitle style={{ userSelect: "text" }}>{tr("loader.settings.patch.module", "Module {id}", { id })}</Forms.FormTitle>
 
             <Match matchResult={matchResult} />
             <Diff diff={diff} />
@@ -132,19 +136,18 @@ export function PatchPreview({ module, match, replacement, setReplacementError }
                             const wrappedCode = "0," + (!isArrowFunction ? "function" : "") + patchedCode.slice(patchedCode.indexOf("("));
                             Function(wrappedCode);
 
-                            setCompileResult([true, "Compiled successfully"]);
+                            setCompileResult([true, tr("loader.settings.compiled.successfully", "Compiled successfully")]);
                         } catch (err) {
                             setCompileResult([false, (err as Error).message]);
                         }
                     }}
                 >
-                    Compile
-                </Button>
+                    {tr("loader.settings.compile", "Compile")}</Button>
             )}
 
             {compileResult && (
                 <Forms.FormText style={{ color: compileResult[0] ? "var(--status-positive)" : "var(--text-feedback-critical)" }}>
-                    {compileResult[1]}
+                    {compileResult[0] ? tr("loader.settings.compiled.successfully", "Compiled successfully") : compileResult[1]}
                 </Forms.FormText>
             )}
         </>

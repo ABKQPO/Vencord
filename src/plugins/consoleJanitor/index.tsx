@@ -8,6 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { Devs } from "@utils/constants";
+import { tr, useLocale } from "@utils/localization";
 import definePlugin, { defineDefault, OptionType, StartAt } from "@utils/types";
 import { Checkbox, Text } from "@webpack/common";
 
@@ -41,6 +42,15 @@ interface AllowLevelSettingProps {
 }
 
 function AllowLevelSetting({ settingKey }: AllowLevelSettingProps) {
+    useLocale();
+    const labels: Record<keyof AllowLevels, string> = {
+        error: tr("plugins.ConsoleJanitor.levelerror", "Error"),
+        warn: tr("plugins.ConsoleJanitor.levelwarn", "Warn"),
+        trace: tr("plugins.ConsoleJanitor.leveltrace", "Trace"),
+        log: tr("plugins.ConsoleJanitor.levellog", "Log"),
+        info: tr("plugins.ConsoleJanitor.levelinfo", "Info"),
+        debug: tr("plugins.ConsoleJanitor.leveldebug", "Debug")
+    };
     const { allowLevel } = settings.use(["allowLevel"]);
     const value = allowLevel[settingKey];
 
@@ -50,14 +60,15 @@ function AllowLevelSetting({ settingKey }: AllowLevelSettingProps) {
             onChange={(_, newValue) => settings.store.allowLevel[settingKey] = newValue}
             size={20}
         >
-            <Text variant="text-sm/normal">{settingKey[0].toUpperCase() + settingKey.slice(1)}</Text>
+            <Text variant="text-sm/normal">{labels[settingKey]}</Text>
         </Checkbox>
     );
 }
 
 const AllowLevelSettings = ErrorBoundary.wrap(() => {
+    useLocale();
     return (
-        <SettingsSection name="Filter List" id="filterList" description="Always allow loggers of these types">
+        <SettingsSection name={tr("plugins.ConsoleJanitor.filterList", "Filter List")} id="filterList" description={tr("plugins.ConsoleJanitor.alwaysAllowLoggersOfTheseTypes", "Always allow loggers of these types")}>
             <div style={{ display: "flex", flexDirection: "row" }}>
                 {Object.keys(settings.store.allowLevel).map(key => (
                     <AllowLevelSetting key={key} settingKey={key as keyof AllowLevels} />

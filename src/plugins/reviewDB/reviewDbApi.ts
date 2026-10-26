@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { tr } from "@utils/localization";
+
 import { Auth, authorize, getToken, updateAuth } from "./auth";
 import { Review, ReviewDBCurrentUser, ReviewDBUser, ReviewType } from "./entities";
 import { settings } from "./settings";
@@ -49,7 +51,7 @@ async function rdbRequest<T = unknown>(path: string, options: RequestInit = {}):
         ...options,
         headers,
     }).catch(err => {
-        showToast({ text: "Network error: Failed to connect to ReviewDB.", variant: "critical" });
+        showToast({ text: tr("plugins.ReviewDB.networkErrorFailedToConnectToReviewDB", "Network error: Failed to connect to ReviewDB."), variant: "critical" });
         return null;
     });
 
@@ -58,7 +60,7 @@ async function rdbRequest<T = unknown>(path: string, options: RequestInit = {}):
     const data = await res.json().catch(() => null);
 
     if (!res.ok) {
-        const message = data?.message ?? `ReviewDB: Request failed with status ${res.status}`;
+        const message = data?.message ?? tr("plugins.ReviewDB.requestFailed", "ReviewDB: Request failed with status {status}", { status: res.status });
         showToast({ text: message, variant: "critical" });
         return null;
     }
@@ -81,7 +83,7 @@ export async function getReviews(id: string, { limit, offset = 0, fetchVotes = f
     const res = (req.ok)
         ? await req.json() as UserReviewsData
         : {
-            message: req.status === 429 ? "You are sending requests too fast. Wait a few seconds and try again." : "An Error occured while fetching reviews. Please try again later.",
+            message: req.status === 429 ? tr("plugins.ReviewDB.youAreSendingRequestsTooFastWaitAFewSecondsAndTryAgain", "You are sending requests too fast. Wait a few seconds and try again.") : tr("plugins.ReviewDB.anErrorOccuredWhileFetchingReviewsPleaseTryAgainLater", "An Error occured while fetching reviews. Please try again later."),
             reviews: [],
             updated: false,
             hasNextPage: false,
@@ -142,7 +144,7 @@ export async function addReview(review: { userid: string; comment: string; }): P
 
     const token = await getToken();
     if (!token) {
-        showToast({ text: "Please authorize to add a review.", variant: "critical" });
+        showToast({ text: tr("plugins.ReviewDB.pleaseAuthorizeToAddAReview", "Please authorize to add a review."), variant: "critical" });
         authorize();
         return null;
     }
@@ -179,7 +181,7 @@ export async function reportReview(id: number) {
 export async function voteReview(id: number, isUpvote: boolean) {
     const token = await getToken();
     if (!token) {
-        showToast({ text: "Please authorize to vote on reviews.", variant: "critical" });
+        showToast({ text: tr("plugins.ReviewDB.pleaseAuthorizeToVoteOnReviews", "Please authorize to vote on reviews."), variant: "critical" });
         authorize();
         return false;
     }
@@ -197,7 +199,7 @@ export async function voteReview(id: number, isUpvote: boolean) {
 export async function deleteReviewVote(id: number) {
     const token = await getToken();
     if (!token) {
-        showToast({ text: "Please authorize to vote on reviews.", variant: "critical" });
+        showToast({ text: tr("plugins.ReviewDB.pleaseAuthorizeToVoteOnReviews", "Please authorize to vote on reviews."), variant: "critical" });
         authorize();
         return false;
     }
@@ -222,7 +224,7 @@ async function patchBlock(action: "block" | "unblock", userId: string) {
 
     if (!data) return;
 
-    showToast({ text: `Successfully ${action}ed user`, variant: "success" });
+    showToast({ text: action === "block" ? tr("plugins.ReviewDB.blockedUser", "Successfully blocked user") : tr("plugins.ReviewDB.unblockedUser", "Successfully unblocked user"), variant: "success" });
 
     if (Auth?.user?.blockedUsers) {
         const newBlockedUsers = action === "block"

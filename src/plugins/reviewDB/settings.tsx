@@ -19,6 +19,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { openInviteModal } from "@utils/discord";
+import { tr, useLocale } from "@utils/localization";
 import { OptionType } from "@utils/types";
 
 import { authorize, getToken } from "./auth";
@@ -28,11 +29,14 @@ import { cl } from "./utils";
 export const settings = definePluginSettings({
     authorize: {
         type: OptionType.COMPONENT,
-        component: () => (
+        component: () => {
+            useLocale();
+            return (
             <Button onClick={() => authorize()}>
-                Authorize with ReviewDB
+                {tr("plugins.ReviewDB.authorizeButton", "Authorize with ReviewDB")}
             </Button>
-        )
+            );
+        }
     },
     notifyReviews: {
         type: OptionType.BOOLEAN,
@@ -56,9 +60,11 @@ export const settings = definePluginSettings({
     },
     buttons: {
         type: OptionType.COMPONENT,
-        component: () => (
+        component: () => {
+            useLocale();
+            return (
             <div className={cl("button-grid")} >
-                <Button onClick={openBlockModal}>Manage Blocked Users</Button>
+                <Button onClick={openBlockModal}>{tr("plugins.ReviewDB.manageBlockedUsers", "Manage Blocked Users")}</Button>
 
                 <Button
                     variant="positive"
@@ -66,7 +72,7 @@ export const settings = definePluginSettings({
                         VencordNative.native.openExternal("https://github.com/sponsors/mantikafasi");
                     }}
                 >
-                    Support ReviewDB development
+                    {tr("plugins.ReviewDB.supportDevelopment", "Support ReviewDB development")}
                 </Button>
 
                 <Button variant="link" onClick={async () => {
@@ -77,15 +83,16 @@ export const settings = definePluginSettings({
 
                     VencordNative.native.openExternal(url);
                 }}>
-                    ReviewDB website
+                    {tr("plugins.ReviewDB.website", "ReviewDB website")}
                 </Button>
 
 
                 <Button variant="link" onClick={() => openInviteModal("eWPBSbvznt")}>
-                    ReviewDB Support Server
+                    {tr("plugins.ReviewDB.supportServer", "ReviewDB Support Server")}
                 </Button>
             </div >
-        )
+            );
+        }
     }
 }).withPrivateSettings<{
     lastReviewId?: number;
